@@ -360,22 +360,73 @@ def home_page():
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown("<br><br><br>", unsafe_allow_html=True)
-    
-    f1, f2, f3 = st.columns(3)
-    features = [
-        ("MRI Neural Analysis", "Voxel-level tumor classification using deep residual networks."),
-        ("Spatial MNI Mapping", "Autonomous coordinate transformation into MNI-152 standard space."),
-        ("Clinical Reporting", "High-fidelity diagnostic reports with integrated therapeutic protocols.")
-    ]
-    for i, (title, desc) in enumerate(features):
-        with [f1, f2, f3][i]:
-            st.markdown(f"""
-                <div class="glass-card slide-up" style="animation-delay: {0.2*(i+1)}s;">
-                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">{title}</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">{desc}</p>
+    st.markdown("""
+        <style>
+        .carousel-container {
+            overflow: hidden;
+            width: 100%;
+            padding: 2rem 0;
+            position: relative;
+        }
+        .carousel-track {
+            display: flex;
+            width: calc(400px * 6); /* Width of cards * number of cards (including duplicates) */
+            animation: scroll 30s linear infinite;
+            gap: 2rem;
+        }
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+        .carousel-card {
+            flex: 0 0 400px;
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 32px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .carousel-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--accent-blue);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-400px * 3 - 6rem)); } /* Move by 3 cards + gaps */
+        }
+        </style>
+        <div class="carousel-container slide-up">
+            <div class="carousel-track">
+                <!-- Original 3 Cards -->
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">MRI Neural Analysis</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Voxel-level tumor classification using deep residual networks.</p>
                 </div>
-            """, unsafe_allow_html=True)
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Spatial MNI Mapping</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Autonomous coordinate transformation into MNI-152 standard space.</p>
+                </div>
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Clinical Reporting</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">High-fidelity diagnostic reports with integrated therapeutic protocols.</p>
+                </div>
+                <!-- Duplicate 3 Cards for Seamless Loop -->
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">MRI Neural Analysis</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Voxel-level tumor classification using deep residual networks.</p>
+                </div>
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Spatial MNI Mapping</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Autonomous coordinate transformation into MNI-152 standard space.</p>
+                </div>
+                <div class="carousel-card">
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Clinical Reporting</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">High-fidelity diagnostic reports with integrated therapeutic protocols.</p>
+                </div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 def dashboard_page():
     st.markdown("<h1 class='slide-up'>MRI Diagnostic Center</h1>", unsafe_allow_html=True)
