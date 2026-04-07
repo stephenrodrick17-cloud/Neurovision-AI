@@ -429,6 +429,27 @@ def home_page():
     """, unsafe_allow_html=True)
 
 def dashboard_page():
+    # Load and encode dashboard background
+    bg_path = os.path.join(os.path.dirname(__file__), "assets", "dashboard_bg.jpg")
+    if os.path.exists(bg_path):
+        with open(bg_path, "rb") as f:
+            bg_bytes = f.read()
+        bg_b64 = base64.b64encode(bg_bytes).decode()
+        
+        st.markdown(f"""
+            <style>
+            .stApp {{
+                background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/jpeg;base64,{bg_b64}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }}
+            .main {{
+                background: transparent !important;
+            }}
+            </style>
+        """, unsafe_allow_html=True)
+
     st.markdown("<h1 class='slide-up'>MRI Diagnostic Center</h1>", unsafe_allow_html=True)
     
     col_l, col_r = st.columns([1, 2.5])
@@ -553,6 +574,27 @@ def dashboard_page():
             st.info("System Initialized. Awaiting MRI Data Upload.")
 
 def analytics_page():
+    # Load and encode analytics background
+    bg_path = os.path.join(os.path.dirname(__file__), "assets", "dashboard_bg.jpg")
+    if os.path.exists(bg_path):
+        with open(bg_path, "rb") as f:
+            bg_bytes = f.read()
+        bg_b64 = base64.b64encode(bg_bytes).decode()
+        
+        st.markdown(f"""
+            <style>
+            .stApp {{
+                background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("data:image/jpeg;base64,{bg_b64}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }}
+            .main {{
+                background: transparent !important;
+            }}
+            </style>
+        """, unsafe_allow_html=True)
+
     st.markdown("<h1 class='slide-up'>Neural Architecture Analytics</h1>", unsafe_allow_html=True)
     
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
