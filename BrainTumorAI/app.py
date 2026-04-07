@@ -112,13 +112,14 @@ st.markdown("""
 
     .hero-title {
         font-family: 'Space Grotesk', sans-serif;
-        font-size: clamp(4rem, 10vw, 8.5rem); /* Significantly bigger */
-        font-weight: 800;
+        font-size: clamp(5rem, 12vw, 10rem); /* Significantly bigger */
+        font-weight: 900; /* Extra Bold */
         line-height: 0.95;
         margin-bottom: 2.5rem;
         text-transform: uppercase;
-        letter-spacing: -3px;
+        letter-spacing: -4px;
         color: #ffffff;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 50px rgba(37, 99, 235, 0.3);
     }
 
     /* Global Subpage Titles */
@@ -303,12 +304,30 @@ def home_page():
                 width: 100vw;
                 height: 100vh;
                 z-index: -100;
-                filter: brightness(0.6) contrast(1.1);
+                filter: brightness(0.3) contrast(1.1);
                 object-fit: cover;
                 pointer-events: none;
             }}
             .hero-container {{
                 background: transparent !important;
+                padding-top: 10rem !important; /* Move it down a bit */
+            }}
+            .hero-subtitle {{
+                font-size: 1.8rem !important;
+                color: #ffffff !important;
+                max-width: 1000px !important;
+                margin: 0 auto 4rem auto !important;
+                line-height: 1.6 !important;
+                font-weight: 500 !important;
+                text-shadow: 0 5px 15px rgba(0,0,0,1);
+            }}
+            .hero-badge {{
+                color: var(--accent-blue) !important;
+                font-weight: 800 !important;
+                letter-spacing: 8px !important;
+                margin-bottom: 2rem !important;
+                font-size: 1.4rem !important;
+                text-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
             }}
             </style>
             <video autoplay muted loop playsinline id="background-video">
@@ -318,9 +337,9 @@ def home_page():
 
     st.markdown("""
         <div class="hero-container slide-up">
-            <p style="color: var(--accent-blue); font-weight: 600; letter-spacing: 5px; margin-bottom: 1.5rem; font-size: 1.1rem;">NEURO-AI CORE ENGINE V2.0</p>
+            <p class="hero-badge">NEURO-AI CORE ENGINE V2.0</p>
             <h1 class="hero-title">Decoding the<br><span style="color: var(--accent-blue);">Human Brain.</span></h1>
-            <p style="font-size: 1.5rem; color: var(--text-dim); max-width: 900px; margin: 0 auto 4rem auto; line-height: 1.6;">
+            <p class="hero-subtitle">
                 The next frontier in clinical neuro-diagnostics. A unified environment for high-fidelity imaging, 
                 autonomous therapeutic simulation, and multi-modal clinical profiling.
             </p>
