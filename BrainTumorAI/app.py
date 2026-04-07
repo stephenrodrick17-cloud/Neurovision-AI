@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image, ImageEnhance
 import os
 import sys
+import base64
 from datetime import datetime
 from torchvision import models, transforms
 import plotly.express as px
@@ -278,6 +279,37 @@ def mni_anatomical_mapping(heatmap):
 
 # --- Page Content ---
 def home_page():
+    # Load and encode background video
+    video_path = os.path.join(os.path.dirname(__file__), "assets", "background.mp4")
+    if os.path.exists(video_path):
+        with open(video_path, "rb") as f:
+            video_bytes = f.read()
+        video_b64 = base64.b64encode(video_bytes).decode()
+        
+        st.markdown(f"""
+            <style>
+            #background-video {{
+                position: fixed;
+                right: 0;
+                bottom: 0;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                z-index: -1;
+                filter: brightness(0.35) contrast(1.1);
+                object-fit: cover;
+            }}
+            .main-content {{
+                position: relative;
+                z-index: 1;
+            }}
+            </style>
+            <video autoplay muted loop id="background-video">
+                <source src="data:video/mp4;base64,{video_b64}" type="video/mp4">
+            </video>
+        """, unsafe_allow_html=True)
+
     st.markdown("""
         <div class="hero-container slide-up">
             <p style="color: var(--accent-blue); font-weight: 600; letter-spacing: 5px; margin-bottom: 1.5rem; font-size: 1.1rem;">NEURO-AI CORE ENGINE V2.0</p>
