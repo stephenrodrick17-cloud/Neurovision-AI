@@ -288,24 +288,30 @@ def home_page():
         
         st.markdown(f"""
             <style>
+            .stApp {{
+                background: transparent !important;
+            }}
+            .main {{
+                background: transparent !important;
+            }}
             #background-video {{
                 position: fixed;
                 right: 0;
-                bottom: 0;
+                top: 0;
                 min-width: 100%;
                 min-height: 100%;
-                width: auto;
-                height: auto;
-                z-index: -1;
-                filter: brightness(0.35) contrast(1.1);
+                width: 100vw;
+                height: 100vh;
+                z-index: -100;
+                filter: brightness(0.6) contrast(1.1);
                 object-fit: cover;
+                pointer-events: none;
             }}
-            .main-content {{
-                position: relative;
-                z-index: 1;
+            .hero-container {{
+                background: transparent !important;
             }}
             </style>
-            <video autoplay muted loop id="background-video">
+            <video autoplay muted loop playsinline id="background-video">
                 <source src="data:video/mp4;base64,{video_b64}" type="video/mp4">
             </video>
         """, unsafe_allow_html=True)
