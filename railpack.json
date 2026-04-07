@@ -1,0 +1,6 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "deploy": {
+    "startCommand": "streamlit run BrainTumorAI/app.py --server.port $PORT --server.address 0.0.0.0"
+  }
+}
