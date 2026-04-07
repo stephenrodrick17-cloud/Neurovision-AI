@@ -239,12 +239,32 @@ def process_image_adjustments(image, brightness, contrast, sharpness):
     image = enhancer.enhance(sharpness)
     return image
 
-def get_feature_maps(model, input_tensor, layer_idx=0):
-    layers = list(model.children())
-    intermediate_model = torch.nn.Sequential(*layers[:layer_idx+1])
+def get_feature_maps(model, input_tensor, layer_name="layer1"):
+    feature_maps = []
+    
+    def hook(module, input, output):
+        feature_maps.append(output)
+    
+    # Find the target layer by name
+    target_layer = None
+    for name, module in model.named_modules():
+        if name == layer_name:
+            target_layer = module
+            break
+            
+    if target_layer is None:
+        return None
+        
+    handle = target_layer.register_forward_hook(hook)
+    
     with torch.no_grad():
-        feature_maps = intermediate_model(input_tensor)
-    return feature_maps
+        try:
+            model(input_tensor)
+        except:
+            pass
+            
+    handle.remove()
+    return feature_maps[0] if feature_maps else None
 
 def mni_anatomical_mapping(heatmap):
     if heatmap is None: return "N/A", "N/A", "N/A"
@@ -441,12 +461,39 @@ def analytics_page():
         with c1:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             st.subheader("Activation Maps")
-            layer_choice = st.selectbox("Network Depth", ["conv1", "layer1", "layer2", "layer3", "layer4"])
-            layer_map = {"conv1": 0, "layer1": 4, "layer2": 5, "layer3": 6, "layer4": 7}
-            f_maps = get_feature_maps(model, input_tensor, layer_map[layer_choice])[0].cpu().numpy()
-            fig_fm = px.imshow(f_maps[:16], facet_col=0, facet_col_wrap=4, color_continuous_scale="Viridis")
-            fig_fm.update_layout(height=450, margin=dict(l=0,r=0,b=0,t=20), paper_bgcolor='rgba(0,0,0,0)')
-            st.plotly_chart(fig_fm, use_container_width=True)
+            
+            # Expanded layer choices for ResNet-18
+            layer_options = {
+                "Initial Conv": "conv1",
+                "Layer 1 (Block 1)": "layer1.0.conv1",
+                "Layer 1 (Final)": "layer1",
+                "Layer 2 (Block 1)": "layer2.0.conv1",
+                "Layer 2 (Final)": "layer2",
+                "Layer 3 (Block 1)": "layer3.0.conv1",
+                "Layer 3 (Final)": "layer3",
+                "Layer 4 (Block 1)": "layer4.0.conv1",
+                "Layer 4 (Final)": "layer4"
+            }
+            
+            selected_label = st.selectbox("Network Depth", list(layer_options.keys()), index=2)
+            layer_name = layer_options[selected_label]
+            
+            output = get_feature_maps(model, input_tensor, layer_name)
+            
+            if output is not None:
+                f_maps = output[0].cpu().numpy()
+                # Ensure we have at least 16 filters to show
+                num_filters = min(f_maps.shape[0], 16)
+                fig_fm = px.imshow(f_maps[:num_filters], facet_col=0, facet_col_wrap=4, color_continuous_scale="Viridis")
+                fig_fm.update_layout(height=450, margin=dict(l=0,r=0,b=0,t=20), paper_bgcolor='rgba(0,0,0,0)')
+                st.plotly_chart(fig_fm, use_container_width=True)
+                
+                # Use f_maps for histogram below
+                current_f_maps = f_maps
+            else:
+                st.error(f"Could not extract feature maps for {selected_label}")
+                current_f_maps = None
+                
             st.markdown('</div>', unsafe_allow_html=True)
 
         with c2:
@@ -465,10 +512,11 @@ def analytics_page():
             """, unsafe_allow_html=True)
             
             st.markdown("<br>", unsafe_allow_html=True)
-            fig_stats = px.histogram(f_maps.flatten(), nbins=50, color_discrete_sequence=['#2563eb'])
-            fig_stats.update_layout(height=280, showlegend=False, paper_bgcolor='rgba(0,0,0,0)', 
-                                  plot_bgcolor='rgba(0,0,0,0)', font_color="white", margin=dict(t=0,b=0))
-            st.plotly_chart(fig_stats, use_container_width=True)
+            if current_f_maps is not None:
+                fig_stats = px.histogram(current_f_maps.flatten(), nbins=50, color_discrete_sequence=['#2563eb'])
+                fig_stats.update_layout(height=280, showlegend=False, paper_bgcolor='rgba(0,0,0,0)', 
+                                      plot_bgcolor='rgba(0,0,0,0)', font_color="white", margin=dict(t=0,b=0))
+                st.plotly_chart(fig_stats, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
 def patient_records_page():
