@@ -7,3 +7,9 @@ BrainTumorAI/dataset/
 *.pth
 *.pdf
 temp_viz.jpg
+.env
+models_list.txt
+list_models.py
+list_models_new.py
+BrainTumorAI/temp_upload.jpg
+BrainTumorAI/temp_analytics.jpg

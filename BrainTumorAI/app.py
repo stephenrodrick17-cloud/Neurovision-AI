@@ -17,6 +17,7 @@ sys.path.append(os.path.dirname(__file__))
 from heatmap_gen import GradCAM, apply_heatmap
 from surgery_viz import create_3d_brain_model
 from medication_report import suggest_treatment, create_pdf_report, generate_report_text
+from gemini_assistant import describe_image_for_blind, get_gemini_response, tts_component
 
 # --- Medical-Grade Page Config ---
 st.set_page_config(
@@ -213,6 +214,12 @@ if 'patient_data' not in st.session_state:
         "P-001": {"name": "John Doe", "age": 45, "history": "Chronic headaches, dizziness"},
         "P-002": {"name": "Jane Smith", "age": 32, "history": "Post-trauma evaluation"},
     }
+
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+
+if 'audio_description' not in st.session_state:
+    st.session_state.audio_description = ""
 
 # --- Load Model ---
 @st.cache_resource
@@ -482,7 +489,11 @@ def dashboard_page():
             raw_image = Image.open(uploaded_file).convert('RGB')
             adj_image = process_image_adjustments(raw_image, b, c, s)
             
-            t1, t2, t3 = st.tabs(["Neural Analysis", "Spatial Visualization", "Therapeutic Protocol"])
+            # Save temp image for Gemini analysis
+            temp_img_path = os.path.join(os.path.dirname(__file__), "temp_upload.jpg")
+            adj_image.save(temp_img_path)
+            
+            t1, t2, t3, t4 = st.tabs(["Neural Analysis", "Spatial Visualization", "Therapeutic Protocol", "Gemini AI Assistant"])
             
             with t1:
                 c1, c2 = st.columns([1.2, 1])
@@ -518,6 +529,17 @@ def dashboard_page():
                     fig_probs.update_layout(height=350, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
                                           font_color="white", showlegend=False, margin=dict(t=20,b=20,l=20,r=20))
                     st.plotly_chart(fig_probs, use_container_width=True)
+
+                    st.markdown("---")
+                    st.subheader("Blind Accessibility")
+                    if st.button("Generate Audio Description"):
+                        with st.spinner("Gemini is analyzing the scan for audio description..."):
+                            diag_info = f"Classification: {res_class}, Confidence: {confidence*100:.2f}%"
+                            st.session_state.audio_description = describe_image_for_blind(temp_img_path, diag_info)
+                    
+                    if st.session_state.audio_description:
+                        st.info(st.session_state.audio_description)
+                        st.components.v1.html(tts_component(st.session_state.audio_description, auto_play=True), height=100)
 
             with t2:
                 if pred_idx == 1:
@@ -570,6 +592,10 @@ def dashboard_page():
                         with open(pdf_path, "rb") as f:
                             st.download_button("Save Report", f, file_name=os.path.basename(pdf_path))
                 st.markdown('</div>', unsafe_allow_html=True)
+
+            with t4:
+                context = f"Patient Scan Analysis. Results: {res_class} with {confidence*100:.2f}% confidence."
+                render_gemini_assistant(context)
         else:
             st.info("System Initialized. Awaiting MRI Data Upload.")
 
@@ -669,6 +695,33 @@ def analytics_page():
                 st.plotly_chart(fig_stats, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
+        st.markdown("---")
+        st.markdown("<h2 class='slide-up'>Gemini AI Neural Insights</h2>", unsafe_allow_html=True)
+        
+        col_chat, col_tts = st.columns([2, 1])
+        
+        with col_chat:
+            render_gemini_assistant("Advanced Analytics Page: Analyzing neural activation maps and MNI coordinates.")
+            
+        with col_tts:
+            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+            st.subheader("Audio Layer Analysis")
+            st.markdown("Generate an audio description of the neural activations for accessibility.")
+            
+            # Save temp image if not already done
+            temp_img_path = os.path.join(os.path.dirname(__file__), "temp_analytics.jpg")
+            raw_image.save(temp_img_path)
+            
+            if st.button("Generate Audio Insight"):
+                with st.spinner("Gemini is analyzing the neural layers..."):
+                    context = f"Neural Analytics. Focus: {selected_label} activation maps. MNI Coords: {mni_coords}."
+                    st.session_state.audio_description = describe_image_for_blind(temp_img_path, context)
+            
+            if st.session_state.audio_description:
+                st.info(st.session_state.audio_description)
+                st.components.v1.html(tts_component(st.session_state.audio_description, auto_play=True), height=100)
+            st.markdown('</div>', unsafe_allow_html=True)
+
 def patient_records_page():
     st.markdown("<h1 class='slide-up'>Electronic Health Records</h1>", unsafe_allow_html=True)
     
@@ -726,6 +779,45 @@ def about_page():
             </div>
         </div>
     """, unsafe_allow_html=True)
+
+def render_gemini_assistant(context_info=""):
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.subheader("Clinical AI Consultation")
+    st.markdown("Ask Gemini about the scan results, potential treatments, or anatomical concerns.")
+    
+    # Chat Interface
+    for message in st.session_state.chat_history:
+        role_color = "var(--accent-blue)" if message['role'] == 'user' else "rgba(255,255,255,0.1)"
+        st.markdown(f"""
+            <div style="background: {role_color}; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--card-border);">
+                <p style="margin:0; font-size: 0.9rem; font-weight: 700;">{'YOU' if message['role'] == 'user' else 'GEMINI AI'}</p>
+                <p style="margin:5px 0 0 0;">{message['content']}</p>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    user_input = st.text_input("Consult with Gemini AI...", key=f"gemini_input_{st.session_state.page}")
+    if st.button("Send Query", key=f"send_query_{st.session_state.page}"):
+        if user_input:
+            history = []
+            for m in st.session_state.chat_history:
+                history.append({"role": m['role'], "parts": [m['content']]})
+            
+            if not history:
+                user_query = f"Context: {context_info}\n\nUser Question: {user_input}"
+            else:
+                user_query = user_input
+                
+            with st.spinner("Gemini is thinking..."):
+                response = get_gemini_response(history, user_query)
+                
+            st.session_state.chat_history.append({"role": "user", "content": user_input})
+            st.session_state.chat_history.append({"role": "model", "content": response})
+            st.rerun()
+    
+    if st.button("Clear Consultation History", key=f"clear_chat_{st.session_state.page}"):
+        st.session_state.chat_history = []
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def render_footer():
     st.markdown("""

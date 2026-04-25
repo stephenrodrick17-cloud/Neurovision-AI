@@ -6,3 +6,13 @@ numpy
 Pillow
 plotly
 fpdf
+google-genai
+Flask
+Flask-CORS
+PyQt5
+PyQt5-sip
+pyautogui
+pyttsx3
+python-dotenv
+python-multipart
+Werkzeug
