@@ -1,0 +1,13 @@
+Phase 0 run log
+================
+
+Command: python experiments/make_gradcam_examples.py
+Output:
+Saved Grad-CAM grid: C:\Users\asus\Downloads\Brain Imaging\experiments_results\phase0\gradcam_examples\gradcam_grid_2x4.png
+Saved individual overlays: 8
+Saved metadata: C:\Users\asus\Downloads\Brain Imaging\experiments_results\phase0\gradcam_examples\gradcam_metadata.json
+
+Command: PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q
+Output:
+...................                                                      [100%]
+19 passed in 21.90s

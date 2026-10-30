@@ -57,13 +57,13 @@ def create_3d_brain_model(mri_slice, tumor_mask=None):
     traces = [go.Scatter3d(
         x=x, y=y, z=z_points, mode="markers",
         marker=dict(size=1.8, color="rgba(180,200,220,0.10)", line=dict(width=0)),
-        name="Brain Parenchyma", showlegend=True, hoverinfo="skip",
+        name="Synthetic brain-image points", showlegend=True, hoverinfo="skip",
     )]
     skull_x, skull_y, skull_z = _sphere_points(w / 2, h / 2, depth / 2, min(h, w) * 0.48, n_pts=24)
     traces.append(go.Surface(
         x=skull_x, y=skull_y, z=skull_z, opacity=0.06,
         colorscale=[[0, "rgba(100,150,220,0.05)"], [1, "rgba(160,200,255,0.08)"]],
-        showscale=False, name="Skull Surface", showlegend=True,
+        showscale=False, name="Synthetic skull-shaped surface", showlegend=True,
     ))
     if tumor_mask is not None:
         tm = tumor_mask if tumor_mask.ndim == 2 else tumor_mask[..., 0]
@@ -75,7 +75,7 @@ def create_3d_brain_model(mri_slice, tumor_mask=None):
             x=tx, y=ty, z=tz, mode="markers",
             marker=dict(size=3, color="#ef4444", opacity=0.82,
                         line=dict(width=0.4, color="rgba(255,255,255,0.4)")),
-            name="Tumor Volume", showlegend=True,
+            name="Thresholded Grad-CAM activation (not a segmentation mask)", showlegend=True,
         ))
         if len(tx) > 0:
             cxs, cys, czs = tx.mean(), ty.mean(), tz.mean()
@@ -84,16 +84,16 @@ def create_3d_brain_model(mri_slice, tumor_mask=None):
             traces.append(go.Surface(
                 x=cx, y=cy, z=cz, opacity=0.25,
                 colorscale=[[0, "rgba(239,68,68,0.05)"], [1, "rgba(239,68,68,0.35)"]],
-                showscale=False, name="Tumor Isosurface", showlegend=True,
+                showscale=False, name="Synthetic activation envelope", showlegend=True,
             ))
             entry_pt = [0.05 * w, 0.02 * h, 0.0]
             traces.append(go.Scatter3d(
                 x=[entry_pt[0], cxs], y=[entry_pt[1], cys], z=[entry_pt[2], czs],
                 mode="lines", line=dict(color="#10b981", width=4),
-                name="Quick Surgical Path", showlegend=True,
+                name="Illustrative line (not a surgical plan)", showlegend=True,
             ))
     fig = go.Figure(data=traces)
-    fig.update_layout(**_base_3d_layout("3D Surgical Planning Visualization"))
+    fig.update_layout(**_base_3d_layout("Illustrative / Simulated 3D View — Not an Anatomical Reconstruction"))
     fig.update_layout(scene_camera=dict(eye=dict(x=1.45, y=1.45, z=0.9)))
     return fig
 
@@ -122,13 +122,13 @@ def render_stereotactic_plan_3d(mri_slice,
     traces.append(go.Scatter3d(
         x=bx, y=by, z=bz, mode="markers",
         marker=dict(size=1.6, color="rgba(170,195,230,0.09)"),
-        name="Brain Parenchyma", hoverinfo="skip",
+        name="Synthetic brain-image points", hoverinfo="skip",
     ))
     skull_x, skull_y, skull_z = _sphere_points(w / 2, h / 2, depth / 2, min(h, w) * 0.48, n_pts=22)
     traces.append(go.Surface(
         x=skull_x, y=skull_y, z=skull_z, opacity=0.06,
         colorscale=[[0, "rgba(100,160,230,0.04)"], [1, "rgba(180,210,255,0.07)"]],
-        showscale=False, name="Skull Surface",
+        showscale=False, name="Synthetic skull-shaped surface",
     ))
     if tumor_mask is not None:
         tm = tumor_mask if tumor_mask.ndim == 2 else tumor_mask[..., 0]
@@ -138,7 +138,7 @@ def render_stereotactic_plan_3d(mri_slice,
             traces.append(go.Scatter3d(
                 x=tx_vals[::3], y=ty_vals[::3], z=tz[::3], mode="markers",
                 marker=dict(size=3.2, color="#ef4444", opacity=0.85),
-                name="Tumor Volume",
+                name="Thresholded Grad-CAM activation (not a segmentation mask)",
             ))
             cxs, cys, czs = tx_vals.mean(), ty_vals.mean(), tz.mean()
             r = max(2.5, float(np.percentile(np.sqrt((tx_vals - cxs)**2 + (ty_vals - cys)**2 + (tz - czs)**2), 80)))
@@ -146,7 +146,7 @@ def render_stereotactic_plan_3d(mri_slice,
             traces.append(go.Surface(
                 x=cx, y=cy, z=cz, opacity=0.28,
                 colorscale=[[0, "rgba(239,68,68,0.04)"], [1, "rgba(239,68,68,0.35)"]],
-                showscale=False, name="Tumor Isosurface",
+                showscale=False, name="Synthetic activation envelope",
             ))
     for s in critical_structures:
         name = s.name
@@ -159,7 +159,7 @@ def render_stereotactic_plan_3d(mri_slice,
             x=xx, y=yy, z=zz, opacity=0.10,
             colorscale=[[0, "rgba(251,191,36,0.03)"], [1, "rgba(251,191,36,0.25)"]],
             showscale=False, name=f"Zone: {name}", showlegend=True,
-            hovertemplate=f"{name}<br>R={r0:.0f} mm<extra></extra>",
+            hovertemplate=f"Illustrative proxy: {name}<br>Assumed radius={r0:.0f} mm<extra></extra>",
         ))
     e_px, e_py, e_pz = to_plot_coords(entry_mm)
     t_px, t_py, t_pz = to_plot_coords(target_mm)
@@ -167,7 +167,7 @@ def render_stereotactic_plan_3d(mri_slice,
         x=[e_px, t_px], y=[e_py, t_py], z=[e_pz, t_pz],
         mode="lines",
         line=dict(color="#10b981", width=6),
-        name="Planned Trajectory",
+        name="Illustrative trajectory (not patient-specific)",
     ))
     ring_u = np.linspace(0, 2 * np.pi, 28)
     ring_r = 6.0
@@ -186,20 +186,22 @@ def render_stereotactic_plan_3d(mri_slice,
     traces.append(go.Scatter3d(
         x=ring_x, y=ring_y, z=ring_z, mode="lines",
         line=dict(color="#fbbf24", width=4),
-        name="Burr-Hole Entry (14 mm)",
+        name="Illustrative entry ring (synthetic geometry)",
     ))
     traces.append(go.Scatter3d(
         x=[e_px], y=[e_py], z=[e_pz], mode="markers",
         marker=dict(size=9, color="#fbbf24", line=dict(width=2, color="white")),
-        name="Entry Point",
+        name="Illustrative entry point",
     ))
     traces.append(go.Scatter3d(
         x=[t_px], y=[t_py], z=[t_pz], mode="markers",
         marker=dict(size=9, color="#22d3ee", symbol="cross", line=dict(width=2, color="white")),
-        name="Target Isocenter",
+        name="Illustrative target point",
     ))
     fig = go.Figure(data=traces)
-    fig.update_layout(**_base_3d_layout("6-DOF STEREOTACTIC ARM · TRAJECTORY PLAN"))
+    fig.update_layout(**_base_3d_layout(
+        "Illustrative / Simulated Trajectory — Not Patient-Specific or Clinically Validated"
+    ))
     fig.update_layout(scene_camera=dict(eye=dict(x=1.55, y=1.55, z=0.95)))
     return fig
 
@@ -224,13 +226,13 @@ def render_radiosurgery_plan_3d(mri_slice,
     traces.append(go.Scatter3d(
         x=bx, y=by, z=bz, mode="markers",
         marker=dict(size=1.6, color="rgba(170,195,230,0.08)"),
-        name="Brain Parenchyma", hoverinfo="skip",
+        name="Synthetic brain-image points", hoverinfo="skip",
     ))
     skull_x, skull_y, skull_z = _sphere_points(w / 2, h / 2, depth / 2, min(h, w) * 0.48, n_pts=22)
     traces.append(go.Surface(
         x=skull_x, y=skull_y, z=skull_z, opacity=0.05,
         colorscale=[[0, "rgba(100,160,230,0.04)"], [1, "rgba(180,210,255,0.07)"]],
-        showscale=False, name="Skull",
+        showscale=False, name="Synthetic skull-shaped surface",
     ))
     if tumor_mask is not None:
         tm = tumor_mask if tumor_mask.ndim == 2 else tumor_mask[..., 0]
@@ -240,13 +242,13 @@ def render_radiosurgery_plan_3d(mri_slice,
             traces.append(go.Scatter3d(
                 x=tx_vals[::3], y=ty_vals[::3], z=tz[::3], mode="markers",
                 marker=dict(size=3, color="#ef4444", opacity=0.85),
-                name="Tumor PTV",
+                name="Thresholded Grad-CAM activation (not a segmentation mask)",
             ))
     tx, ty, tz = to_plot(target_mm)
     traces.append(go.Scatter3d(
         x=[tx], y=[ty], z=[tz], mode="markers",
         marker=dict(size=10, color="#22d3ee", symbol="x", line=dict(width=2, color="white")),
-        name="Isocenter",
+        name="Illustrative isocenter",
     ))
     iso_levels = [(0.95, "#fde047"), (0.8, "#f97316"), (0.6, "#ef4444"), (0.4, "#a855f7"), (0.2, "#3b82f6")]
     for thresh, color in iso_levels:
@@ -256,7 +258,7 @@ def render_radiosurgery_plan_3d(mri_slice,
         traces.append(go.Surface(
             x=x, y=y, z=z, opacity=0.08,
             colorscale=[[0, f"{color}00"], [1, f"{color}44"]],
-            showscale=False, name=f"Dose {int(thresh*100)}%", showlegend=True,
+            showscale=False,             name=f"Simulated dose contour {int(thresh*100)}%", showlegend=True,
         ))
     linac_base_dist_mm = 420.0
     linac_base_dist_plot = linac_base_dist_mm * scale_xy
@@ -271,16 +273,16 @@ def render_radiosurgery_plan_3d(mri_slice,
         traces.append(go.Scatter3d(
             x=[sx, tx], y=[sy, ty], z=[sz, tz],
             mode="lines", line=dict(color=col, width=3),
-            name=f"Beam {b['beam_index']:02d} ({b['gantry_yaw_deg']:.0f}°, {b['couch_pitch_deg']:.0f}°)",
+            name=f"Simulated beam {b['beam_index']:02d} ({b['gantry_yaw_deg']:.0f}°, {b['couch_pitch_deg']:.0f}°)",
             showlegend=b["beam_index"] <= 5,
         ))
         traces.append(go.Scatter3d(
             x=[sx], y=[sy], z=[sz], mode="markers",
-            marker=dict(size=4, color=col), name=f"Linac Head {b['beam_index']:02d}", showlegend=False,
+            marker=dict(size=4, color=col), name=f"Simulated source {b['beam_index']:02d}", showlegend=False,
         ))
     fig = go.Figure(data=traces)
     fig.update_layout(**_base_3d_layout(
-        f"CYBERKNIFE G4 · {beams_plan.get('n_beams', 9)} NON-COPLANAR BEAMS · {beams_plan.get('beam_energy_mv', 6)} MV"
+        "Illustrative / Simulated Dose Geometry — Not a Treatment Plan"
     ))
     fig.update_layout(scene_camera=dict(eye=dict(x=1.55, y=1.55, z=0.95)))
     return fig

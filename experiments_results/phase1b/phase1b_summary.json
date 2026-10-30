@@ -1,0 +1,42 @@
+{
+  "runs": [
+    {
+      "architecture": "densenet121",
+      "seed": 44,
+      "device": "cuda",
+      "best_epoch": 3,
+      "best_validation_balanced_accuracy": 0.9928154118291893,
+      "best_validation_loss": 0.03781961107100006,
+      "training_seconds": 577.431,
+      "metrics": {
+        "confusion_matrix": [
+          [
+            214,
+            7
+          ],
+          [
+            1,
+            384
+          ]
+        ],
+        "accuracy": 0.9867986798679867,
+        "balanced_accuracy": 0.9828641946289005,
+        "sensitivity": 0.9974025974025974,
+        "specificity": 0.9683257918552036,
+        "precision": 0.9820971867007673,
+        "f1": 0.9896907216494846,
+        "roc_auc": 0.9976023976023977,
+        "average_precision": 0.9985398724722914
+      },
+      "train_class_counts": {
+        "no_tumor": 1490,
+        "tumor": 1701
+      },
+      "validation_class_counts": {
+        "no_tumor": 376,
+        "tumor": 427
+      },
+      "code_revision": "0f4d663a327e8ab638b78e6425096a9fd84c9165"
+    }
+  ]
+}

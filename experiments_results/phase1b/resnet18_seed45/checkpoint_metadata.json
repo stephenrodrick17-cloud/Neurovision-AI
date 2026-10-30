@@ -1,0 +1,13 @@
+{
+  "architecture": "resnet18",
+  "seed": 45,
+  "selected_epoch": 6,
+  "selection_metric": "validation_balanced_accuracy",
+  "validation_balanced_accuracy": 0.9964871194379391,
+  "validation_loss": 0.029334073641176097,
+  "threshold": 0.5,
+  "class_to_idx": {
+    "no_tumor": 0,
+    "tumor": 1
+  }
+}

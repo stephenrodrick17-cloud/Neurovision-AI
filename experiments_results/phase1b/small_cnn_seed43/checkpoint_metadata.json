@@ -1,0 +1,13 @@
+{
+  "architecture": "small_cnn",
+  "seed": 43,
+  "selected_epoch": 12,
+  "selection_metric": "validation_balanced_accuracy",
+  "validation_balanced_accuracy": 0.8299896606706861,
+  "validation_loss": 0.38242083669154164,
+  "threshold": 0.5,
+  "class_to_idx": {
+    "no_tumor": 0,
+    "tumor": 1
+  }
+}

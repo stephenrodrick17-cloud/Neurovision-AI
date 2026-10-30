@@ -17,6 +17,31 @@ BRAIN_HALF_DEPTH_MM = 70.0
 VOXEL_SIZE_MM = 1.0
 
 
+SIMULATED_COORDINATE_LABEL = "Illustrative / Simulated Coordinates"
+
+
+def illustrative_heatmap_mapping(
+    heatmap: np.ndarray | None,
+) -> Tuple[Tuple[int, int, int], str, str]:
+    """Map a 2D heatmap peak to display-only image-plane coordinates."""
+    if heatmap is None:
+        return (0, 0, 0), "Unknown image region", "Unknown image side"
+    if heatmap.ndim != 2 or heatmap.size == 0 or not np.isfinite(heatmap).all():
+        raise ValueError("Coordinate preview requires a finite, non-empty 2D heatmap.")
+
+    y, x = np.unravel_index(int(np.argmax(heatmap)), heatmap.shape)
+    height, width = heatmap.shape
+    image_x = int(round((x / max(width - 1, 1) - 0.5) * 180))
+    image_y = int(round((0.5 - y / max(height - 1, 1)) * 180))
+    image_region = (
+        "upper image" if y < height / 3
+        else "middle image" if y < 2 * height / 3
+        else "lower image"
+    )
+    image_side = "image-left" if x < width / 2 else "image-right"
+    return (image_x, image_y, 0), image_region, image_side
+
+
 def _voxel_to_mm(px: int, py: int, pz: int, shape=(224, 224, 10)) -> Tuple[float, float, float]:
     h, w, d = shape
     x_mm = (px - w / 2.0) * VOXEL_SIZE_MM
@@ -34,6 +59,7 @@ def _mm_to_voxel(x_mm: float, y_mm: float, z_mm: float, shape=(224, 224, 10)) ->
 
 
 def compute_tumor_centroid(heatmap: np.ndarray, mri_shape=(224, 224), threshold=0.4) -> Dict[str, Any]:
+    """Build an illustrative geometry proxy from a 2D activation map, not a lesion mask."""
     h, w = mri_shape[:2]
     hm = np.clip(heatmap.astype(np.float32), 0, 1)
     if hm.shape[:2] != (h, w):

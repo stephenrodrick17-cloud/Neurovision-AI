@@ -1,0 +1,38 @@
+{
+  "architecture": "resnet18",
+  "seed": 43,
+  "device": "cuda",
+  "best_epoch": 8,
+  "best_validation_balanced_accuracy": 0.9916444516418357,
+  "best_validation_loss": 0.04641606373379919,
+  "training_seconds": 537.569,
+  "metrics": {
+    "confusion_matrix": [
+      [
+        214,
+        7
+      ],
+      [
+        3,
+        382
+      ]
+    ],
+    "accuracy": 0.9834983498349835,
+    "balanced_accuracy": 0.9802667920314979,
+    "sensitivity": 0.9922077922077922,
+    "specificity": 0.9683257918552036,
+    "precision": 0.9820051413881749,
+    "f1": 0.9870801033591732,
+    "roc_auc": 0.9972615619674444,
+    "average_precision": 0.9983864908458172
+  },
+  "train_class_counts": {
+    "no_tumor": 1490,
+    "tumor": 1701
+  },
+  "validation_class_counts": {
+    "no_tumor": 376,
+    "tumor": 427
+  },
+  "code_revision": "0f4d663a327e8ab638b78e6425096a9fd84c9165"
+}

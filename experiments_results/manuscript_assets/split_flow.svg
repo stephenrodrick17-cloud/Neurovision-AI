@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="390" viewBox="0 0 1120 390" role="img" aria-labelledby="title desc">
+  <title id="title">Image-level dataset partition counts</title>
+  <desc id="desc">A total of 4,600 folder-labeled images are divided into train, validation, and test partitions with their respective class counts.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a"/>
+    </marker>
+    <style>
+      .box { fill:#f4f7fb; stroke:#31547a; stroke-width:2; rx:14; }
+      .total { fill:#eaf4ee; stroke:#28724a; stroke-width:2; rx:14; }
+      .title { font:700 21px Arial,sans-serif; fill:#17324d; text-anchor:middle; }
+      .body { font:16px Arial,sans-serif; fill:#26384a; text-anchor:middle; }
+      .note { font:14px Arial,sans-serif; fill:#52627a; text-anchor:middle; }
+      .arrow { stroke:#52627a; stroke-width:2.5; fill:none; marker-end:url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1120" height="390" fill="#ffffff"/>
+  <text x="560" y="38" class="title">Fixed image-level split (folder-derived labels)</text>
+
+  <rect x="390" y="65" width="340" height="92" class="total"/>
+  <text x="560" y="100" class="title">All images: 4,600</text>
+  <text x="560" y="130" class="body">No-tumor label: 2,087  |  Tumor label: 2,513</text>
+
+  <path d="M560 157 V196 M190 196 H930 M190 196 V220 M560 196 V220 M930 196 V220" class="arrow"/>
+
+  <rect x="55" y="220" width="270" height="106" class="box"/>
+  <text x="190" y="254" class="title">Training: 3,191</text>
+  <text x="190" y="282" class="body">No-tumor: 1,490</text>
+  <text x="190" y="306" class="body">Tumor: 1,701</text>
+
+  <rect x="425" y="220" width="270" height="106" class="box"/>
+  <text x="560" y="254" class="title">Validation: 803</text>
+  <text x="560" y="282" class="body">No-tumor: 376</text>
+  <text x="560" y="306" class="body">Tumor: 427</text>
+
+  <rect x="795" y="220" width="270" height="106" class="box"/>
+  <text x="930" y="254" class="title">Test: 606</text>
+  <text x="930" y="282" class="body">No-tumor: 221</text>
+  <text x="930" y="306" class="body">Tumor: 385</text>
+
+  <text x="560" y="363" class="note">Patient/study identifiers were unavailable; this is not a patient-level split.</text>
+</svg>

@@ -4,7 +4,41 @@ __pycache__/
 .ipynb_checkpoints/
 archive/
 BrainTumorAI/dataset/
+BrainTumorAI/data/external/
+BrainTumorAI/data/brats/
+BrainTumorAI/cache/
+BrainTumorAI/models/v2_patient_level/
 *.pth
 *.pdf
 temp_*.jpg
 .trae/
+BrainTumorAI/results/*
+!BrainTumorAI/results/v2_patient_level/
+BrainTumorAI/results/v2_patient_level/*
+!BrainTumorAI/results/v2_patient_level/**/
+!BrainTumorAI/results/v2_patient_level/**/*.md
+!BrainTumorAI/results/v2_patient_level/**/*.sha256
+!BrainTumorAI/results/v2_patient_level/**/*.csv
+!BrainTumorAI/results/v2_patient_level/**/*.json
+BrainTumorAI/results/v2_patient_level/**/*.png
+BrainTumorAI/results/v2_patient_level/**/*.jpg
+BrainTumorAI/results/v2_patient_level/**/*.jpeg
+BrainTumorAI/results/v2_patient_level/**/*.nii
+BrainTumorAI/results/v2_patient_level/**/*.nii.gz
+BrainTumorAI/results/v2_patient_level/**/*.pth
+BrainTumorAI/results/v2_patient_level/**/images/
+BrainTumorAI/results/v2_patient_level/**/checkpoints/
+.env
+
+# Large data/archive files
+*.zip
+
+# Scratch/utility scripts
+list_models.py
+list_models_new.py
+models_list.txt
+results_extract_output.txt
+extract_results.py
+
+# VS Code
+.vscode/

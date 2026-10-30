@@ -1,241 +1,135 @@
-# NeuroVision AI: A Research Prototype for Binary Brain-Image Classification and Interactive Visualization
+# NeuroVision AI: Reproducible Image-Level Evaluation of a Brain MRI Classifier Prototype
 
-> **Scope and evidence note:** This manuscript describes the software and one exploratory evaluation of the local checkpoint. The checkpoint's training provenance and the image dataset's source and patient-level independence have not been verified. The reported image-level metrics are descriptive, must not be interpreted as clinical performance, and should not be submitted as a validated diagnostic study.
+> **Draft and scope.** This draft describes a local software experiment, not a clinical validation study. The dataset source, version, license, patient identities, and clinical validity of folder-derived labels have not been verified. The reported metrics describe prediction of those labels on an image-level split only.
 
 ## Abstract
 
 ### Background
 
-Brain-image classification is an active area of medical-imaging research. Research prototypes can combine image-classification models with visualization and reporting interfaces, but software functionality alone does not establish clinical validity.
+Brain-image classifiers require reproducible data partitions, strict checkpoint handling, and evaluation that is separated from model selection. A working user interface or high image-level score alone does not establish patient-level or clinical validity.
 
 ### Objective
 
-This work describes a browser-based prototype for binary classification of brain images into tumor and no-tumor classes, with supplementary model-activation visualizations and an interactive interface. We characterize the implemented workflow and report an exploratory evaluation of the locally available checkpoint on the local test-folder images. The aim is descriptive software characterization, not clinical validation.
+To audit and characterize the NeuroVision AI binary brain-image classifier, address defects in its legacy training/evaluation workflow, and measure the corrected baseline on a fixed image-level test partition.
 
 ### Methods
 
-The prototype uses a ResNet-18 image-classification architecture initialized with ImageNet-pretrained weights and a replacement two-class output layer. Images are resized to 224 × 224 pixels and normalized using ImageNet channel statistics. The training script applies random horizontal flips, rotations up to 10 degrees, and brightness/contrast jitter to training images. It uses cross-entropy loss, the Adam optimizer (learning rate 0.001), batch size 32, and 10 training epochs. The preprocessing script generates an image-level 80:20 train/test split with `random_state=42`; patient-level grouping and stratification are not implemented. We loaded the local checkpoint and evaluated it once on 920 images in the local test folder. This split and checkpoint are not independently verified as an untouched patient-level test set.
+The available local dataset contains 4,600 readable images in `Brain Tumor` and `Healthy` folders, mapped to `tumor=1` and `no_tumor=0`. Its source citation, release, license, patient identifiers, and independent label validation could not be established. A deterministic seed-42 split grouped exact pixel duplicates and candidate near-duplicates identified using perceptual-hash distance and grayscale structural similarity. The resulting partitions contained 3,191 training, 803 validation, and 606 final-test images. An ImageNet-pretrained ResNet-18 was trained using training data only; validation balanced accuracy selected checkpoints and controlled early stopping. A small CNN, the legacy ResNet-18 checkpoint, and a training-majority baseline were compared on the same final test partition. Evaluation used a fixed 0.5 threshold and continuous tumor-class scores for ROC-AUC and average precision. Confidence intervals were estimated by duplicate-group-stratified bootstrap.
 
 ### Results
 
-On the local test-folder set (399 no-tumor and 521 tumor images), the loaded checkpoint predicted every image as tumor. The image-level confusion matrix contained 0 true negatives, 399 false positives, 0 false negatives, and 521 true positives. Accuracy was 56.63% (Wilson 95% interval 53.41–59.80%), tumor sensitivity 100%, no-tumor specificity 0%, tumor precision 56.63%, tumor F1 72.31%, balanced accuracy 50.00%, and ROC-AUC 0.487. These descriptive results show degenerate all-positive behavior and are not evidence of useful classification. The test split's patient independence and checkpoint provenance are unknown.
+On the 606-image final test partition, the corrected ResNet-18 achieved 98.51% accuracy, 98.16% balanced accuracy, 99.48% tumor sensitivity, 96.83% no-tumor specificity, and ROC-AUC 0.9996. Its confusion matrix in `[no_tumor, tumor]` order was `[[214, 7], [2, 383]]`; 216 images were predicted as no-tumor and 390 as tumor. The duplicate-group-bootstrap 95% interval was 96.28–100.00% for accuracy and 0.9987–1.0000 for ROC-AUC. The small CNN achieved 81.02% accuracy and ROC-AUC 0.9045. The legacy checkpoint predicted all 606 test images as tumor, with 63.53% accuracy, 50.00% balanced accuracy, 0% specificity, and ROC-AUC 0.4952. The training-majority baseline had the same accuracy and balanced accuracy as that degenerate checkpoint.
 
 ### Conclusions
 
-The repository demonstrates an integrated software workflow for binary image classification and interactive visualization. The current implementation is a research/educational prototype. Dataset provenance, patient-independent evaluation, external validation, and clinical utility have not been established by the software itself.
+The corrected pipeline produced a substantially stronger result against the local folder-derived labels than the legacy checkpoint on the same image-level test partition. This is preliminary software/method evidence only. The lack of patient identifiers, verified source and license, independently adjudicated labels, and external validation prevents patient-generalization or clinical claims. Independent data and domain-expert review are needed before manuscript submission as a diagnostic-performance study.
 
-**Keywords:** brain imaging; image classification; ResNet-18; Grad-CAM; explainable artificial intelligence; research prototype
-
----
+**Keywords:** brain MRI; binary image classification; ResNet-18; reproducibility; image-level evaluation; research prototype
 
 ## 1. Introduction
 
-Automated analysis of brain images is a broad research area with potential applications in image triage, computer-assisted review, and methodological investigation. Any such system must be assessed in relation to the provenance and representativeness of its data, the independence of its training and evaluation cohorts, the validity of its labels, and the intended clinical setting.
+Automated analysis of brain images is an active research area, but performance estimates depend on dataset provenance, label validity, independence of evaluation cases, and the match between the experiment and the intended use. Image-level splits can overstate generalization when related images from the same patient or source volume occur across partitions. A model's tensor-compatible checkpoint also does not establish that it was trained appropriately or that its predictions are informative.
 
-This work describes NeuroVision AI, a software prototype that combines a binary image classifier with an interactive web interface. The prototype accepts a single two-dimensional PNG or JPEG image, applies image preprocessing, returns scores for two classes, and presents supplementary visualizations and reporting features. The implementation is intended to support research and educational exploration rather than clinical diagnosis.
+NeuroVision AI is a Streamlit research and educational prototype with a binary image classifier and supplementary activation visualizations. Its verified classifier task is limited to classifying a single two-dimensional image as `tumor` or `no_tumor`. It does not classify tumor subtypes, segment lesions, analyze volumes, or provide validated anatomical localization. Simulated stereotactic, robotic, radiosurgery, and treatment-report features are demonstrations and are not clinical tools.
 
-The project should be described narrowly: its trained task is tumor-versus-no-tumor image classification. It does not perform tumor-subtype classification, volumetric segmentation, or validated anatomical localization. The user interface contains features with broader clinical labels, but these should not be interpreted as validated model capabilities.
+This work audits the legacy pipeline, implements a train/validation/final-test workflow with strict model loading, and reports a measured comparison on the available local data. The specific cause of the legacy checkpoint's all-tumor output could not be reconstructed because its training logs and full provenance are unavailable.
 
-### 1.1 Study objective
+## 2. Materials and methods
 
-The objective was to describe the software implementation and characterize the local checkpoint's behavior on the available image-level test folder. The evaluation was exploratory and was not designed to establish clinical performance or generalization.
+### 2.1 Data source and labels
 
-### 1.2 Research questions
+The local source directory is `archive/Brain Tumor Data Set/Brain Tumor Data Set/`, with `Brain Tumor` and `Healthy` subdirectories. Files were mapped by folder name to `tumor=1` and `no_tumor=0`, respectively. The available files do not identify an authoritative source, citation, dataset release/version, license, patient or volume IDs, or an independent label-adjudication process. The data were not identified as BraTS and are not described as such here.
 
-The work addresses two descriptive questions: (1) what image-classification and visualization workflow is implemented, and (2) how did the available checkpoint classify the local test-folder images? It does not evaluate patient-independent performance, localization accuracy against annotations, usability, or clinical benefit.
+The audit counted 2,513 tumor-folder images and 2,087 healthy-folder images. All 4,600 files were readable; 4,496 were JPEG, 18 PNG, and 86 TIFF, with 459 distinct image dimensions. Exact decoded-pixel hashing found 432 duplicate groups containing 1,017 images. A conservative near-duplicate screen grouped images only when perceptual-hash Hamming distance was at most 4 and 64×64 grayscale structural similarity was at least 0.95. This process yielded 955 multi-image connected components containing 2,782 images and found no high-similarity cross-label edges. Such groups are image-similarity units, not patient identities. A small visual spot-check was not a clinical label review.
 
-### 1.3 Contributions
+### 2.2 Partitions and leakage checks
 
-The implemented software contributions are:
+The fixed manifest was generated with seed 42 using stratified group splitting, keeping exact and screened near-duplicate components within one partition. It assigned 3,191 images to training (1,490 no-tumor; 1,701 tumor), 803 to validation (376; 427), and 606 to final testing (221; 385). The final test partition contains 396 duplicate/near-duplicate groups, including 121 multi-image groups. No group ID or exact decoded-pixel hash crossed partitions.
 
-- a Streamlit interface for uploading and classifying a single two-dimensional image;
-- a binary ResNet-18 inference workflow with softmax score display;
-- Grad-CAM and intermediate feature-map visualizations;
-- a local, rule-based information panel and PDF report generation;
-- optional remote language-model chat/image description and browser-based speech synthesis.
+The legacy prepared train/test folders had 151 exact duplicate groups crossing the split boundary, representing 224 train-folder and 167 test-folder images in shared groups. The legacy training script also evaluated the nominal test folder each epoch for scheduler updates and checkpoint selection. Its reported old-folder result is therefore not an unbiased final-test estimate. The replacement training script reads only train and validation rows and asserts that exact and near-duplicate groups do not cross partitions. No patient-independent split was possible.
 
-These are implementation contributions, not evidence of diagnostic accuracy, improved clinical outcomes, or validated accessibility benefit.
+### 2.3 Preprocessing
 
-## 2. Materials and Methods
+Images are decoded with Pillow, converted to RGB, resized to 224×224, converted to tensors, and normalized using ImageNet means `(0.485, 0.456, 0.406)` and standard deviations `(0.229, 0.224, 0.225)`. Training-only augmentation consists of random horizontal flips and rotations up to 10 degrees. Validation, final-test, and application inference use the same non-augmenting transform. The test threshold, preprocessing settings, and checkpoint were not selected using final-test labels.
 
-### 2.1 Software and architecture
+### 2.4 Models and training
 
-The application is implemented in Python. The user interface is built with Streamlit. Image classification uses PyTorch and Torchvision, image handling uses Pillow and OpenCV, and plots use Plotly. PDF reports are generated using FPDF. Optional generative-AI requests use the OpenAI-compatible Python client pointed at the OpenRouter API.
+The primary baseline is Torchvision ResNet-18 initialized with ImageNet V1 weights, with its final layer replaced by two logits. An additional small CNN was trained on the same manifest. The legacy local ResNet-18 state dictionary was loaded strictly for comparison; its training configuration and data provenance remain unverified. A constant training-majority predictor was included as a non-learning baseline.
 
-The system consists of the following components:
+For both newly trained models, the training seed was 42, the loss was unweighted cross-entropy, and Adam used learning rate `1e-4` and weight decay `1e-4` with batch size 16 and a maximum of 12 epochs. The class ratio was modest enough that no class weighting or balanced sampler was used. `ReduceLROnPlateau`, early stopping (patience 4), and checkpoint selection used validation balanced accuracy only; validation loss broke ties. Both runs completed 12 epochs and selected epoch 11. Best validation balanced accuracy was 99.15% for ResNet-18 and 84.17% for the small CNN. Training summaries mark the final test split as not accessed.
 
-1. **User interface:** `BrainTumorAI/app.py` manages navigation, upload controls, inference, plots, session state, and report/download interactions.
-2. **Preprocessing script:** `BrainTumorAI/preprocess.py` reads the expected source folders, resizes readable images, assigns binary folder labels, and writes train/test directories.
-3. **Training script:** `BrainTumorAI/train_classifier.py` defines the augmentation pipeline, loads folder-based datasets, fine-tunes ResNet-18, and saves a model state dictionary.
-4. **Explainability visualization:** `BrainTumorAI/heatmap_gen.py` computes a Grad-CAM heatmap using forward activations and backward gradients from a selected layer.
-5. **Three-dimensional illustration:** `BrainTumorAI/surgery_viz.py` constructs a point-cloud-style Plotly visualization from a two-dimensional image. It does not reconstruct a scan volume.
-6. **Reports and fixed informational text:** `BrainTumorAI/medication_report.py` provides predefined text and PDF construction.
-7. **Optional generative AI:** `BrainTumorAI/gemini_assistant.py` sends chat prompts or an image plus prompt to a remote model when configured.
+Checkpoints store the architecture, strict class mapping, model state, seed, preprocessing/training configuration, software environment, manifest hash, selected epoch, and validation result. The ResNet-18 checkpoint SHA-256 is `0ce4741c3ce2cbc287c7b716395b1571bac143200e2f3489e48efd002310b40e`; the small-CNN checkpoint SHA-256 is `f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c`. The split-manifest SHA-256 is `c0d909039b77d1d2ccb3fb27105e411eafee792b868b8203794ac5bf979d66ab`.
 
-The trained checkpoint is saved locally as `BrainTumorAI/models/tumor_classifier.pth`. Checkpoints (`*.pth`) and datasets are excluded by the repository's Git ignore rules. Consequently, the checkpoint and data used in a local run must be separately archived and identified to reproduce that run.
+### 2.5 Evaluation
 
-### 2.2 Dataset and labels
+Each frozen candidate was evaluated on the same 606-image final-test partition. The decision threshold was fixed at 0.5. Metrics included accuracy, balanced accuracy, tumor sensitivity/recall, no-tumor specificity, tumor precision/F1, per-class precision/recall/F1, confusion matrix, predicted-class counts, ROC-AUC, and average precision. ROC-AUC and average precision used continuous tumor-class softmax scores. One-class prediction collapse was explicitly flagged.
 
-The preprocessing code expects two source directories named `Brain Tumor` and `Healthy` under `archive/Brain Tumor Data Set/Brain Tumor Data Set/`. It maps these folders to `tumor` and `no_tumor`, respectively.
+The primary 95% percentile confidence intervals used 1,000 stratified bootstrap replicates that sampled complete duplicate/near-duplicate groups within each class. A secondary image-stratified bootstrap was also recorded. Neither interval accounts for patient-level clustering because patient/volume identifiers are unavailable. No test-driven threshold selection, checkpoint selection, or hyperparameter tuning was performed.
 
-At the time the project documentation was prepared, the local generated image folders contained:
+The experiment used Python 3.13.1, PyTorch 2.7.1+cu118, Torchvision 0.22.1+cu118, scikit-learn 1.6.1, NumPy 2.2.6, Pillow 11.1.0, OpenCV 4.10.0, and an NVIDIA GeForce RTX 3050 Laptop GPU on Windows. The recorded Git base revision was `0f4d663a327e8ab638b78e6425096a9fd84c9165`; the experiment was run with local working-tree changes, so that commit alone does not identify a complete immutable source snapshot.
 
-| Split | No tumor | Tumor | Total |
-|---|---:|---:|---:|
-| Training | 1,688 | 1,992 | 3,680 |
-| Test | 399 | 521 | 920 |
-| Total | 2,087 | 2,513 | 4,600 |
+### 2.6 Application and visualization
 
-These are local file counts and are not independently verified cohort counts. The repository does not identify the dataset's authoritative source, release, license, acquisition protocol, patient identities, label adjudication process, or exclusion criteria. **Do not report these counts as a study cohort until the source data and processing history have been checked.**
+The Streamlit application loads the reproducible ResNet-18 checkpoint with strict key matching and the same inference preprocessing. Missing or incompatible checkpoints produce an explicit error instead of random-head predictions. Displayed softmax values are uncalibrated model scores. Grad-CAM targets the final ResNet block and selected output class; it is not a validated lesion segmentation or localization method. A prior startup/health check succeeded, and a consistency check on 12 final-test images found identical evaluator and single-image application predictions and scores (maximum absolute score difference 0). These checks predate the latest UI-copy changes; current runtime verification is reported in Section 3.3. Coordinates, 3D views, surgical trajectories, safety scores, and radiosurgery views are synthetic demonstrations; no treatment advice is provided.
 
-The preprocessing code uses `train_test_split` with `test_size=0.2` and `random_state=42`, but does not set stratification or group by patient. It does not check for duplicate images. If images include multiple slices from one patient, this split may place related images in both sets. A patient-level split should be created before using the test set to support a scientific performance claim.
+The interface's **Illustrative / Simulated Coordinates** are deterministic display-only image-plane values with a placeholder zero Z coordinate. They are not derived from image-affine metadata, masks, or an anatomical registration, and are not MNI coordinates. Heatmap-derived geometry and estimated-volume proxies are not lesion measurements. No annotated masks or expert localization references were available; Grad-CAM remains qualitative, with no localization scores reported. Invalid or zero-contrast Grad-CAM outputs now fail explicitly. Robotic, radiosurgery, and patient-record features are labeled as demonstrations, not clinical functions. Treatment advice was removed and replaced with a neutral placeholder. Optional OpenRouter chat/image-description features disclose remote processing and must not receive identifiable or restricted data without authorization.
 
-### 2.3 Image preprocessing
+### 2.7 Exploratory image-format sensitivity check
 
-For dataset preparation, OpenCV reads images and resizes them to 224 × 224 pixels. Files that cannot be read and subdirectories are skipped. The resulting arrays are saved as JPEG files in class-specific `train` and `test` folders.
-
-For model training, Torchvision transforms resize images to 224 × 224, convert them to tensors, and normalize channels with mean `[0.485, 0.456, 0.406]` and standard deviation `[0.229, 0.224, 0.225]`. Training-only augmentation consists of random horizontal flips, random rotations up to 10 degrees, and brightness/contrast jitter with magnitude 0.2.
-
-At dashboard inference, an uploaded PNG, JPG, or JPEG is converted to RGB. Optional brightness, contrast, and sharpness adjustments are applied before resizing and normalization. These controls change the input presented to the classifier and should be held fixed or explicitly recorded in a controlled evaluation.
-
-### 2.4 Model
-
-The training script initializes `torchvision.models.resnet18` with `ResNet18_Weights.IMAGENET1K_V1`, replaces its final fully connected layer with a linear layer containing two outputs, and trains the model parameters [1,2]. The intended class index mapping is `no_tumor: 0`, `tumor: 1`, corresponding to alphabetical ordering by Torchvision `ImageFolder`.
-
-Training configuration in the current script:
-
-| Parameter | Value |
-|---|---|
-| Backbone | ResNet-18 |
-| Initialization | ImageNet V1 pretrained weights |
-| Output classes | 2 |
-| Loss | Cross-entropy |
-| Optimizer | Adam |
-| Learning rate | 0.001 |
-| Batch size | 32 |
-| Epochs | 10 |
-| Device selection | CUDA if available, otherwise CPU |
-| Saved artifact | PyTorch model `state_dict` |
-
-The training script evaluates the test loader after each epoch and prints loss and accuracy, then saves the final epoch's weights. It does not use a distinct validation set, select a best checkpoint, implement early stopping, save a structured metrics log, or set an explicit random seed for model initialization and data-loader shuffling. For this manuscript's exploratory evaluation, the locally available checkpoint was loaded strictly into the same ResNet-18 architecture on CPU and evaluated in inference mode on the local `dataset/test` folder, with `ImageFolder` ordering and batch size 32. The run processed 920 images in 21.559 seconds. The checkpoint's source run cannot be confirmed from repository records; therefore the folder cannot be claimed to be an untouched test cohort.
-
-The application loads the checkpoint on CPU. If the file is unavailable, it constructs a ResNet-18 with ImageNet weights and a newly initialized two-output layer. The current loader also suppresses checkpoint-loading exceptions. These fallback states are not a trained tumor classifier and must not be used to report meaningful predictions.
-
-### 2.5 Inference and output
-
-The application performs a forward pass on one image and applies softmax to the two logits. It labels output index 1 as `TUMOR DETECTED` and index 0 as `HEALTHY SCAN`; the maximum softmax value is displayed as a percentage. This value is an uncalibrated model score, not a clinically validated probability or measure of accuracy.
-
-The classifier is binary. A separate UI selector allows a user to choose Glioma, Meningioma, or Pituitary Tumor for predefined text/report content after a tumor prediction. This selector is not an output of the trained model.
-
-### 2.6 Explainability and visual analytics
-
-Grad-CAM [3] is computed from the last block of ResNet-18 (`model.layer4[-1]`). Gradients are spatially averaged to weight the activation maps; the weighted map is summed across channels, passed through ReLU, and normalized. The map is resized and overlaid on the input image for display.
-
-Grad-CAM is an exploratory visualization. The repository does not compare maps with expert lesion segmentations, calculate localization metrics, or demonstrate that highlighted pixels correspond to tumor tissue.
-
-The analytics page attaches forward hooks to selected ResNet layers and displays up to 16 feature maps. Its coordinate display finds the maximum heatmap location and applies a linear conversion to two values; the third value is randomly selected. There is no DICOM geometry, voxel spacing, orientation, anatomical registration, or MNI template. Therefore, the displayed coordinates and brain-region label are not validated MNI-space localization.
-
-The optional 3D view samples bright pixels in the single input image and assigns random depth values. A heatmap mask can be overlaid as another point set. This visualization is illustrative only; it is not volumetric imaging, segmentation, or surgical planning.
-
-### 2.7 User interface, reports, and generative-AI features
-
-The patient-record page stores demonstration records in Streamlit session state. There is no persistent database or implemented authentication, authorization, audit system, or electronic health record integration.
-
-The report module combines user/patient fields, the binary model output or user-selected label, a score, placeholder location/size values, and predefined text into a PDF. It does not generate a clinically validated radiology report. Medication and follow-up statements are static strings in source code rather than patient-specific recommendations.
-
-When configured with `OPENROUTER_API_KEY`, the language-model module requests `google/gemini-2.0-flash-001` through OpenRouter. Image description sends the image and prompt to a remote service; chat sends text messages. The browser's Web Speech API can read generated text aloud. Responses are not validated and may be incorrect. No protected or identifiable image data should be transmitted without appropriate consent, authorization, and institutional/privacy review.
-
-### 2.8 Exploratory local evaluation
-
-The available `state_dict` was loaded with strict key matching into a ResNet-18 with a two-output fully connected layer. The nominal test set was loaded from `BrainTumorAI/dataset/test` using Torchvision `ImageFolder`, resized to 224 × 224 pixels, converted to tensors, and normalized using the ImageNet mean and standard deviation. Inference used batches of 32 on CPU with shuffling disabled. The predicted class was the argmax of the two logits. The tumor probability used for ROC-AUC was the softmax score for class index 1. We computed image-level accuracy, confusion matrix, tumor precision/recall/F1, no-tumor specificity, balanced accuracy, and ROC-AUC.
-
-The accuracy interval is a two-sided 95% Wilson binomial interval computed from 521 correct classifications among 920 images. This interval does not account for possible dependence among images from the same patient. Patient identifiers, patient counts, dataset provenance, duplicate status, and checkpoint training history were unavailable; no patient-level or inferential performance claim is made.
-
-The evaluation environment was Python 3.13.1, PyTorch 2.7.1+cu118, Torchvision 0.22.1+cu118, and scikit-learn 1.6.1 on Windows with an AMD Ryzen 7 7435HS CPU. CUDA was available in the environment, but this evaluation explicitly ran on CPU. The local checkpoint's SHA-256 was `779D87161A8118DF39A9518B8B02FC663ED95990CE1DC5450C0266FDCA3F3A97`. The dataset and checkpoint are ignored by Git and are not distributed with the repository.
+As an audit-only sensitivity analysis, stored final-test predictions were restricted to JPEG files. This subset contained 590 images; all 16 TIFF images in the full test partition were tumor-labeled. The JPEG-only confusion matrix was `[[214, 7], [2, 367]]`, with 98.47% accuracy, 98.15% balanced accuracy, ROC-AUC 0.999644, and average precision 0.999790. This post hoc calculation was not used to select or modify a model, threshold, or preprocessing. It suggests TIFF-vs-JPEG format alone does not explain the high performance, but cannot exclude other source/acquisition confounding or patient overlap.
 
 ## 3. Results
 
-### 3.1 Software implementation
+### 3.1 Final-test model comparison
 
-The implemented prototype provides an image-upload workflow, binary class-score display, Grad-CAM overlay, selected-layer activation maps, a synthetic three-dimensional visualization, static informational/report output, and optional remote generative-AI and browser speech features.
+| Model | Accuracy | Balanced accuracy | Tumor sensitivity | No-tumor specificity | Tumor precision | Tumor F1 | ROC-AUC | Average precision |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Corrected ImageNet ResNet-18 | 98.51% | 98.16% | 99.48% | 96.83% | 98.21% | 98.84% | 0.9996 | 0.9998 |
+| Small CNN | 81.02% | 78.70% | 87.27% | 70.14% | 83.58% | 85.39% | 0.9045 | 0.9462 |
+| Existing legacy ResNet-18 | 63.53% | 50.00% | 100.00% | 0.00% | 63.53% | 77.70% | 0.4952 | 0.6827 |
+| Training-majority baseline | 63.53% | 50.00% | 100.00% | 0.00% | 63.53% | 77.70% | 0.5000 | 0.6353 |
 
-### 3.2 Classifier performance
+For corrected ResNet-18, the class-specific results were:
 
-The following are descriptive metrics from one run on the local test folder. They are not patient-level estimates and do not establish clinical performance.
+| Class | Support | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|
+| No-tumor | 221 | 99.07% | 96.83% | 97.94% |
+| Tumor | 385 | 98.21% | 99.48% | 98.84% |
 
-| Metric | No-tumor class | Tumor class | Binary overall |
-|---|---:|---:|---:|
-| Test images | 399 | 521 | 920 |
-| Test patients | Not available | Not available | Not available |
-| Recall/sensitivity by class | 0.00% | 100.00% | — |
-| Precision by class | 0.00% (undefined; zero-division convention) | 56.63% | — |
-| F1 score by class | 0.00% | 72.31% | — |
-| Specificity (tumor treated as positive) | — | — | 0.00% |
-| Accuracy | — | — | 56.63% (Wilson 95% CI 53.41–59.80%) |
-| Balanced accuracy | — | — | 50.00% |
-| ROC-AUC | — | — | 0.487 |
+The corrected ResNet-18 confusion matrix, with true classes as rows and predictions as columns in `[no_tumor, tumor]` order, was `[[214, 7], [2, 383]]`. It classified 216 images as no-tumor and 390 as tumor. Duplicate-group-bootstrap 95% intervals were 96.28–100.00% for accuracy, 95.08–100.00% for balanced accuracy, 98.40–100.00% for tumor sensitivity, 90.95–100.00% for no-tumor specificity, 0.9987–1.0000 for ROC-AUC, and 0.9992–1.0000 for average precision.
 
-For class-index order `[no_tumor, tumor]`, the confusion matrix (rows are true labels; columns are predicted labels) was:
+The legacy checkpoint classified all 606 images as tumor, the same class as the training-majority baseline. Its accuracy therefore reflected the test-set tumor prevalence rather than useful class discrimination. On a different historical 920-image test folder, the legacy checkpoint also predicted every image as tumor (56.63% accuracy, 0% specificity, 50.00% balanced accuracy, ROC-AUC 0.487); that folder was used for checkpoint selection and had duplicate leakage, so those values are not directly comparable to the fixed final-test metrics above.
 
-|  | Predicted no tumor | Predicted tumor |
-|---|---:|---:|
-| True no tumor | 0 | 399 |
-| True tumor | 0 | 521 |
+### 3.2 Reproducibility outputs
 
-The classifier returned tumor for all 920 images. Its accuracy therefore equals the tumor-class prevalence in this folder; the binary specificity of 0%, balanced accuracy of 50%, and ROC-AUC below 0.5 indicate no useful discrimination in this evaluation. The result is a warning about the local checkpoint, not a claim that every training run or future checkpoint will behave identically. No calibration analysis, threshold selection, external validation, or patient-level analysis was performed.
+The local run generated the manifest and data audit, train/validation histories, learning curves, checkpoint metadata and hashes, test predictions, per-model metrics, confidence intervals, confusion-matrix plots, and ROC/precision-recall plots under `BrainTumorAI/results/` and `BrainTumorAI/models/`. Those data and checkpoint artifacts are ignored by Git and are not included in a fresh clone.
 
-### 3.3 Explainability and usability
+### 3.3 Current software verification
 
-No expert review of Grad-CAM maps, quantitative localization analysis, accessibility evaluation, or usability study was conducted. The interface demonstrates those features in software only.
+On 2026-10-10, the focused suite completed with 19 passed tests and no failures, skips, or errors when unrelated global pytest plugin auto-loading was disabled. A normal auto-loading attempt failed before collection in an unrelated globally installed plugin dependency; no project tests ran in that invocation. Python compilation completed successfully, and `git diff --check` passed after the documentation edits.
+
+The current Streamlit process started successfully: its health endpoint returned HTTP 200 with `ok`, and its root route returned HTTP 200. Streamlit AppTest rendered the current application with the saved ResNet-18 checkpoint and no app exceptions; it emitted two bare-mode `ScriptRunContext` warnings. A synthetic 224x224 RGB input produced two finite logits through the shared inference path. This is a software smoke check, not a result on held-out data. The 12-image evaluator/application parity check above was not repeated after the interface changes. These checks do not establish clinical validity, patient independence, or external generalization.
 
 ## 4. Discussion
 
-### 4.1 Principal findings
+The audit found two concrete defects that undermined the legacy evaluation: test data influenced epoch-wise scheduling and checkpoint selection, and exact duplicate images crossed its train/test boundary. The old app could also silently fall back to an untrained classifier head if checkpoint loading failed. No class-index mismatch was found, and the legacy checkpoint did load strictly; therefore, the specific training cause of its all-tumor predictions remains unknown.
 
-The software implements an interactive binary image-classification workflow with exploratory visualizations. However, the one-run evaluation of the available local checkpoint produced an all-tumor prediction pattern: it detected all 521 tumor-folder images but also classified all 399 no-tumor-folder images as tumor. The resulting 56.63% image-level accuracy reflects class prevalence rather than useful discrimination. This finding argues against interpreting the checkpoint output as a functional diagnostic classifier.
+The corrected ResNet-18 produced stronger image-level discrimination than both the small CNN and the legacy checkpoint on the same fixed test split. This comparison supports the technical value of separating train/validation/test data, explicit mappings, strict loading, and auditable metrics; it does not establish which individual correction caused the difference. The very high corrected-model scores warrant independent reproduction and investigation of source/acquisition confounding. Duplicate grouping cannot rule out patient overlap or shared source characteristics without patient and acquisition metadata.
 
-### 4.2 Interpretation
+Limitations include the unverified source, version, license, and label provenance; labels inferred only from folder names; no expert adjudication; no patient identifiers; an image-level rather than patient-level split; heuristic near-duplicate detection; no independent external cohort; and no probability calibration. The legacy split had 151 exact-duplicate groups crossing train/test; corrected grouping does not rule out residual duplication or patient overlap. Source/acquisition confounding remains unresolved, and the JPEG-only sensitivity analysis does not demonstrate freedom from shortcut learning. The bootstrap intervals group similar images but are not patient-clustered. No annotated lesion masks or expert localization references were available to validate Grad-CAM, which remains qualitative without Dice or IoU claims. The interface's coordinates, 3D geometry, and planning views are simulated, not anatomically registered; they do not establish physical tumor location or volume and are not treatment-planning capability. The legacy model's all-tumor prediction on the corrected split is confirmed, but its original training failure remains unexplained because complete logs and provenance are unavailable.
 
-The prototype illustrates one way to present a binary classifier and exploratory visualizations through a browser-based application. The current implementation does not establish that predictions generalize to independent patients or clinical settings. A visually plausible heatmap does not establish lesion localization, and an uncalibrated softmax value should not be interpreted as diagnostic certainty.
-
-### 4.3 Limitations
-
-Limitations apparent from the current repository include:
-
-- incomplete dataset provenance and no tracked data citation;
-- image-level, non-stratified splitting without patient grouping or duplicate detection;
-- no separate validation set, best-checkpoint selection, or recorded final test evaluation;
-- no explicit reproducibility seed for all random operations;
-- a binary classifier despite subtype terminology in the user interface;
-- fallback model loading that can silently leave a randomly initialized output head;
-- no probability calibration or external validation;
-- Grad-CAM without annotated localization validation;
-- heuristic, partly random coordinates rather than MNI registration;
-- a synthetic 3D visualization rather than volume reconstruction;
-- static treatment text and placeholder report fields;
-- session-only demonstration patient records rather than a secure clinical data system;
-- optional remote processing of image/text without a validated clinical or privacy workflow.
-
-In addition, the locally evaluated checkpoint's training run is not recorded, and the all-positive output pattern indicates that this specific local model artifact is unsuitable for meaningful classification in the evaluated folder. The local counts and measured outputs are not independently reproducible from a fresh clone because the dataset and checkpoint are not tracked.
-
-### 4.4 Future work
-
-Potential future work, contingent on research approvals and a defined study design, includes dataset provenance documentation; patient-level cohort splitting; external validation; calibrated predictions; clinically appropriate comparators; expert-reviewed localization evaluation; support for volumetric data with correct spatial metadata; persistence/security engineering; accessibility/usability evaluation; and prospective assessment. These are proposals, not existing capabilities.
+Accordingly, the results are suitable only as qualified preliminary image-level results for software/method development. Before a manuscript makes substantive scientific or generalization claims, the dataset must be traced to an authorized source, labels and inclusion criteria must be checked by qualified reviewers, patient-level splitting and external validation should be performed, and the exact experiment source tree must be archived or committed. Ethics, consent, data governance, and author declarations also require confirmation.
 
 ## 5. Conclusion
 
-NeuroVision AI is a software prototype that integrates binary brain-image classification with exploratory visual analytics and a Streamlit interface. In a single exploratory run, the available local checkpoint classified every image in the nominal test folder as tumor, yielding 50% balanced accuracy and no specificity for the no-tumor class. The artifact should not be used for diagnosis or treated as a useful detector. Because dataset provenance, patient independence, and checkpoint training history are unknown, these image-level results are descriptive and cannot establish generalizable diagnostic performance. Future evaluation requires a traceable dataset, a prespecified patient-independent design, a verified checkpoint, and appropriate clinical and ethical review.
+NeuroVision AI now has an auditable local workflow with a validation-selected ResNet-18, a small-CNN comparison, a held-out image-level test evaluation, strict checkpoint loading, and shared app/evaluator preprocessing. The measured corrected ResNet-18 result was substantially stronger than the legacy all-tumor checkpoint on the same final split. It remains a historical preliminary result against unverified folder labels; the available provenance and patient-level information do not support independent reproduction, patient-independent, external, or clinical performance claims.
 
-## Declarations
+## Declarations to complete before submission
 
-- **Ethics approval:** Not reported in the repository. Authors must determine and state the applicable review/approval status before submission.
-- **Consent:** Not reported in the repository; the applicable consent or waiver must be confirmed by the data provider and authors.
-- **Data availability:** The local data folder is not tracked in Git. Its original source, license, and redistribution conditions were not established during this software review.
-- **Code availability:** The project source is hosted at `https://github.com/stephenrodrick17-cloud/Neurovision-AI`. The exact commit used for the local evaluation should be recorded before submission.
-- **Funding:** Funding information was not available in the inspected project materials; authors must confirm.
-- **Conflicts of interest:** Conflict-of-interest declarations were not available in the inspected project materials; authors must confirm.
-- **Author contributions:** Contributions were not established from the code review and must be completed by the authors.
-- **Acknowledgments:** None are asserted in this draft.
+- **Ethics approval and consent:** Not established by the repository; confirm the applicable approval, waiver, and consent requirements with the data provider and institution.
+- **Data availability and license:** The local dataset source, citation, release, and license are unknown. Establish authorization and add the primary dataset citation.
+- **Code availability:** Source repository: `https://github.com/stephenrodrick17-cloud/Neurovision-AI`. Archive the exact worktree/source revision and experiment artifacts before submission.
+- **Funding, conflicts, author contributions, acknowledgments:** Not available in the inspected materials; authors must complete these statements.
 
 ## References
 
@@ -243,18 +137,4 @@ NeuroVision AI is a software prototype that integrates binary brain-image classi
 2. Deng J, Dong W, Socher R, Li LJ, Li K, Fei-Fei L. ImageNet: A large-scale hierarchical image database. In: *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)*. 2009:248–255. doi:10.1109/CVPR.2009.5206848.
 3. Selvaraju RR, Cogswell M, Das A, Vedantam R, Parikh D, Batra D. Grad-CAM: Visual explanations from deep networks via gradient-based localization. In: *Proceedings of the IEEE International Conference on Computer Vision (ICCV)*. 2017:618–626. doi:10.1109/ICCV.2017.74.
 
-The source dataset's primary citation could not be identified from the repository and must be added once its provenance is established. Verify citation metadata and adapt formatting to the target journal before submission.
-
-## Before submission checklist
-
-- [ ] Confirm dataset source, citation, license, cohort definition, and label provenance.
-- [ ] Rebuild splits so images from one patient cannot appear in multiple partitions.
-- [ ] Check duplicates and record all exclusions and preprocessing failures.
-- [ ] Separate train, validation, and final test data; do not tune on the final test cohort.
-- [ ] Record code commit, dependency versions, hardware, seeds, checkpoint hash, and full training logs.
-- [ ] Verify the checkpoint used for reported results is the checkpoint produced by the documented run.
-- [ ] Re-evaluate a verified checkpoint and calculate patient-level metrics and confidence intervals from saved predictions.
-- [ ] Add calibration and external validation if making probability or generalization claims.
-- [ ] Remove or explicitly qualify unvalidated MNI, 3D, treatment, subtype, and clinical claims.
-- [ ] Complete ethics, privacy, consent, funding, authorship, and data-availability statements.
-- [ ] Have a domain expert and statistician review the manuscript and claims.
+The source dataset citation could not be identified from local repository contents and must be added after provenance is established. Verify reference details and format against the target journal.

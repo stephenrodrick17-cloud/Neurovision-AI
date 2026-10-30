@@ -1,0 +1,59 @@
+{
+  "analysis": "BraTS GLI segmentation mask-area distribution only; no MRI intensities, model predictions, checkpoints, or model outputs were accessed.",
+  "source_root": "D:\\datasets\\brats\\ASNR-MICCAI-BraTS2023-GLI-Challenge-TrainingData",
+  "file_pattern": "*-seg.nii.gz",
+  "orientation": "Each segmentation was canonicalized with nibabel.as_closest_canonical; mask area is count of voxels > 0 per axial slice along axis 2.",
+  "subject_count": 1251,
+  "axial_slice_count": 193905,
+  "zero_area_slice_count": 112468,
+  "nonzero_area_slice_count": 81437,
+  "nonzero_area_percentiles_pixels": {
+    "p1": 5,
+    "p5": 43,
+    "p10": 121,
+    "p25": 487,
+    "p50": 1268,
+    "p75": 2247,
+    "p90": 3109,
+    "p95": 3593,
+    "p99": 4618
+  },
+  "candidate_minimum_area": {
+    "pixels": 10,
+    "nonzero_slices_below_minimum": 1416,
+    "percent_of_nonzero_area_slices_below_minimum": 1.7388,
+    "nonzero_slices_retained_at_or_above_minimum": 80021,
+    "percent_of_nonzero_area_slices_retained_at_or_above_minimum": 98.2612
+  },
+  "proposed_reporting_bins_pixels": [
+    {
+      "name": "small",
+      "minimum_inclusive": 10,
+      "maximum_inclusive": 49,
+      "slice_count": 3059,
+      "percent_of_nonzero_area_slices": 3.7563
+    },
+    {
+      "name": "medium-small",
+      "minimum_inclusive": 50,
+      "maximum_inclusive": 199,
+      "slice_count": 6778,
+      "percent_of_nonzero_area_slices": 8.323
+    },
+    {
+      "name": "medium-large",
+      "minimum_inclusive": 200,
+      "maximum_inclusive": 999,
+      "slice_count": 22858,
+      "percent_of_nonzero_area_slices": 28.0683
+    },
+    {
+      "name": "large",
+      "minimum_inclusive": 1000,
+      "maximum_inclusive": null,
+      "slice_count": 47326,
+      "percent_of_nonzero_area_slices": 58.1136
+    }
+  ],
+  "important_interpretation": "These are 2D segmentation mask areas per slice, not 3D tumor volumes or clinically validated tumor-size categories. Counts include all canonical axial segmentation slices before central-brain filtering, A_min filtering, or per-patient slice sampling."
+}

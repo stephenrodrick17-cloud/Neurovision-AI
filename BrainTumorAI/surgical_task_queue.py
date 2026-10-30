@@ -54,8 +54,8 @@ def default_queue() -> List[Dict[str, Any]]:
             "assigned_robot": ROBOTS["srs"],
             "priority": "HIGH",
             "tumor_volume_mm3": 4320.0,
-            "mni_coords_mm": (28, -14, 42),
-            "lobe": "Right Parietal",
+            "illustrative_coordinates": (28, -14, 42),
+            "lobe": "Not anatomically assessed",
             "planned_date": (base_date + timedelta(hours=2)).strftime("%Y-%m-%d %H:%M"),
             "surgeon": "Dr. Kapoor",
             "endoscope_channel": "CH-03 (Karl Storz)",
@@ -71,8 +71,8 @@ def default_queue() -> List[Dict[str, Any]]:
             "assigned_robot": ROBOTS["stereotactic_biopsy"],
             "priority": "MED",
             "tumor_volume_mm3": 1180.0,
-            "mni_coords_mm": (-22, 36, 18),
-            "lobe": "Left Frontal",
+            "illustrative_coordinates": (-22, 36, 18),
+            "lobe": "Not anatomically assessed",
             "planned_date": (base_date + timedelta(hours=5)).strftime("%Y-%m-%d %H:%M"),
             "surgeon": "Dr. Iyer",
             "endoscope_channel": "CH-01 (Olympus)",
@@ -88,8 +88,8 @@ def default_queue() -> List[Dict[str, Any]]:
             "assigned_robot": ROBOTS["resection"],
             "priority": "HIGH",
             "tumor_volume_mm3": 18650.0,
-            "mni_coords_mm": (8, -52, -8),
-            "lobe": "Right Cerebellar",
+            "illustrative_coordinates": (8, -52, -8),
+            "lobe": "Not anatomically assessed",
             "planned_date": (base_date + timedelta(hours=26)).strftime("%Y-%m-%d %H:%M"),
             "surgeon": "Dr. Mishra",
             "endoscope_channel": "CH-05 (Zeiss Pentero)",
@@ -105,8 +105,8 @@ def default_queue() -> List[Dict[str, Any]]:
             "assigned_robot": ROBOTS["laser_abl"],
             "priority": "LOW",
             "tumor_volume_mm3": 2750.0,
-            "mni_coords_mm": (-16, -8, -18),
-            "lobe": "Left Temporal (Mesial)",
+            "illustrative_coordinates": (-16, -8, -18),
+            "lobe": "Not anatomically assessed",
             "planned_date": (base_date + timedelta(days=2)).strftime("%Y-%m-%d %H:%M"),
             "surgeon": "Dr. Bhatt",
             "endoscope_channel": "CH-02 (Medtronic)",
@@ -133,7 +133,7 @@ def default_queue() -> List[Dict[str, Any]]:
 
 def add_task(queue: List[Dict[str, Any]], patient_id: str, patient_name: str,
              procedure_type: str, priority: str, tumor_volume_mm3: float,
-             mni_coords_mm, lobe: str, planned_date: str, age: int = 50,
+             illustrative_coordinates, lobe: str, planned_date: str, age: int = 50,
              surgeon: str = "Unassigned", endoscope_channel: str = "CH-01",
              overhead_camera_id: str = "OR-01-CAM-A",
              n_beams: int = 0, beam_energy_mv: int = 6,
@@ -155,7 +155,7 @@ def add_task(queue: List[Dict[str, Any]], patient_id: str, patient_name: str,
         "assigned_robot": robot,
         "priority": priority,
         "tumor_volume_mm3": float(tumor_volume_mm3),
-        "mni_coords_mm": tuple(mni_coords_mm),
+        "illustrative_coordinates": tuple(illustrative_coordinates),
         "lobe": lobe,
         "planned_date": planned_date,
         "surgeon": surgeon,
@@ -190,7 +190,7 @@ def advance_task_status(queue: List[Dict[str, Any]], task_id: str,
         if t["status"] in ("PLANNING", "IN_PROGRESS"):
             t["status"] = "CANCELLED"
             t["audit_log"].append(_log("EMERGENCY STOP — task cancelled", user))
-            t["error_log"].append({"time": _now_iso(), "msg": "User-initiated E-STOP"})
+            t["error_log"].append({"time": _now_iso(), "msg": "User paused the demo queue"})
             return True
         return False
     next_s = STATUS_FLOW.get(t["status"])

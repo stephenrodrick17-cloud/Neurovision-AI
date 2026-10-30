@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="680" viewBox="0 0 1120 680" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative brain-shaped 3D visualization</title>
+  <desc id="desc">A brain-inspired side-view illustration with rounded lobes, curved surface folds, a cerebellum, brainstem, and a schematic activation overlay. It is not patient-specific anatomy.</desc>
+  <defs>
+    <linearGradient id="brain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0c8b8"/>
+      <stop offset=".48" stop-color="#d99c91"/>
+      <stop offset="1" stop-color="#a95e68"/>
+    </linearGradient>
+    <linearGradient id="brainSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a95e68"/>
+      <stop offset="1" stop-color="#74445b"/>
+    </linearGradient>
+    <radialGradient id="activation">
+      <stop offset="0" stop-color="#ef4444" stop-opacity=".88"/>
+      <stop offset=".56" stop-color="#f97316" stop-opacity=".62"/>
+      <stop offset="1" stop-color="#facc15" stop-opacity=".04"/>
+    </radialGradient>
+    <clipPath id="cerebrumClip">
+      <path d="M244 373
+        C205 352 195 309 214 277
+        C194 243 211 207 245 192
+        C246 153 281 128 318 138
+        C339 105 386 102 414 125
+        C442 92 496 96 520 127
+        C552 105 597 117 612 151
+        C650 139 685 168 682 205
+        C721 222 733 264 710 294
+        C733 326 714 365 683 378
+        C675 416 635 438 600 422
+        C572 450 531 448 507 424
+        C477 451 431 447 411 419
+        C380 442 338 430 327 400
+        C291 417 255 405 244 373Z"/>
+    </clipPath>
+    <clipPath id="cerebellumClip">
+      <path d="M278 397
+        C258 381 252 353 265 334
+        C265 306 289 287 314 292
+        C335 272 371 282 380 306
+        C404 319 408 350 393 369
+        C391 396 365 414 342 405
+        C321 421 290 416 278 397Z"/>
+    </clipPath>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16865b"/>
+    </marker>
+    <style>
+      .heading { font:700 24px Arial,sans-serif; fill:#17324d; }
+      .subtitle { font:15px Arial,sans-serif; fill:#52627a; }
+      .label { font:700 16px Arial,sans-serif; fill:#26384a; }
+      .body { font:14px Arial,sans-serif; fill:#34495e; }
+      .note { font:700 15px Arial,sans-serif; fill:#8a3b16; }
+      .fold { fill:none; stroke:#874e5c; stroke-width:4; stroke-linecap:round; opacity:.60; }
+      .finefold { fill:none; stroke:#f3c9b8; stroke-width:2.2; stroke-linecap:round; opacity:.8; }
+    </style>
+  </defs>
+  <rect width="1120" height="680" fill="#ffffff"/>
+  <text x="56" y="52" class="heading">Illustrative / simulated 3D brain view</text>
+  <text x="56" y="80" class="subtitle">Brain-inspired shape and surface folds; schematic activation overlay</text>
+
+  <g aria-label="Brain-inspired side-view illustration">
+    <path d="M249 372
+      C210 351 200 308 219 276
+      C199 242 216 206 250 191
+      C251 152 286 127 323 137
+      C344 104 391 101 419 124
+      C447 91 501 95 525 126
+      C557 104 602 116 617 150
+      C655 138 690 167 687 204
+      C726 221 738 263 715 293
+      C738 325 719 364 688 377
+      C680 415 640 437 605 421
+      C577 449 536 447 512 423
+      C482 450 436 446 416 418
+      C385 441 343 429 332 399
+      C296 416 260 404 249 372Z"
+      transform="translate(15 13)" fill="#503c54" opacity=".40"/>
+
+    <path d="M244 373
+      C205 352 195 309 214 277
+      C194 243 211 207 245 192
+      C246 153 281 128 318 138
+      C339 105 386 102 414 125
+      C442 92 496 96 520 127
+      C552 105 597 117 612 151
+      C650 139 685 168 682 205
+      C721 222 733 264 710 294
+      C733 326 714 365 683 378
+      C675 416 635 438 600 422
+      C572 450 531 448 507 424
+      C477 451 431 447 411 419
+      C380 442 338 430 327 400
+      C291 417 255 405 244 373Z"
+      fill="url(#brain)" stroke="#774955" stroke-width="4"/>
+
+    <g clip-path="url(#cerebrumClip)">
+      <path d="M220 217 C260 199 274 174 276 141 M238 268 C272 244 286 215 279 184
+        M262 326 C292 305 303 275 296 247 M285 380 C315 355 323 328 312 300
+        M318 167 C345 190 350 220 337 246 M329 285 C355 262 360 235 350 211
+        M355 392 C376 366 378 337 362 314 M371 150 C395 171 402 199 391 223
+        M392 270 C417 246 419 216 405 193 M405 370 C430 347 434 317 420 292
+        M432 135 C458 157 463 187 450 211 M453 264 C477 241 480 211 466 187
+        M468 397 C493 373 495 343 482 319 M493 153 C520 174 526 202 514 227
+        M519 286 C543 262 545 231 531 207 M538 384 C562 360 564 330 550 306
+        M568 170 C593 194 597 222 583 246 M586 287 C611 263 614 235 601 211
+        M616 365 C639 341 642 314 628 290 M647 219 C664 245 662 273 646 294"
+        class="fold"/>
+      <path d="M218 239 C251 219 265 195 263 169 M250 348 C280 329 291 302 284 280
+        M306 217 C326 236 329 258 319 276 M346 344 C366 325 368 300 357 282
+        M382 188 C403 209 406 232 396 251 M424 324 C444 304 446 280 434 261
+        M470 176 C492 198 495 222 484 241 M506 348 C526 328 528 302 516 282
+        M550 224 C571 244 573 267 562 286 M598 331 C618 310 620 286 608 267
+        M651 323 C671 305 677 283 670 263"
+        class="finefold"/>
+      <ellipse cx="551" cy="225" rx="76" ry="66" fill="url(#activation)"/>
+      <circle cx="533" cy="223" r="7" fill="#dc2626" opacity=".86"/>
+      <circle cx="553" cy="208" r="6" fill="#ef4444" opacity=".86"/>
+      <circle cx="569" cy="229" r="7" fill="#dc2626" opacity=".82"/>
+      <circle cx="546" cy="244" r="5" fill="#f97316" opacity=".86"/>
+      <circle cx="580" cy="205" r="5" fill="#ef4444" opacity=".8"/>
+    </g>
+
+    <path d="M278 397
+      C258 381 252 353 265 334
+      C265 306 289 287 314 292
+      C335 272 371 282 380 306
+      C404 319 408 350 393 369
+      C391 396 365 414 342 405
+      C321 421 290 416 278 397Z"
+      transform="translate(9 8)" fill="#503c54" opacity=".35"/>
+    <path d="M278 397
+      C258 381 252 353 265 334
+      C265 306 289 287 314 292
+      C335 272 371 282 380 306
+      C404 319 408 350 393 369
+      C391 396 365 414 342 405
+      C321 421 290 416 278 397Z"
+      fill="#c88983" stroke="#774955" stroke-width="3"/>
+    <g clip-path="url(#cerebellumClip)">
+      <path d="M258 321 C293 333 355 326 397 309 M256 339 C294 351 356 345 404 328
+        M256 358 C296 371 359 363 405 347 M266 378 C304 390 359 381 397 365
+        M284 397 C317 405 359 396 387 382" fill="none" stroke="#814c59" stroke-width="3" opacity=".64"/>
+      <path d="M258 329 C296 341 354 334 400 318 M258 348 C297 360 359 352 403 337
+        M261 368 C299 380 359 372 401 356 M273 389 C308 400 359 391 392 374"
+        fill="none" stroke="#e4b3a2" stroke-width="1.8" opacity=".78"/>
+    </g>
+
+    <path d="M411 405 C424 423 427 447 418 468
+      C410 487 408 512 420 531
+      C431 548 456 550 468 534
+      C480 517 471 494 472 474
+      C472 451 487 435 507 424
+      C479 445 436 444 411 405Z"
+      transform="translate(9 7)" fill="#503c54" opacity=".35"/>
+    <path d="M411 405 C424 423 427 447 418 468
+      C410 487 408 512 420 531
+      C431 548 456 550 468 534
+      C480 517 471 494 472 474
+      C472 451 487 435 507 424
+      C479 445 436 444 411 405Z"
+      fill="url(#brainSide)" stroke="#774955" stroke-width="3"/>
+    <path d="M424 442 C444 451 464 448 480 437 M418 473 C436 482 458 481 473 469
+      M417 504 C435 512 456 511 472 499" fill="none" stroke="#d6948a" stroke-width="2.2" opacity=".7"/>
+
+    <path d="M241 473 C303 430 385 356 522 231" fill="none" stroke="#16865b" stroke-width="4" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+    <text x="220" y="500" class="body">Illustrative line</text>
+  </g>
+
+  <g transform="translate(770 174)">
+    <text x="0" y="0" class="label">Illustration components</text>
+    <path d="M2 32 C9 21 21 21 28 32 C21 43 9 43 2 32Z" fill="url(#brain)" stroke="#774955" stroke-width="1.5"/>
+    <text x="40" y="37" class="body">Brain-inspired outer form</text>
+    <path d="M2 66 C9 54 21 54 28 66" fill="none" stroke="#874e5c" stroke-width="3"/>
+    <text x="40" y="71" class="body">Schematic surface folds</text>
+    <circle cx="15" cy="101" r="12" fill="url(#activation)"/>
+    <text x="40" y="106" class="body">Illustrative activation overlay</text>
+    <path d="M0 137 H26" fill="none" stroke="#16865b" stroke-width="3" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+    <text x="40" y="142" class="body">Illustrative line (not a plan)</text>
+    <rect x="-8" y="174" width="302" height="148" rx="12" fill="#fff6e6" stroke="#d69b43" stroke-width="1.5"/>
+    <text x="10" y="205" class="note">Illustration, not patient anatomy</text>
+    <text x="10" y="234" class="body">Brain shape and folds are schematic.</text>
+    <text x="10" y="258" class="body">Activation placement and depth</text>
+    <text x="10" y="280" class="body">are simulated from one 2D image.</text>
+    <text x="10" y="306" class="body">No lesion volume or plan is shown.</text>
+  </g>
+
+  <text x="560" y="630" text-anchor="middle" class="subtitle">Qualitative software illustration only — not patient-specific anatomy, validated localization, segmentation, or treatment guidance.</text>
+</svg>

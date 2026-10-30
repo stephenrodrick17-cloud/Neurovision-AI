@@ -1,5 +1,5 @@
-torch
-torchvision
+torch>=2.6
+torchvision>=0.21
 streamlit
 opencv-python-headless
 numpy
@@ -9,6 +9,8 @@ fpdf2
 scikit-learn
 pandas
 scipy
+matplotlib
+h5py
 openai
 google-genai
 python-dotenv

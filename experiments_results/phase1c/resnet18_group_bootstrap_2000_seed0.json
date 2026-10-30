@@ -1,0 +1,47 @@
+{
+  "method": "duplicate-group resampling, stratified by class; percentile 95% CI",
+  "replicates": 2000,
+  "seed": 0,
+  "comparison": {
+    "accuracy": {
+      "stored_1000_seed42": {
+        "lower_95": 0.9628384271690744,
+        "upper_95": 1.0
+      },
+      "recomputed_2000_seed0": {
+        "lower_95": 0.9600623003194888,
+        "upper_95": 1.0
+      }
+    },
+    "sensitivity": {
+      "stored_1000_seed42": {
+        "lower_95": 0.9839989304812834,
+        "upper_95": 1.0
+      },
+      "recomputed_2000_seed0": {
+        "lower_95": 0.9837387327677625,
+        "upper_95": 1.0
+      }
+    },
+    "specificity": {
+      "stored_1000_seed42": {
+        "lower_95": 0.9095143592357925,
+        "upper_95": 1.0
+      },
+      "recomputed_2000_seed0": {
+        "lower_95": 0.9042091954022988,
+        "upper_95": 1.0
+      }
+    },
+    "roc_auc": {
+      "stored_1000_seed42": {
+        "lower_95": 0.9986648446367108,
+        "upper_95": 1.0
+      },
+      "recomputed_2000_seed0": {
+        "lower_95": 0.9985273371770279,
+        "upper_95": 1.0
+      }
+    }
+  }
+}

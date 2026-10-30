@@ -2,12 +2,13 @@ import streamlit as st
 import cv2
 import torch
 import numpy as np
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, UnidentifiedImageError
 import os
 import sys
 import base64
+import csv
 from datetime import datetime
-from torchvision import models, transforms
+from pathlib import Path
 import plotly.express as px
 import time
 
@@ -17,19 +18,43 @@ sys.path.append(os.path.dirname(__file__))
 from heatmap_gen import GradCAM, apply_heatmap
 from surgery_viz import create_3d_brain_model, render_stereotactic_plan_3d, render_radiosurgery_plan_3d
 from medication_report import suggest_treatment, create_pdf_report, generate_report_text
-from stereotactic_robot import build_full_plan, generate_critical_structures, compute_burr_hole_entry, plan_trajectory, check_trajectory_safety, robotic_arm_ik
+from stereotactic_robot import (
+    SIMULATED_COORDINATE_LABEL,
+    build_full_plan,
+    illustrative_heatmap_mapping,
+    generate_critical_structures,
+    compute_burr_hole_entry,
+    plan_trajectory,
+    check_trajectory_safety,
+    robotic_arm_ik,
+)
 from radiosurgery import build_radiosurgery_plan
 from surgical_task_queue import (
     default_queue, add_task, find_task, advance_task_status, cancel_task,
     procedure_uses_radiation, PROCEDURES, STATUS_COLORS, PRIORITY_COLORS, ROBOTS,
 )
+from classifier_pipeline import (
+    CheckpointError,
+    DEFAULT_CHECKPOINT,
+    DEFAULT_RESULTS_DIR,
+    IDX_TO_CLASS,
+    load_checkpoint,
+    predict_image,
+    preprocess_image,
+)
 try:
     from gemini_assistant import describe_image_for_blind, get_gemini_response, tts_component
 except Exception:
     def describe_image_for_blind(image_path, diagnostic_info=None):
-        return f"Scan Analysis: {diagnostic_info if diagnostic_info else 'Brain MRI evaluated by NeuroVision AI.'}"
+        return (
+            f"Image-description service unavailable. Available model output: "
+            f"{diagnostic_info or 'none'}. This is not a radiological interpretation."
+        )
     def get_gemini_response(chat_history, user_input):
-        return f"Consultant: Regarding '{user_input}', automated neuro-oncology analysis evaluates tumor volume, stereotactic trajectories, and isodose distributions. (Configure OPENROUTER_API_KEY in .env for live Gemini 2.0 Flash reasoning)."
+        return (
+            f"Regarding '{user_input}': this research prototype provides a binary image-classifier output only. "
+            "It does not provide a diagnosis, anatomical localization, or treatment advice."
+        )
     def tts_component(text, auto_play=True):
         return ""
 
@@ -279,31 +304,22 @@ if 'last_plan' not in st.session_state:
 # --- Load Model ---
 @st.cache_resource
 def load_model():
-    model = models.resnet18(weights=None)
-    num_ftrs = model.fc.in_features
-    model.fc = torch.nn.Linear(num_ftrs, 2)
-    model_path = os.path.join(os.path.dirname(__file__), "models", "tumor_classifier.pth")
-    loaded = False
-    if os.path.exists(model_path):
-        try:
-            model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=True))
-            loaded = True
-        except Exception:
-            try:
-                model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=False))
-                loaded = True
-            except Exception:
-                pass
-    if not loaded:
-        try:
-            model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
-            model.fc = torch.nn.Linear(num_ftrs, 2)
-        except Exception:
-            pass
+    model_path = Path(os.environ.get("NEUROVISION_CHECKPOINT", str(DEFAULT_CHECKPOINT)))
+    model, metadata = load_checkpoint(model_path, map_location=torch.device("cpu"))
+    if metadata.get("architecture") != "resnet18":
+        raise CheckpointError(
+            f"Streamlit Grad-CAM integration requires a ResNet-18 checkpoint, got "
+            f"{metadata.get('architecture')}."
+        )
     model.eval()
     return model
 
-model = load_model()
+try:
+    model = load_model()
+except (FileNotFoundError, CheckpointError, ValueError) as exc:
+    st.error(f"Verified model unavailable: {exc}")
+    st.info("Train the reproducible ResNet-18 or set NEUROVISION_CHECKPOINT to a valid research checkpoint.")
+    st.stop()
 
 # --- Helper Functions ---
 def process_image_adjustments(image, brightness, contrast, sharpness):
@@ -314,6 +330,22 @@ def process_image_adjustments(image, brightness, contrast, sharpness):
     enhancer = ImageEnhance.Sharpness(image)
     image = enhancer.enhance(sharpness)
     return image
+
+def load_rgb_image(source):
+    try:
+        with Image.open(source) as image:
+            image.load()
+            return image.convert("RGB")
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        st.error(f"Image could not be opened or decoded: {exc}")
+        return None
+
+def infer_image(image):
+    try:
+        return predict_image(model, image)
+    except (RuntimeError, ValueError) as exc:
+        st.error(f"Model inference failed: {exc}")
+        return None
 
 def get_feature_maps(model, input_tensor, layer_name="layer1"):
     feature_maps = []
@@ -332,28 +364,14 @@ def get_feature_maps(model, input_tensor, layer_name="layer1"):
         return None
         
     handle = target_layer.register_forward_hook(hook)
-    
-    with torch.no_grad():
-        try:
+    try:
+        with torch.no_grad():
             model(input_tensor)
-        except:
-            pass
-            
-    handle.remove()
+    finally:
+        handle.remove()
     return feature_maps[0] if feature_maps else None
 
-def mni_anatomical_mapping(heatmap):
-    if heatmap is None:
-        return (0, 0, 0), "Unknown", "Unknown"
-    y, x = np.unravel_index(np.argmax(heatmap), heatmap.shape)
-    mni_x = int((x / heatmap.shape[1] * 180) - 90)
-    mni_y = int((y / heatmap.shape[0] * 180) - 90)
-    mni_z = int(np.random.randint(-20, 60))
-    region = "Frontal Lobe" if mni_y > 30 else "Parietal Lobe" if mni_y > -20 else "Occipital Lobe"
-    side = "Left" if mni_x < 0 else "Right"
-    return (mni_x, mni_y, mni_z), region, side
-
-def _parse_mni_coords(coords):
+def _parse_illustrative_coords(coords):
     if isinstance(coords, (tuple, list)) and len(coords) >= 3:
         try:
             return (float(coords[0]), float(coords[1]), float(coords[2]))
@@ -369,121 +387,65 @@ def _parse_mni_coords(coords):
     return (0.0, 0.0, 0.0)
 
 def get_sample_scans():
-    dataset_dir = os.path.join(os.path.dirname(__file__), "dataset")
+    manifest_path = DEFAULT_RESULTS_DIR / "split_manifest.csv"
     samples = {}
-    for split in ["test", "train"]:
-        tumor_dir = os.path.join(dataset_dir, split, "tumor")
-        healthy_dir = os.path.join(dataset_dir, split, "no_tumor")
-        if os.path.exists(tumor_dir) and "Tumor Positive Scan (Primary)" not in samples:
-            files = sorted([f for f in os.listdir(tumor_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
-            if files:
-                samples["Tumor Positive Scan (Primary)"] = os.path.join(tumor_dir, files[0])
-                if len(files) > 1:
-                    samples["Tumor Positive Scan (Secondary)"] = os.path.join(tumor_dir, files[1])
-        if os.path.exists(healthy_dir) and "Healthy Control Scan" not in samples:
-            files = sorted([f for f in os.listdir(healthy_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
-            if files:
-                samples["Healthy Control Scan (Negative)"] = os.path.join(healthy_dir, files[0])
+    if not manifest_path.is_file():
+        return samples
+    with manifest_path.open(newline="", encoding="utf-8") as source:
+        rows = [
+            row
+            for row in csv.DictReader(source)
+            if row.get("status") == "readable" and row.get("split") == "train"
+        ]
+    sample_names = {"tumor": "Training-set tumor-labeled sample", "no_tumor": "Training-set no-tumor-labeled sample"}
+    for label, display_name in sample_names.items():
+        match = next((row for row in rows if row.get("label") == label), None)
+        if match:
+            path = Path(__file__).resolve().parents[1] / match["source_file"]
+            if path.is_file():
+                samples[display_name] = str(path)
     return samples
 
 def get_dataset_inventory():
-    dataset_dir = os.path.join(os.path.dirname(__file__), "dataset")
-    categories = {
-        "Test - Tumor Positive (Pathology)": os.path.join(dataset_dir, "test", "tumor"),
-        "Test - Healthy Controls (Normal)": os.path.join(dataset_dir, "test", "no_tumor"),
-        "Train - Tumor Positive (Pathology)": os.path.join(dataset_dir, "train", "tumor"),
-        "Train - Healthy Controls (Normal)": os.path.join(dataset_dir, "train", "no_tumor"),
-    }
-    inventory = {}
-    for cat_name, folder_path in categories.items():
-        if os.path.exists(folder_path):
-            files = sorted([f for f in os.listdir(folder_path) if f.lower().endswith(('.jpg', '.jpeg', '.png'))])
-            if files:
-                inventory[cat_name] = {f: os.path.join(folder_path, f) for f in files}
+    manifest_path = DEFAULT_RESULTS_DIR / "split_manifest.csv"
+    inventory = {"Training pool — tumor label": {}, "Training pool — no-tumor label": {}}
+    if not manifest_path.is_file():
+        return {}
+    with manifest_path.open(newline="", encoding="utf-8") as source:
+        for row in csv.DictReader(source):
+            if row.get("status") != "readable" or row.get("split") != "train":
+                continue
+            category = (
+                "Training pool — tumor label"
+                if row.get("label") == "tumor"
+                else "Training pool — no-tumor label"
+            )
+            path = Path(__file__).resolve().parents[1] / row["source_file"]
+            if path.is_file():
+                inventory[category][path.name] = str(path)
+    inventory = {name: files for name, files in inventory.items() if files}
     return inventory
 
-def generate_clinical_rationale(pred_idx, confidence, mni_coords, brain_region, brain_side, volume_mm3, safety_score, safety_warnings, depth_mm):
-    if pred_idx == 1:
-        if "Frontal" in brain_region or "Parietal" in brain_region:
-            likely_type = "Glioblastoma Multiforme (GBM) / High-Grade Glioma" if volume_mm3 > 4000 else "Low-Grade Diffuse Astrocytoma / Oligodendroglioma"
-            pathology_desc = (
-                f"Neuro-radiological feature extraction reveals a focal space-occupying lesion with prominent "
-                f"hyperintense contrast enhancement in the {brain_side} {brain_region}. ResNet-18 residual feature "
-                f"maps indicate severe architectural distortion of the surrounding parenchymal white matter tracts."
-            )
-        elif "Temporal" in brain_region:
-            likely_type = "Temporal Lobe Glioma / Mesial Glioneuronal Neoplasm"
-            pathology_desc = (
-                f"High-confidence neural gradient activation centered in the {brain_side} Temporal Lobe. "
-                f"Focal T1-hypointense / T2-hyperintense core with surrounding vasogenic edema bordering mesial temporal structures."
-            )
-        elif "Occipital" in brain_region:
-            likely_type = "Occipital Glioblastoma / Secondary Metastatic Lesion"
-            pathology_desc = (
-                f"Posterior cranial fossa / Occipital lobe focal lesion with marked peripheral ring enhancement "
-                f"and central necrotic core attenuation."
-            )
-        else:
-            likely_type = "Meningioma / Deep Intracranial Extra-Axial Mass"
-            pathology_desc = (
-                f"Circumscribed contrast-enhancing mass with dural tail abutment identified in deep cranial space."
-            )
-        
-        vol_cm3 = volume_mm3 / 1000.0
-        if vol_cm3 < 3.0:
-            vol_severity = f"Small localized lesion ({vol_cm3:.2f} cm³). Favorable for high-precision stereotactic radiosurgery (SRS) or targeted LITT laser ablation."
-        elif vol_cm3 < 15.0:
-            vol_severity = f"Moderate volume mass ({vol_cm3:.2f} cm³). Requires stereotactic navigation for biopsy and potential debulking craniotomy."
-        else:
-            vol_severity = f"Large volume mass ({vol_cm3:.2f} cm³) with significant mass effect. Urgent surgical decompression and cytoreductive resection indicated."
-
-        if "Left" in brain_side and ("Frontal" in brain_region or "Temporal" in brain_region):
-            eloquence_note = "High Eloquence Zone: Proximity to Broca's / Wernicke's speech and language centers. Awake intraoperative mapping or sub-millimeter stereotactic trajectory strongly advised to preserve speech fluency."
-        elif "Frontal" in brain_region or "Parietal" in brain_region:
-            eloquence_note = "Moderate Eloquence Zone: Adjacent to primary motor cortex (Precentral Gyrus) and corticospinal tracts. Trajectory planned to maintain safe distance from motor strips."
-        else:
-            eloquence_note = "Standard Eloquence Zone: Visual radiation pathways and subcortical white matter fibers monitored during trajectory descent."
-
-        if safety_score >= 85:
-            robotics_note = f"Optimal Trajectory Safety ({safety_score:.1f}/100): Clear linear corridor established from calvarium entry point to target centroid. 6-DOF manipulator kinematic pose is well within safe joint torque envelope."
-        else:
-            warns_str = ", ".join(safety_warnings[:2]) if safety_warnings else "narrow anatomical corridor"
-            robotics_note = f"Cautionary Trajectory Safety ({safety_score:.1f}/100): Trajectory approaches near critical structures ({warns_str}). Automated path optimizer applied safety penalties."
-
-        return {
-            "status": "TUMOR_DETECTED",
-            "likely_type": likely_type,
-            "pathology_desc": pathology_desc,
-            "vol_severity": vol_severity,
-            "vol_cm3": vol_cm3,
-            "eloquence_note": eloquence_note,
-            "robotics_note": robotics_note,
-            "recommended_procedure": "Radiosurgery (SRS)" if vol_cm3 < 5.0 else ("Tumor Resection" if vol_cm3 > 12.0 else "Stereotactic Biopsy"),
-            "medications": [
-                "Dexamethasone 4mg IV/PO q6h (Anti-edema & ICP reduction)",
-                "Levetiracetam (Keppra) 500mg BID (Seizure prophylaxis for supratentorial lesion)",
-                "Omeprazole 20mg daily (Gastric protection during steroid therapy)"
-            ]
-        }
-    else:
-        return {
-            "status": "HEALTHY_SCAN",
-            "likely_type": "Normal Neuroanatomy (No Neoplasm)",
-            "pathology_desc": (
-                "Deep convolutional feature extraction demonstrates symmetric cerebral hemispheres, "
-                "normal ventricular dimensions, preserved gray-white matter junction differentiation, "
-                "and no evidence of focal space-occupying mass lesions, hyperintense enhancement, or midline shift."
-            ),
-            "vol_severity": "No pathological mass volume detected (0.00 cm³). Normal intracranial baseline.",
-            "vol_cm3": 0.0,
-            "eloquence_note": "Intact eloquent cortical networks. Normal corticospinal and language pathway architecture.",
-            "robotics_note": "No stereotactic target required. Robotics arm remains in calibrated standby mode.",
-            "recommended_procedure": "None (Routine Surveillance)",
-            "medications": [
-                "No neurosurgical intervention or steroid medications required.",
-                "Routine clinical follow-up as clinically indicated."
-            ]
-        }
+def generate_demo_summary(pred_idx, confidence):
+    label = IDX_TO_CLASS[pred_idx]
+    return {
+        "status": "DEMONSTRATION_MODEL_OUTPUT",
+        "likely_type": f"{label}-labeled class",
+        "pathology_desc": (
+            f"The binary image classifier assigned the {label} label. Its top-class softmax score is "
+            f"{confidence * 100:.2f}% and is uncalibrated. This output is not a diagnosis and does not "
+            "identify a tumor subtype, tissue characteristics, or disease severity."
+        ),
+        "vol_severity": "Lesion volume is not measured from this 2D image.",
+        "vol_cm3": None,
+        "eloquence_note": "Anatomical location, laterality, and eloquent structures are not assessed.",
+        "robotics_note": (
+            "Any coordinates, trajectories, safety scores, or device displays are illustrative simulations, "
+            "not patient-specific plans or hardware controls."
+        ),
+        "recommended_procedure": "No procedure recommendation is generated.",
+        "medications": ["No medication or treatment recommendation is generated."],
+    }
 
 # --- Page Content ---
 def home_page():
@@ -554,8 +516,8 @@ def home_page():
             <p class="hero-badge">NEURO-AI CORE ENGINE V2.0</p>
             <h1 class="hero-title">Decoding the<br><span style="color: var(--accent-blue);">Human Brain.</span></h1>
             <p class="hero-subtitle">
-                The next frontier in clinical neuro-diagnostics. A unified environment for high-fidelity imaging, 
-                autonomous therapeutic simulation, and multi-modal clinical profiling.
+                A research and educational prototype for binary brain-image classification,
+                activation-map visualization, and clearly simulated planning interfaces.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -615,28 +577,28 @@ def home_page():
                 <!-- Original 3 Cards -->
                 <div class="carousel-card">
                     <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">MRI Neural Analysis</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Voxel-level tumor classification using deep residual networks.</p>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Binary image-level class-score demonstration using a ResNet-18.</p>
                 </div>
                 <div class="carousel-card">
-                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Spatial MNI Mapping</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Autonomous coordinate transformation into MNI-152 standard space.</p>
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Illustrative / Simulated Coordinates</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Display-only image-plane values; no voxel-to-world transform or anatomical registration.</p>
                 </div>
                 <div class="carousel-card">
-                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Clinical Reporting</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">High-fidelity diagnostic reports with integrated therapeutic protocols.</p>
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Demonstration Summary</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Prototype summary without diagnosis or treatment recommendations.</p>
                 </div>
                 <!-- Duplicate 3 Cards for Seamless Loop -->
                 <div class="carousel-card">
                     <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">MRI Neural Analysis</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Voxel-level tumor classification using deep residual networks.</p>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Binary image-level class-score demonstration using a ResNet-18.</p>
                 </div>
                 <div class="carousel-card">
-                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Spatial MNI Mapping</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Autonomous coordinate transformation into MNI-152 standard space.</p>
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Illustrative / Simulated Coordinates</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Display-only image-plane values; no voxel-to-world transform or anatomical registration.</p>
                 </div>
                 <div class="carousel-card">
-                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Clinical Reporting</h3>
-                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">High-fidelity diagnostic reports with integrated therapeutic protocols.</p>
+                    <h3 style="color: white; margin-bottom: 1.5rem; font-size: 1.8rem;">Demonstration Summary</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">Prototype summary without diagnosis or treatment recommendations.</p>
                 </div>
             </div>
         </div>
@@ -692,12 +654,12 @@ def dashboard_page():
             selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()))
             scan_file_path = sample_scans[selected_scan_name]
             if os.path.exists(scan_file_path):
-                raw_image = Image.open(scan_file_path).convert('RGB')
+                raw_image = load_rgb_image(scan_file_path)
                 scan_identifier = os.path.splitext(os.path.basename(scan_file_path))[0]
         else:
             uploaded_file = st.file_uploader("Upload MRI Data", type=["jpg", "png", "jpeg"])
             if uploaded_file:
-                raw_image = Image.open(uploaded_file).convert('RGB')
+                raw_image = load_rgb_image(uploaded_file)
                 scan_identifier = os.path.splitext(uploaded_file.name)[0]
         
         if raw_image is not None:
@@ -724,30 +686,32 @@ def dashboard_page():
                     st.image(adj_image, use_container_width=True)
                 
                 with c2:
-                    transform = transforms.Compose([
-                        transforms.Resize((224, 224)),
-                        transforms.ToTensor(),
-                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                    ])
-                    input_tensor = transform(adj_image).unsqueeze(0)
+                    input_tensor = preprocess_image(adj_image).unsqueeze(0)
+                    output = infer_image(adj_image)
+                    if output is None:
+                        return
+                    probs = torch.softmax(output, dim=0)
+                    confidence, pred_idx = torch.max(probs, 0)
+                    pred_idx = int(pred_idx.item())
+                    confidence = float(confidence.item())
                     
-                    with torch.no_grad():
-                        output = model(input_tensor)
-                        probs = torch.softmax(output, 1)[0]
-                        confidence, pred_idx = torch.max(probs, 0)
-                    
-                    res_class = "TUMOR DETECTED" if pred_idx == 1 else "HEALTHY SCAN"
+                    res_class = (
+                        "TUMOR-LABELED MODEL PREDICTION"
+                        if IDX_TO_CLASS[pred_idx] == "tumor"
+                        else "NO-TUMOR-LABELED MODEL PREDICTION"
+                    )
                     color = "#ef4444" if pred_idx == 1 else "#10b981"
                     
                     st.markdown(f"""
                         <div style='background: {color}; padding: 40px; border-radius: 24px; text-align: center; margin-bottom: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.3);'>
                             <h2 style='color: white; margin: 0; font-family: Space Grotesk; font-size: 2rem;'>{res_class}</h2>
-                            <h3 style='color: white; opacity: 0.9; margin-top: 10px; font-size: 1.4rem;'>CONFIDENCE: {confidence*100:.2f}%</h3>
+                            <h3 style='color: white; opacity: 0.9; margin-top: 10px; font-size: 1.2rem;'>TOP-CLASS SOFTMAX SCORE (UNCALIBRATED): {confidence*100:.2f}%</h3>
                         </div>
                     """, unsafe_allow_html=True)
+                    st.caption("Softmax scores are uncalibrated model outputs, not diagnostic certainty or calibrated probabilities.")
                     
-                    fig_probs = px.bar(x=["Healthy", "Tumor"], y=[probs[0].item(), probs[1].item()], 
-                                      color=["Healthy", "Tumor"],
+                    fig_probs = px.bar(x=["No-tumor score", "Tumor score"], y=[probs[0].item(), probs[1].item()],
+                                      color=["No-tumor score", "Tumor score"],
                                       color_discrete_sequence=["#10b981", "#ef4444"])
                     fig_probs.update_layout(height=350, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
                                           font_color="white", showlegend=False, margin=dict(t=20,b=20,l=20,r=20))
@@ -755,8 +719,12 @@ def dashboard_page():
 
                     st.markdown("---")
                     st.subheader("Blind Accessibility")
+                    st.caption(
+                        "If the optional OpenRouter service is configured, this image is sent to that remote "
+                        "provider for description. Do not submit identifiable or restricted images without authorization."
+                    )
                     if st.button("Generate Audio Description"):
-                        with st.spinner("Gemini is analyzing the scan for audio description..."):
+                        with st.spinner("Generating the optional image description..."):
                             diag_info = f"Classification: {res_class}, Confidence: {confidence*100:.2f}%"
                             st.session_state.audio_description = describe_image_for_blind(temp_img_path, diag_info)
                     
@@ -767,7 +735,11 @@ def dashboard_page():
             with t2:
                 if pred_idx == 1:
                     grad_cam = GradCAM(model, model.layer4[-1])
-                    heatmap = grad_cam.generate_heatmap(input_tensor)
+                    try:
+                        heatmap = grad_cam.generate_heatmap(input_tensor, target_class=pred_idx)
+                    except (RuntimeError, ValueError) as exc:
+                        st.error(f"Grad-CAM could not be generated: {exc}")
+                        return
                     temp_path = os.path.join(os.path.dirname(__file__), "temp_viz.jpg")
                     adj_image.save(temp_path)
                     heatmapped_img = apply_heatmap(temp_path, heatmap)
@@ -788,10 +760,13 @@ def dashboard_page():
 
                     st.markdown("<br>", unsafe_allow_html=True)
                     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-                    st.subheader("🤖 Send to Robotics Planner")
-                    st.caption("Compute stereotactic trajectory / radiosurgery beam plan and queue the procedure.")
+                    st.subheader("Illustrative Planning Demonstration")
+                    st.caption(
+                        "The following geometry is synthetic, uses a 2D activation map, and is not a patient-specific "
+                        "trajectory, treatment plan, or hardware command."
+                    )
 
-                    mni_coords, brain_region, brain_side = mni_anatomical_mapping(heatmap)
+                    illustrative_coordinates, image_region, image_side = illustrative_heatmap_mapping(heatmap)
                     stereo_plan = build_full_plan(heatmap, np.array(adj_image).shape[:2])
                     radio_plan = build_radiosurgery_plan(
                         heatmap,
@@ -805,23 +780,26 @@ def dashboard_page():
                         procedure_choice = st.selectbox(
                             "Procedure",
                             ("Stereotactic Biopsy", "Tumor Resection", "Radiosurgery (SRS)", "Laser Interstitial Ablation"),
-                            index=2 if stereo_plan["centroid"]["volume_mm3"] < 6000 else 1,
+                            index=0,
                         )
                     with col_r2:
                         priority_choice = st.selectbox(
                             "Priority",
                             ("HIGH", "MED", "LOW"),
-                            index=0 if confidence > 0.97 and stereo_plan["centroid"]["volume_mm3"] > 5000 else 1,
+                            index=1,
                         )
                     with col_r3:
                         default_date = (datetime.now()).strftime("%Y-%m-%d %H:%M")
                         planned_date = st.text_input("Planned Date", value=default_date)
 
                     r_m1, r_m2, r_m3, r_m4 = st.columns(4)
-                    mni_str = f"({mni_coords[0]:.0f}, {mni_coords[1]:.0f}, {mni_coords[2]:.0f})" if isinstance(mni_coords, (tuple, list)) else f"({mni_coords})"
-                    r_m1.metric("Target Centroid (MNI)", mni_str)
-                    r_m2.metric("Tumor Volume", f"{stereo_plan['centroid']['volume_mm3']:.0f} mm³")
-                    r_m3.metric("Safety Score", f"{stereo_plan['safety_score']:.1f} / 100",
+                    illustrative_display = (
+                        f"({illustrative_coordinates[0]}, {illustrative_coordinates[1]}, "
+                        f"{illustrative_coordinates[2]})"
+                    )
+                    r_m1.metric(SIMULATED_COORDINATE_LABEL, illustrative_display)
+                    r_m2.metric("Synthetic activation proxy (not lesion volume)", f"{stereo_plan['centroid']['volume_mm3']:.0f}")
+                    r_m3.metric("Synthetic safety score (not validated)", f"{stereo_plan['safety_score']:.1f} / 100",
                                 delta="GREEN" if stereo_plan['safety_score'] >= 85 else ("AMBER" if stereo_plan['safety_score'] >= 60 else "RED"),
                                 delta_color="normal" if stereo_plan['safety_score'] >= 85 else "inverse")
                     r_m4.metric("Procedure Type", procedure_choice.split(" ")[0])
@@ -840,8 +818,8 @@ def dashboard_page():
                                 procedure_type=procedure_choice,
                                 priority=priority_choice,
                                 tumor_volume_mm3=stereo_plan["centroid"]["volume_mm3"],
-                                mni_coords_mm=mni_coords,
-                                lobe=f"{brain_side} {brain_region}",
+                                illustrative_coordinates=illustrative_coordinates,
+                                lobe=f"{image_side}, {image_region} (image plane only)",
                                 planned_date=planned_date,
                                 surgeon="Pending assignment",
                                 n_beams=radio_plan["beams_plan"]["n_beams"] if procedure_uses_radiation(procedure_choice) else 0,
@@ -856,9 +834,9 @@ def dashboard_page():
                                 "confidence": float(confidence),
                                 "stereo_plan": stereo_plan,
                                 "radio_plan": radio_plan,
-                                "mni_coords": mni_coords,
-                                "brain_region": brain_region,
-                                "brain_side": brain_side,
+                                "illustrative_coordinates": illustrative_coordinates,
+                                "image_region": image_region,
+                                "image_side": image_side,
                                 "mask_arr": mask,
                                 "mri_arr": np.array(adj_image),
                                 "task_id": task["id"],
@@ -866,49 +844,53 @@ def dashboard_page():
                             st.session_state.selected_task_id = task["id"]
                             st.success(f"Task {task['id']} queued for {p_info['name']}.")
                     with hq_c2:
-                        if st.button("Open Robotics Command Center →", use_container_width=True, type="primary"):
-                            st.session_state.page = "Robotics Command Center"
+                        if st.button("Open Robotics Simulation →", use_container_width=True, type="primary"):
+                            st.session_state.page = "Robotics Simulation"
                             st.rerun()
                     st.markdown('</div>', unsafe_allow_html=True)
                 else:
-                    st.success("Clear Scan. Rendering 3D Reference Model...")
+                    st.success("No-tumor-labeled class predicted. Rendering an illustrative 3D visualization...")
                     fig_3d = create_3d_brain_model(np.array(adj_image))
                     st.plotly_chart(fig_3d, use_container_width=True)
+                    st.caption("Synthetic 3D depth and geometry; this is not an anatomical reconstruction.")
 
             with t3:
                 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-                st.subheader("Autonomous Clinical Sequence")
-                
-                tumor_type = st.selectbox("Detected Classification", ["Glioma", "Meningioma", "Pituitary Tumor"]) if pred_idx == 1 else "no_tumor"
-                med_info = suggest_treatment(tumor_type)
+                st.subheader("Treatment Advice Not Provided")
+                st.warning(
+                    "The binary model does not identify tumor subtype or provide a treatment recommendation. "
+                    "No clinical follow-up guidance is available in this prototype."
+                )
+                med_info = suggest_treatment("not_used")
                 
                 st.markdown(f"""
                     <div class="med-card">
-                        <span class="med-tag">PROTOCOL</span>
+                        <span class="med-tag">NOT PROVIDED</span>
                         <p style="font-size: 1.3rem; color: white; font-weight: 500;">{med_info['description']}</p>
                     </div>
                 """, unsafe_allow_html=True)
                 
-                st.write("**Suggested Interventions:**")
+                st.write("**Treatment advice:**")
                 for t in med_info['treatments']:
                     st.markdown(f"- <span style='font-size: 1.1rem;'>{t}</span>", unsafe_allow_html=True)
                 
-                st.markdown(f"**Follow-up Schedule:** <span style='color: var(--accent-blue); font-weight: 600;'>{med_info['followup']}</span>", unsafe_allow_html=True)
+                st.markdown(f"**Follow-up guidance:** <span style='color: var(--accent-blue); font-weight: 600;'>{med_info['followup']}</span>", unsafe_allow_html=True)
                 
                 st.markdown("---")
-                if st.button("Download Clinical Report"):
+                if st.button("Download Demonstration Summary"):
                     with st.spinner("Generating Report..."):
                         pdf_path = create_pdf_report(p_info['name'], f"SCAN-{scan_identifier[:8]}", 
-                                                   tumor_type, confidence*100, f"{brain_side} {brain_region}" if pred_idx == 1 else "Normal Anatomy", 
-                                                   f"{stereo_plan['centroid']['volume_mm3'] / 1000.0:.1f}" if pred_idx == 1 else "0.0", 
-                                                   "Autonomous AI Sequence.")
+                                                   IDX_TO_CLASS[pred_idx], confidence*100,
+                                                   "Not assessed from this 2D image",
+                                                   "Not measured",
+                                                   "Binary image-classifier output only; not a diagnosis or treatment recommendation.")
                         time.sleep(0.5)
                         with open(pdf_path, "rb") as f:
                             st.download_button("Save Report", f, file_name=os.path.basename(pdf_path))
                 st.markdown('</div>', unsafe_allow_html=True)
 
             with t4:
-                context = f"Patient Scan Analysis. Results: {res_class} with {confidence*100:.2f}% confidence."
+                context = f"Uncalibrated image-classifier output: {res_class}; top-class score {confidence*100:.2f}%."
                 render_gemini_assistant(context)
         else:
             st.info("System Initialized. Select a pre-loaded benchmark scan or upload MRI data to begin analysis.")
@@ -946,17 +928,15 @@ def analytics_page():
         selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()), key="analytics_scan_select")
         scan_file_path = sample_scans[selected_scan_name]
         if os.path.exists(scan_file_path):
-            raw_image = Image.open(scan_file_path).convert('RGB')
+            raw_image = load_rgb_image(scan_file_path)
     else:
         uploaded_file = st.file_uploader("Upload Scan for Neural Layer Analysis", type=["jpg", "png", "jpeg"], key="analytics_uploader")
         if uploaded_file:
-            raw_image = Image.open(uploaded_file).convert('RGB')
+            raw_image = load_rgb_image(uploaded_file)
     st.markdown('</div>', unsafe_allow_html=True)
     
     if raw_image is not None:
-        transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(),
-                                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
-        input_tensor = transform(raw_image).unsqueeze(0)
+        input_tensor = preprocess_image(raw_image).unsqueeze(0)
         current_f_maps = None
         
         c1, c2 = st.columns(2)
@@ -979,7 +959,11 @@ def analytics_page():
             selected_label = st.selectbox("Network Depth", list(layer_options.keys()), index=2)
             layer_name = layer_options[selected_label]
             
-            output = get_feature_maps(model, input_tensor, layer_name)
+            try:
+                output = get_feature_maps(model, input_tensor, layer_name)
+            except RuntimeError as exc:
+                st.error(f"Feature-map inference failed: {exc}")
+                return
             
             if output is not None:
                 f_maps = output[0].cpu().numpy()
@@ -996,17 +980,20 @@ def analytics_page():
 
         with c2:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Anatomical Mapping (MNI)")
+            st.subheader(SIMULATED_COORDINATE_LABEL)
             grad_cam = GradCAM(model, model.layer4[-1])
             heatmap = grad_cam.generate_heatmap(input_tensor)
-            mni_coords, brain_region, brain_side = mni_anatomical_mapping(heatmap)
-            mni_display = f"({mni_coords[0]}, {mni_coords[1]}, {mni_coords[2]})" if isinstance(mni_coords, (tuple, list)) else f"({mni_coords})"
+            illustrative_coordinates, image_region, image_side = illustrative_heatmap_mapping(heatmap)
+            coordinate_display = (
+                f"({illustrative_coordinates[0]}, {illustrative_coordinates[1]}, "
+                f"{illustrative_coordinates[2]})"
+            )
             
             st.markdown(f"""
                 <div class="info-box-white">
-                    <p style="margin-bottom: 12px;"><b>COORDINATE SYSTEM:</b> MNI-152 Standard Space</p>
-                    <p style="margin-bottom: 12px;"><b>PEAK ACTIVATION:</b> {mni_display}</p>
-                    <p style="margin-bottom: 0;"><b>ANATOMICAL REGION:</b> {brain_side} {brain_region}</p>
+                    <p style="margin-bottom: 12px;"><b>{SIMULATED_COORDINATE_LABEL}:</b> {coordinate_display} (arbitrary image-plane units; z is a placeholder)</p>
+                    <p style="margin-bottom: 12px;"><b>HEATMAP PEAK:</b> {image_side}, {image_region}</p>
+                    <p style="margin-bottom: 0;">No anatomical orientation, physical spacing, or registration metadata is available.</p>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -1019,25 +1006,31 @@ def analytics_page():
             st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("---")
-        st.markdown("<h2 class='slide-up'>Gemini AI Neural Insights</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 class='slide-up'>Optional AI-Assisted Accessibility Demo</h2>", unsafe_allow_html=True)
         
         col_chat, col_tts = st.columns([2, 1])
         
         with col_chat:
-            render_gemini_assistant("Advanced Analytics Page: Analyzing neural activation maps and MNI coordinates.")
+            render_gemini_assistant(
+                "Advanced Analytics: qualitative neural activation visualization; spatial coordinates are simulated."
+            )
             
         with col_tts:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             st.subheader("Audio Layer Analysis")
             st.markdown("Generate an audio description of the neural activations for accessibility.")
+            st.caption(
+                "If the optional OpenRouter service is configured, the image is sent to that remote provider. "
+                "Do not submit identifiable or restricted images without authorization."
+            )
             
             # Save temp image if not already done
             temp_img_path = os.path.join(os.path.dirname(__file__), "temp_analytics.jpg")
             raw_image.save(temp_img_path)
             
             if st.button("Generate Audio Insight"):
-                with st.spinner("Gemini is analyzing the neural layers..."):
-                    context = f"Neural Analytics. Focus: {selected_label} activation maps. MNI Coords: {mni_coords}."
+                with st.spinner("Generating the optional image description..."):
+                    context = f"Neural Analytics. Focus: {selected_label} activation maps. Spatial coordinates are simulated."
                     st.session_state.audio_description = describe_image_for_blind(temp_img_path, context)
             
             if st.session_state.audio_description:
@@ -1046,10 +1039,14 @@ def analytics_page():
             st.markdown('</div>', unsafe_allow_html=True)
 
 def patient_records_page():
-    st.markdown("<h1 class='slide-up'>Electronic Health Records</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='slide-up'>Demonstration Records</h1>", unsafe_allow_html=True)
+    st.warning(
+        "These are synthetic, session-only demonstration records. This page is not an electronic health record "
+        "system and must not be used to store real patient information."
+    )
     
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Register New Patient")
+    st.subheader("Add Demonstration Record")
     with st.form("patient_registration"):
         c1, c2, c3 = st.columns(3)
         with c1:
@@ -1058,7 +1055,7 @@ def patient_records_page():
             new_name = st.text_input("Full Name")
         with c3:
             new_age = st.number_input("Age", 0, 120, 30)
-        new_history = st.text_area("Clinical History")
+        new_history = st.text_area("Example Notes (do not enter real patient data)")
         
         if st.form_submit_button("Add Patient Record"):
             if new_id and new_name:
@@ -1076,7 +1073,11 @@ def patient_records_page():
 
 
 def robotics_page():
-    st.markdown("<h1 class='slide-up'>Robotics Command Center</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='slide-up'>Robotics Simulation</h1>", unsafe_allow_html=True)
+    st.warning(
+        "Demonstration only: coordinates, estimated volumes, trajectories, safety scores, radiosurgery outputs, "
+        "camera feeds, device status, and telemetry are simulated. Nothing is patient-specific or connected to hardware."
+    )
 
     queue = st.session_state.surgical_queue
     selected_id = st.session_state.selected_task_id
@@ -1104,9 +1105,9 @@ def robotics_page():
         robot_label = "ROSA-One Brain" if (selected_id and not find_task(queue, selected_id) is None and not procedure_uses_radiation(find_task(queue, selected_id)["procedure_type"])) else "CyberKnife G4"
         st.markdown(f"""
             <div style='background:linear-gradient(135deg, rgba(37,99,235,0.25), rgba(14,116,144,0.2)); padding:28px 24px; border-radius:20px; border:1px solid rgba(37,99,235,0.5);'>
-                <p style='margin:0; color:#93c5fd; font-size:0.8rem; letter-spacing:2px;'>PRIMARY ROBOT</p>
+                <p style='margin:0; color:#93c5fd; font-size:0.8rem; letter-spacing:2px;'>SIMULATED ROBOT PROFILE</p>
                 <h3 style='margin:8px 0 0 0; color:white; font-family:Space Grotesk; font-size:1.55rem;'>{robot_label}</h3>
-                <p style='margin:10px 0 0 0; color:#86efac; font-weight:600; font-size:1rem;'>● ONLINE · LINK OK</p>
+                <p style='margin:10px 0 0 0; color:#fcd34d; font-weight:600; font-size:1rem;'>● SIMULATION · NO DEVICE CONNECTION</p>
             </div>
         """, unsafe_allow_html=True)
     with a2:
@@ -1117,22 +1118,25 @@ def robotics_page():
         st.metric("Avg Safety Score", f"{avg_s:.1f} / 100", delta="0.8", delta_color="normal")
     with a5:
         danger_color = "#ef4444" if estop else "#10b981"
-        danger_text = "E-STOP ACTIVE" if estop else "System Armed"
+        danger_text = "SIMULATION STOP ACTIVE" if estop else "SIMULATION IDLE"
         st.markdown(f"""
             <div style='background:rgba(239,68,68,0.08) if {estop} else rgba(16,185,129,0.08); padding:28px 24px; border-radius:20px; border:1px solid {danger_color}66;'>
-                <p style='margin:0; color:{danger_color}; font-size:0.8rem; letter-spacing:3px;'>SAFETY STATUS</p>
+                <p style='margin:0; color:{danger_color}; font-size:0.8rem; letter-spacing:3px;'>SIMULATION STATUS</p>
                 <h3 style='margin:8px 0 0 0; color:{danger_color}; font-family:Space Grotesk; font-size:1.55rem;'>{danger_text}</h3>
-                <p style='margin:10px 0 0 0; color:#cbd5e1; font-size:0.95rem;'>{"Robotics arm servos disabled." if estop else "All 4 manipulators within safe torque envelope."}</p>
+                <p style='margin:10px 0 0 0; color:#cbd5e1; font-size:0.95rem;'>{"Demo queue paused." if estop else "No hardware or real-time telemetry is connected."}</p>
             </div>
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Patient Scan Ingestion & Autonomous Diagnostic Telemetry Panel
+    # Image input and simulated visualization panel
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("🛰️ Patient Scan Ingestion & Autonomous Diagnostic Telemetry")
-    st.caption("Select any MRI scan from the clinical dataset repository or upload custom neuro-imaging data to trigger real-time AI classification, Grad-CAM localization, stereotactic trajectory planning, and in-depth diagnostic reporting.")
+    st.subheader("Image Upload & Simulated System Demonstration")
+    st.caption(
+        "Choose an image for binary model inference and qualitative Grad-CAM display. Coordinates and planning "
+        "views are illustrative simulations, not anatomical localization or diagnostic reports."
+    )
 
     inv = get_dataset_inventory()
     
@@ -1168,12 +1172,12 @@ def robotics_page():
                         chosen_file = scan_files[0]
                     selected_scan_path = scan_dict.get(chosen_file)
                     if selected_scan_path and os.path.exists(selected_scan_path):
-                        selected_img = Image.open(selected_scan_path).convert('RGB')
+                        selected_img = load_rgb_image(selected_scan_path)
                         selected_scan_label = os.path.basename(selected_scan_path)
         else:
             uploaded = st.file_uploader("Upload MRI Scan (JPG, PNG, JPEG)", type=["jpg", "png", "jpeg"], key="robotics_custom_uploader")
             if uploaded:
-                selected_img = Image.open(uploaded).convert('RGB')
+                selected_img = load_rgb_image(uploaded)
                 selected_scan_label = uploaded.name
 
     with col_input_2:
@@ -1192,20 +1196,21 @@ def robotics_page():
 
     if selected_img is not None:
         st.markdown("---")
-        transform = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
-        input_tensor = transform(selected_img).unsqueeze(0)
-        
-        with torch.no_grad():
-            output = model(input_tensor)
-            probs = torch.softmax(output, 1)[0]
-            confidence, pred_idx = torch.max(probs, 0)
+        input_tensor = preprocess_image(selected_img).unsqueeze(0)
+        output = infer_image(selected_img)
+        if output is None:
+            return
+        probs = torch.softmax(output, dim=0)
+        confidence, pred_idx = torch.max(probs, 0)
+        pred_idx = int(pred_idx.item())
+        confidence = float(confidence.item())
         
         grad_cam = GradCAM(model, model.layer4[-1])
-        heatmap = grad_cam.generate_heatmap(input_tensor)
+        try:
+            heatmap = grad_cam.generate_heatmap(input_tensor, target_class=pred_idx)
+        except (RuntimeError, ValueError) as exc:
+            st.error(f"Grad-CAM could not be generated: {exc}")
+            return
         
         img_np = np.array(selected_img)
         temp_cam_path = os.path.join(os.path.dirname(__file__), "temp_rob_cam.jpg")
@@ -1220,7 +1225,7 @@ def robotics_page():
         heatmap_resized = cv2.resize(heatmap, (img_np.shape[1], img_np.shape[0]))
         mask_np = np.uint8(255 * (heatmap_resized > 0.4))
         
-        mni_coords, brain_region, brain_side = mni_anatomical_mapping(heatmap)
+        illustrative_coordinates, image_region, image_side = illustrative_heatmap_mapping(heatmap)
         stereo_plan = build_full_plan(heatmap, img_np.shape[:2])
         radio_plan = build_radiosurgery_plan(
             heatmap,
@@ -1229,72 +1234,70 @@ def robotics_page():
             n_beams=9,
         )
         
-        clinical_info = generate_clinical_rationale(
-            pred_idx=int(pred_idx),
-            confidence=float(confidence),
-            mni_coords=mni_coords,
-            brain_region=brain_region,
-            brain_side=brain_side,
-            volume_mm3=stereo_plan["centroid"]["volume_mm3"],
-            safety_score=stereo_plan["safety_score"],
-            safety_warnings=stereo_plan.get("safety_warnings", []),
-            depth_mm=stereo_plan["trajectory"]["depth_mm"]
-        )
+        demo_summary = generate_demo_summary(int(pred_idx), float(confidence))
 
         v_col1, v_col2, v_col3 = st.columns([1.1, 1.1, 1.8])
         with v_col1:
             st.image(selected_img, caption=f"Raw MRI: {selected_scan_label}", use_container_width=True)
         with v_col2:
-            st.image(heatmapped_img, caption="Grad-CAM Attention Heatmap", use_container_width=True)
+            st.image(
+                heatmapped_img,
+                caption="Qualitative Grad-CAM activation (not a segmentation mask or validated localization)",
+                use_container_width=True,
+            )
         with v_col3:
             res_color = "#ef4444" if pred_idx == 1 else "#10b981"
-            res_tag = "PATHOLOGY DETECTED · POSITIVE NEOPLASM" if pred_idx == 1 else "HEALTHY SCAN · NORMAL PARENCHYMA"
+            res_tag = "MODEL PREDICTION · TUMOR-LABELED CLASS" if pred_idx == 1 else "MODEL PREDICTION · NO-TUMOR-LABELED CLASS"
             st.markdown(f"""
                 <div style='background:linear-gradient(135deg, {res_color}22, rgba(0,0,0,0.6)); border:2px solid {res_color}; border-radius:20px; padding:24px; text-align:center;'>
                     <span style='color:{res_color}; font-weight:700; letter-spacing:2px; font-size:0.85rem;'>{res_tag}</span>
-                    <h2 style='color:white; font-family:Space Grotesk; margin:8px 0;'>{clinical_info["likely_type"]}</h2>
-                    <h3 style='color:{res_color}; margin:0; font-size:1.6rem;'>CONFIDENCE: {confidence*100:.2f}%</h3>
+                    <h2 style='color:white; font-family:Space Grotesk; margin:8px 0;'>{demo_summary["likely_type"]}</h2>
+                    <h3 style='color:{res_color}; margin:0; font-size:1.25rem;'>TOP-CLASS SOFTMAX SCORE (UNCALIBRATED): {confidence*100:.2f}%</h3>
                 </div>
             """, unsafe_allow_html=True)
+            st.caption("Scores are uncalibrated model outputs, not diagnostic certainty or calibrated probabilities.")
             
             m_c1, m_c2, m_c3 = st.columns(3)
             with m_c1:
-                st.metric("MNI Coordinate", f"({mni_coords[0]:.0f}, {mni_coords[1]:.0f}, {mni_coords[2]:.0f})")
+                st.metric(
+                    SIMULATED_COORDINATE_LABEL,
+                    f"({illustrative_coordinates[0]}, {illustrative_coordinates[1]}, {illustrative_coordinates[2]})",
+                )
             with m_c2:
-                st.metric("Estimated Volume", f"{clinical_info['vol_cm3']:.2f} cm³")
+                st.metric("Lesion volume", "Not measured")
             with m_c3:
-                st.metric("Safety Score", f"{stereo_plan['safety_score']:.1f}/100")
+                st.metric("Synthetic safety score (not validated)", f"{stereo_plan['safety_score']:.1f}/100")
 
-        # In-Depth Clinical Explanation Card
+        # Classifier output and simulation explanation
         st.markdown(f"""
             <div style='background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px; margin-top:20px;'>
                 <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;'>
-                    <h3 style='color:white; font-family:Space Grotesk; margin:0;'>🔬 Neuro-Radiological Diagnostic Findings & Rationale</h3>
-                    <span style='background:rgba(37,99,235,0.2); color:#93c5fd; padding:6px 14px; border-radius:12px; font-size:0.85rem; border:1px solid rgba(37,99,235,0.4);'>Autonomous Multi-Modal Analysis</span>
+                    <h3 style='color:white; font-family:Space Grotesk; margin:0;'>Illustrative / Simulated Output — Not for Clinical Use</h3>
+                    <span style='background:rgba(37,99,235,0.2); color:#93c5fd; padding:6px 14px; border-radius:12px; font-size:0.85rem; border:1px solid rgba(37,99,235,0.4);'>2D Classifier and UI Demonstration</span>
                 </div>
                 
                 <div style='display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:16px;'>
                     <div style='background:rgba(0,0,0,0.3); border-left:4px solid #3b82f6; padding:16px 20px; border-radius:12px;'>
-                        <h4 style='color:#93c5fd; margin:0 0 8px 0; font-size:1rem;'>🧠 Pathological Impression & AI Attention</h4>
-                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'>{clinical_info['pathology_desc']}</p>
+                        <h4 style='color:#93c5fd; margin:0 0 8px 0; font-size:1rem;'>Binary Classifier Summary</h4>
+                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'>{demo_summary['pathology_desc']}</p>
                     </div>
                     
                     <div style='background:rgba(0,0,0,0.3); border-left:4px solid #8b5cf6; padding:16px 20px; border-radius:12px;'>
-                        <h4 style='color:#c4b5fd; margin:0 0 8px 0; font-size:1rem;'>🧭 Anatomical Locus & Eloquence Context</h4>
-                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'><b>Location:</b> {brain_side} {brain_region} (MNI: {mni_coords[0]:.0f}, {mni_coords[1]:.0f}, {mni_coords[2]:.0f})<br>{clinical_info['eloquence_note']}</p>
+                        <h4 style='color:#c4b5fd; margin:0 0 8px 0; font-size:1rem;'>{SIMULATED_COORDINATE_LABEL}</h4>
+                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'><b>Image-plane peak:</b> {image_side}, {image_region}; coordinates ({illustrative_coordinates[0]}, {illustrative_coordinates[1]}, {illustrative_coordinates[2]}) are arbitrary display values. {demo_summary['eloquence_note']}</p>
                     </div>
                 </div>
 
                 <div style='display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:16px;'>
                     <div style='background:rgba(0,0,0,0.3); border-left:4px solid #10b981; padding:16px 20px; border-radius:12px;'>
-                        <h4 style='color:#6ee7b7; margin:0 0 8px 0; font-size:1rem;'>🤖 Robotic Surgical Feasibility</h4>
-                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'><b>Burr-Hole Entry:</b> ({stereo_plan['burr_hole_entry_mm'][0]:.1f}, {stereo_plan['burr_hole_entry_mm'][1]:.1f}, {stereo_plan['burr_hole_entry_mm'][2]:.1f}) mm<br><b>Corridor Depth:</b> {stereo_plan['trajectory']['depth_mm']:.1f} mm | <b>Kinematic Error:</b> {stereo_plan['arm_ik']['trajectory_error_mm']:.2f} mm<br>{clinical_info['robotics_note']}</p>
+                        <h4 style='color:#6ee7b7; margin:0 0 8px 0; font-size:1rem;'>Synthetic Geometry Demonstration</h4>
+                        <p style='color:#cbd5e1; font-size:0.95rem; line-height:1.6; margin:0;'><b>Illustrative entry point:</b> ({stereo_plan['burr_hole_entry_mm'][0]:.1f}, {stereo_plan['burr_hole_entry_mm'][1]:.1f}, {stereo_plan['burr_hole_entry_mm'][2]:.1f}) arbitrary units<br><b>Simulated path length:</b> {stereo_plan['trajectory']['depth_mm']:.1f} arbitrary units<br>{demo_summary['robotics_note']}</p>
                     </div>
                     
                     <div style='background:rgba(0,0,0,0.3); border-left:4px solid #f59e0b; padding:16px 20px; border-radius:12px;'>
-                        <h4 style='color:#fcd34d; margin:0 0 8px 0; font-size:1rem;'>💊 Pharmacological & Therapeutic Protocol</h4>
+                        <h4 style='color:#fcd34d; margin:0 0 8px 0; font-size:1rem;'>Treatment Advice Not Available</h4>
                         <ul style='color:#cbd5e1; font-size:0.92rem; line-height:1.5; margin:0; padding-left:18px;'>
-                            {''.join([f'<li>{m}</li>' for m in clinical_info['medications']])}
+                            {''.join([f'<li>{m}</li>' for m in demo_summary['medications']])}
                         </ul>
                     </div>
                 </div>
@@ -1303,8 +1306,8 @@ def robotics_page():
 
         act_col1, act_col2, act_col3 = st.columns(3)
         with act_col1:
-            if st.button("🧲 Queue in Robotics System", use_container_width=True, type="secondary", key="rob_btn_queue"):
-                t_pri = "HIGH" if confidence > 0.95 and stereo_plan["centroid"]["volume_mm3"] > 3500 else "MED"
+            if st.button("🧲 Queue in Demonstration Simulation", use_container_width=True, type="secondary", key="rob_btn_queue"):
+                t_pri = "MED"
                 task = add_task(
                     queue=queue,
                     patient_id=rob_pid,
@@ -1313,13 +1316,16 @@ def robotics_page():
                     procedure_type=proc_type_override,
                     priority=t_pri,
                     tumor_volume_mm3=stereo_plan["centroid"]["volume_mm3"],
-                    mni_coords_mm=mni_coords,
-                    lobe=f"{brain_side} {brain_region}",
+                    illustrative_coordinates=illustrative_coordinates,
+                    lobe=f"{image_side}, {image_region} (image plane only)",
                     planned_date=datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    surgeon="Robotics AI Console",
+                    surgeon="Demo Operator",
                     n_beams=9 if procedure_uses_radiation(proc_type_override) else 0,
                     beam_energy_mv=6 if procedure_uses_radiation(proc_type_override) else 0,
-                    notes=f"Analyzed via Robotics Command Center. Classifier: {clinical_info['likely_type']} ({confidence*100:.1f}%).",
+                    notes=(
+                        f"Demonstration only. Binary classifier output: {IDX_TO_CLASS[pred_idx]}; "
+                        "coordinates and plans are synthetic, not clinical recommendations."
+                    ),
                 )
                 st.session_state.last_plan = {
                     "patient_id": rob_pid,
@@ -1329,9 +1335,9 @@ def robotics_page():
                     "confidence": float(confidence),
                     "stereo_plan": stereo_plan,
                     "radio_plan": radio_plan,
-                    "mni_coords": mni_coords,
-                    "brain_region": brain_region,
-                    "brain_side": brain_side,
+                    "illustrative_coordinates": illustrative_coordinates,
+                    "image_region": image_region,
+                    "image_side": image_side,
                     "mask_arr": mask_np,
                     "mri_arr": img_np,
                     "task_id": task["id"],
@@ -1341,7 +1347,7 @@ def robotics_page():
                 st.rerun()
 
         with act_col2:
-            if st.button("⚡ Arm & Load into Live HUD", use_container_width=True, type="primary", key="rob_btn_arm"):
+            if st.button("Load into Simulated HUD", use_container_width=True, type="primary", key="rob_btn_arm"):
                 target_tid = selected_id if selected_id else "LIVE-001"
                 st.session_state.last_plan = {
                     "patient_id": rob_pid,
@@ -1351,29 +1357,28 @@ def robotics_page():
                     "confidence": float(confidence),
                     "stereo_plan": stereo_plan,
                     "radio_plan": radio_plan,
-                    "mni_coords": mni_coords,
-                    "brain_region": brain_region,
-                    "brain_side": brain_side,
+                    "illustrative_coordinates": illustrative_coordinates,
+                    "image_region": image_region,
+                    "image_side": image_side,
                     "mask_arr": mask_np,
                     "mri_arr": img_np,
                     "task_id": target_tid,
                 }
                 st.session_state.selected_task_id = target_tid
-                st.success("Plan loaded into Live 3D View, Camera Feeds, and Joint Telemetry!")
+                st.success("Illustrative geometry loaded into the simulated preview.")
                 st.rerun()
 
         with act_col3:
-            tumor_report_label = "Glioma" if "Glioma" in clinical_info["likely_type"] else ("Meningioma" if "Meningioma" in clinical_info["likely_type"] else ("Pituitary Tumor" if "Pituitary" in clinical_info["likely_type"] else "no_tumor"))
-            if st.button("📄 Export Clinical PDF Report", use_container_width=True, key="rob_btn_pdf"):
-                with st.spinner("Generating Medical Report..."):
+            if st.button("Export Demonstration Summary PDF", use_container_width=True, key="rob_btn_pdf"):
+                with st.spinner("Generating demonstration summary..."):
                     pdf_path = create_pdf_report(
                         rob_patient_info['name'],
                         f"ROB-{selected_scan_label[:8]}",
-                        tumor_report_label,
+                        IDX_TO_CLASS[pred_idx],
                         confidence * 100,
-                        f"{brain_side} {brain_region}" if pred_idx == 1 else "Normal Anatomy",
-                        f"{clinical_info['vol_cm3']:.2f}",
-                        f"Analyzed in Robotics Command Center. {clinical_info['pathology_desc']}"
+                        "Not assessed from this 2D image",
+                        "Not measured",
+                        "Binary image-classifier output only; all spatial and planning displays are simulations."
                     )
                     with open(pdf_path, "rb") as f:
                         st.download_button("💾 Save PDF Report", f, file_name=os.path.basename(pdf_path), key="rob_dl_pdf_btn")
@@ -1386,7 +1391,7 @@ def robotics_page():
     b1, b2 = st.columns([3, 1.1])
     with b1:
         st.subheader("Surgical Task Queue")
-        st.caption("Patient → Tumor → Procedure → Status")
+        st.caption("Demo record → illustrative workflow → simulation status")
         filter_status = st.multiselect("Filter", ["QUEUED", "PLANNING", "IN_PROGRESS", "COMPLETED", "CANCELLED"],
                                        default=["QUEUED", "PLANNING", "IN_PROGRESS"])
         q = [t for t in queue if t["status"] in filter_status]
@@ -1397,17 +1402,19 @@ def robotics_page():
             for t in q:
                 sc = STATUS_COLORS.get(t["status"], "#64748b")
                 pc = PRIORITY_COLORS.get(t["priority"], "#64748b")
-                c_mni = _parse_mni_coords(t.get("mni_coords_mm", (0, 0, 0)))
+                coordinates = _parse_illustrative_coords(
+                    t.get("illustrative_coordinates", t.get("mni_coords_mm", (0, 0, 0)))
+                )
                 rows.append({
                     "ID": t["id"],
                     "Patient": f"{t['patient_id']} · {t['patient_name']} ({t['age']}y)",
                     "Procedure": t["procedure_type"],
                     "Lobe": t.get("lobe", "—"),
-                    "MNI (x,y,z)": f"({c_mni[0]:.0f}, {c_mni[1]:.0f}, {c_mni[2]:.0f})",
-                    "Volume (mm³)": f"{t['tumor_volume_mm3']:.0f}",
+                    SIMULATED_COORDINATE_LABEL: f"({coordinates[0]:.0f}, {coordinates[1]:.0f}, {coordinates[2]:.0f})",
+                    "Synthetic volume proxy (not mm³)": f"{t['tumor_volume_mm3']:.0f}",
                     "Priority": t["priority"],
                     "Status": t["status"],
-                    "Assigned Robot": t["assigned_robot"],
+                    "Simulated device profile": t["assigned_robot"],
                     "Planned": t["planned_date"],
                     "Progress %": t["progress_pct"],
                 })
@@ -1444,7 +1451,7 @@ def robotics_page():
                     cancel_task(queue, selected_id, reason="Operator cancelled")
                     st.rerun()
             with col_b_btns[3]:
-                if st.button("🔴  EMERGENCY STOP" if not estop else "🟢  CLEAR E-STOP", type="primary",
+                if st.button("🔴  PAUSE DEMO QUEUE" if not estop else "🟢  RESUME DEMO QUEUE", type="primary",
                              use_container_width=True):
                     st.session_state.emergency_stop_active = not estop
                     if st.session_state.emergency_stop_active:
@@ -1460,16 +1467,16 @@ def robotics_page():
             pinfo = st.session_state.patient_data[pid]
             proc = st.selectbox("Procedure", PROCEDURES)
             pri = st.selectbox("Priority", ["HIGH", "MED", "LOW"], index=1)
-            vol = st.number_input("Tumor Volume (mm³)", 100, 80000, 3500, 100)
-            x_m = st.number_input("MNI X", -80, 80, 20)
-            y_m = st.number_input("MNI Y", -80, 80, -20)
-            z_m = st.number_input("MNI Z", -60, 80, 30)
+            vol = st.number_input("Synthetic volume proxy (not a measured lesion volume)", 100, 80000, 3500, 100)
+            x_m = st.number_input("Illustrative X (arbitrary image-plane units)", -80, 80, 20)
+            y_m = st.number_input("Illustrative Y (arbitrary image-plane units)", -80, 80, -20)
+            z_m = st.number_input("Illustrative Z placeholder (not derived from a 2D image)", -60, 80, 0)
             if st.form_submit_button("Add to Queue", disabled=estop):
                 add_task(
                     queue,
                     patient_id=pid, patient_name=pinfo["name"], age=pinfo["age"],
                     procedure_type=proc, priority=pri, tumor_volume_mm3=float(vol),
-                    mni_coords_mm=(x_m, y_m, z_m), lobe="Manual Entry",
+                    illustrative_coordinates=(x_m, y_m, z_m), lobe="Manual demonstration entry",
                     planned_date=datetime.now().strftime("%Y-%m-%d %H:%M"),
                 )
                 st.rerun()
@@ -1480,11 +1487,11 @@ def robotics_page():
     # Row C - Surgical Plan
     selected = find_task(queue, selected_id) if selected_id else None
     if selected is None:
-        st.info("Select a task from the queue above to view its surgical plan, camera feeds, and arm telemetry.")
+        st.info("Select a demonstration task to view simulated geometry, camera placeholders, and telemetry placeholders.")
         return
 
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Surgical Plan & HUD")
+    st.subheader("Illustrative Plan and Simulated HUD")
     c1, c2 = st.columns([1.3, 1])
 
     with c1:
@@ -1541,7 +1548,9 @@ def robotics_page():
         else:
             # Fallback demo plan for pre-seeded / manually added tasks
             uses_rad = procedure_uses_radiation(selected["procedure_type"])
-            sel_coords = _parse_mni_coords(selected.get("mni_coords_mm", (0, 0, 0)))
+            sel_coords = _parse_illustrative_coords(
+                selected.get("illustrative_coordinates", selected.get("mni_coords_mm", (0, 0, 0)))
+            )
             cy = int(np.clip(112 + sel_coords[1] * 0.6, 10, 214))
             cx = int(np.clip(112 + sel_coords[0] * 0.6, 10, 214))
             yy, xx = np.mgrid[0:224, 0:224]
@@ -1567,7 +1576,9 @@ def robotics_page():
                                                   beams_plan=radio["beams_plan"],
                                                   isodoses=radio["isodoses"])
             st.plotly_chart(fig, use_container_width=True)
-            st.caption("Demo visualization: plan rendered from queue parameters (no MRI uploaded yet). Upload an MRI via the Dashboard → Send to Robotics Planner to attach the real Grad-CAM plan.")
+            st.caption(
+                "Demonstration only: synthetic queue coordinates and geometry; not a real plan or anatomical localization."
+            )
 
     with c2:
         # HUD Indicators (Plotly gauge)
@@ -1581,7 +1592,9 @@ def robotics_page():
             depth = stereo["trajectory"]["depth_mm"]
             dose = radio["beams_plan"]["total_dose_gy_per_fraction"] if procedure_uses_radiation(selected["procedure_type"]) else None
         else:
-            sel_coords = _parse_mni_coords(selected.get("mni_coords_mm", (0, 0, 0)))
+            sel_coords = _parse_illustrative_coords(
+                selected.get("illustrative_coordinates", selected.get("mni_coords_mm", (0, 0, 0)))
+            )
             entry = compute_burr_hole_entry(sel_coords)
             traj = plan_trajectory(entry, sel_coords)
             structures = generate_critical_structures()
@@ -1625,7 +1638,7 @@ def robotics_page():
             st.plotly_chart(gauge_fig("TRAJ. ERROR (mm)", min(traj_err, 3.5), 3.5, " mm", 0.5, "#22d3ee"),
                             use_container_width=True)
         with gauges[1]:
-            st.plotly_chart(gauge_fig("SAFETY SCORE", safety, 100, " /100", 75, "#10b981"),
+            st.plotly_chart(gauge_fig("SYNTHETIC SAFETY INDICATOR", safety, 100, " /100", 75, "#10b981"),
                             use_container_width=True)
         gauges2 = st.columns(2)
         with gauges2[0]:
@@ -1828,7 +1841,9 @@ def robotics_page():
             eef = st.session_state.last_plan["stereo_plan"]["arm_ik"]["eef_pose_mm_deg"]
             err = st.session_state.last_plan["stereo_plan"]["arm_ik"]["trajectory_error_mm"]
         else:
-            sel_coords = _parse_mni_coords(selected.get("mni_coords_mm", (0, 0, 0)))
+            sel_coords = _parse_illustrative_coords(
+                selected.get("illustrative_coordinates", selected.get("mni_coords_mm", (0, 0, 0)))
+            )
             entry = compute_burr_hole_entry(sel_coords)
             ik_sim = robotic_arm_ik(entry, sel_coords)
             joints = ik_sim["joints_deg"]
@@ -1875,7 +1890,7 @@ def robotics_page():
 
         st.markdown("<br>", unsafe_allow_html=True)
         estop_disabled = st.session_state.emergency_stop_active
-        danger_label = "⚠  EMERGENCY STOP — RELEASE ALL SERVOS" if not estop_disabled else "✔  CLEAR E-STOP · RE-ARM SYSTEM"
+        danger_label = "⚠  PAUSE SIMULATION" if not estop_disabled else "✔  RESUME SIMULATION"
         if st.button(danger_label,
                      type="primary", use_container_width=True,
                      help="Hard-stop all robotic manipulators and cancel in-progress / planning tasks.",
@@ -1897,25 +1912,25 @@ def about_page():
     
     st.markdown("""
         <div class="glass-card">
-            <h2 style="color: white; margin-bottom: 2rem;">Clinical Standards & Neural Backbone</h2>
+            <h2 style="color: white; margin-bottom: 2rem;">Research Prototype Components</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem;">
                 <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--card-border);">
                     <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">Deep Learning Engine</h3>
                     <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">
-                        Utilizes a <b>ResNet-18</b> backbone fine-tuned on medical datasets. Employs residual learning to ensure stable gradient flow and high-accuracy feature extraction.
+                        Uses a <b>ResNet-18</b> with ImageNet initialization, fine-tuned on a locally available folder-labeled image dataset. It is a binary image classifier, not a clinical diagnostic model.
                     </p>
                 </div>
                 <div style="background: rgba(255,255,255,0.03); padding: 2.5rem; border-radius: 24px; border: 1px solid var(--card-border);">
                     <h3 style="color: var(--accent-blue); margin-bottom: 1rem;">XAI Visualization</h3>
                     <p style="color: var(--text-dim); line-height: 1.8; font-size: 1.1rem;">
-                        Integrates <b>Grad-CAM</b> technology to highlight anatomical regions of interest, providing clinicians with a visual audit trail for every diagnostic outcome.
+                        Uses <b>Grad-CAM</b> as a qualitative activation visualization. It is not a tumor segmentation, validated localization, or clinical explanation.
                     </p>
                 </div>
             </div>
             <div style="background: rgba(239, 68, 68, 0.1); border-left: 6px solid #ef4444; padding: 2.5rem; margin-top: 3rem; border-radius: 16px;">
                 <p style="color: #fca5a5; margin: 0; font-weight: 700; font-size: 1.2rem; letter-spacing: 1px;">MEDICAL DISCLAIMER</p>
                 <p style="color: #fca5a5; margin: 0.5rem 0 0 0; font-size: 1rem; line-height: 1.6;">
-                    NeuroVision AI is a research tool for educational purposes. Final treatment decisions must be made by qualified medical professionals.
+                    NeuroVision AI is an educational research prototype. It does not provide diagnosis, anatomical localization, treatment recommendations, or validated planning.
                 </p>
             </div>
         </div>
@@ -1923,8 +1938,12 @@ def about_page():
 
 def render_gemini_assistant(context_info=""):
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Clinical AI Consultation")
-    st.markdown("Ask Gemini about the scan results, potential treatments, or anatomical concerns.")
+    st.subheader("Optional AI Text Assistant Demo")
+    st.markdown("This assistant is not a source of medical interpretation or advice.")
+    st.caption(
+        "When OpenRouter is configured, chat prompts and any image sent for description leave this application "
+        "and are processed by the remote provider. Do not submit identifiable or restricted data without authorization."
+    )
     
     # Chat Interface
     for message in st.session_state.chat_history:
@@ -1966,11 +1985,11 @@ def render_footer():
             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem;">
                 <div>
                     <h3 style="color: white; margin-bottom: 1.5rem; font-family: Space Grotesk; font-size: 1.8rem;">NeuroVision AI</h3>
-                    <p style="color: var(--text-dim); font-size: 1.1rem; line-height: 1.6;">The global standard in autonomous neurological AI diagnostics.</p>
+                    <p style="color: var(--text-dim); font-size: 1.1rem; line-height: 1.6;">A research and educational brain-image classification prototype.</p>
                 </div>
-                <div><h4 style="color: white; margin-bottom: 1.2rem;">Core</h4><p style="color: var(--text-dim);">Neural Engine</p><p style="color: var(--text-dim);">MNI Atlas</p></div>
+                <div><h4 style="color: white; margin-bottom: 1.2rem;">Core</h4><p style="color: var(--text-dim);">Binary image classifier</p><p style="color: var(--text-dim);">Simulated visualization</p></div>
                 <div><h4 style="color: white; margin-bottom: 1.2rem;">Data</h4><p style="color: var(--text-dim);">Security</p><p style="color: var(--text-dim);">Protocols</p></div>
-                <div><h4 style="color: white; margin-bottom: 1.2rem;">Support</h4><p style="color: var(--text-dim);">Technical</p><p style="color: var(--text-dim);">Clinical</p></div>
+                <div><h4 style="color: white; margin-bottom: 1.2rem;">Support</h4><p style="color: var(--text-dim);">Technical</p><p style="color: var(--text-dim);">Research Use</p></div>
             </div>
             <div style="text-align: center; color: var(--text-dim); font-size: 0.9rem; letter-spacing: 2px; padding-top: 3rem; border-top: 1px solid var(--card-border);">
                 © 2026 NEUROVISION AI SYSTEMS. ALL SYSTEMS OPERATIONAL.
@@ -1991,7 +2010,7 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    pages = ["Home", "Dashboard", "Advanced Analytics", "Robotics Command Center", "Patient Records", "About System"]
+    pages = ["Home", "Dashboard", "Advanced Analytics", "Robotics Simulation", "Demo Records", "About System"]
     if st.session_state.get("page") not in pages:
         st.session_state.page = "Home"
 
@@ -2001,6 +2020,11 @@ def main():
         key="page",
         horizontal=True,
         label_visibility="collapsed",
+    )
+    st.warning(
+        "Research/education prototype only — not for diagnosis or treatment. Model softmax scores are "
+        "uncalibrated. Grad-CAM is qualitative, not a mask. Illustrative / Simulated Coordinates, volume proxies, "
+        "trajectories, safety scores, robotics, and radiosurgery views are not patient-specific or clinically validated."
     )
 
     if st.session_state.page != "Home":
@@ -2019,9 +2043,9 @@ def main():
         dashboard_page()
     elif st.session_state.page == "Advanced Analytics":
         analytics_page()
-    elif st.session_state.page == "Robotics Command Center":
+    elif st.session_state.page == "Robotics Simulation":
         robotics_page()
-    elif st.session_state.page == "Patient Records":
+    elif st.session_state.page == "Demo Records":
         patient_records_page()
     elif st.session_state.page == "About System":
         about_page()

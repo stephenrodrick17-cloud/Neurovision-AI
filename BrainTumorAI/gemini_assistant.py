@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import os
 import base64
+from typing import TYPE_CHECKING, Any
 from dotenv import load_dotenv
-from PIL import Image
+
+if TYPE_CHECKING:
+    from openai.types.chat import ChatCompletionMessageParam
 
 # Load environment variables safely
 load_dotenv()
@@ -26,36 +31,26 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def describe_image_for_blind(image_path, diagnostic_info=None):
+def describe_image_for_blind(image_path: str, diagnostic_info: str | None = None) -> str:
     """
-    Generates a detailed audio-friendly description of the MRI image using OpenRouter (Gemini).
+    Generates an image description through the optional OpenRouter service.
     """
-    client, err = _get_client()
+    client, _ = _get_client()
     if not client:
-        # High quality local fallback description
-        if diagnostic_info and "TUMOR" in str(diagnostic_info).upper():
-            return (
-                f"Audio Description: This MRI scan shows a focal pathological lesion with heightened signal intensity. "
-                f"Based on the neural diagnostic analysis, {diagnostic_info}. "
-                f"The tumor is located in the intracranial space with surrounding edema. "
-                f"Please consult the clinical multidisciplinary team for comprehensive surgical review."
-            )
-        else:
-            return (
-                "Audio Description: This MRI scan demonstrates normal neuroanatomical structures with symmetric cerebral hemispheres, "
-                "well-defined ventricles, and no focal space-occupying lesions or midline shift detected."
-            )
+        return (
+            "An image description service is not configured. "
+            f"The available model output is: {diagnostic_info or 'no classifier output supplied'}. "
+            "This is not a radiological interpretation."
+        )
 
     try:
         base64_image = encode_image(image_path)
         prompt = f"""
-        You are a medical AI assistant for blind users. 
-        Analyze this MRI image and the provided diagnostic information: {diagnostic_info}.
-        Explain in a very clear, empathetic, and descriptive way what the scan shows.
-        Describe the visual aspects of the tumor (if any), its location, and what it means.
-        Since the user is blind, use spatial descriptions (e.g., 'on the top right side of the brain').
-        Keep the language accessible but professional.
-        End with a reassuring statement.
+        Provide a brief, accessible description of visible image content for accessibility.
+        The optional model output is: {diagnostic_info}.
+        Do not diagnose, infer a tumor subtype, claim a lesion is present or absent, assign anatomy or laterality,
+        provide anatomical or MNI coordinates, or suggest treatment. Grad-CAM and all displayed coordinates are
+        illustrative only. State when image interpretation is uncertain.
         """
         
         response = client.chat.completions.create(
@@ -75,42 +70,50 @@ def describe_image_for_blind(image_path, diagnostic_info=None):
                 }
             ],
         )
-        return response.choices[0].message.content
+        content = response.choices[0].message.content
+        if content is None:
+            raise RuntimeError("The image-description service returned no text.")
+        return content
     except Exception as e:
-        return f"Clinical Description: {diagnostic_info if diagnostic_info else 'Normal Neuroanatomy'}. (Note: Live OpenRouter consultation note: {str(e)})"
+        return f"Image-description request failed: {e}"
 
-def get_gemini_response(chat_history, user_input):
+def get_gemini_response(chat_history: list[dict[str, Any]], user_input: str) -> str:
     """
     Handles chatbot interactions via OpenRouter / Gemini.
     """
-    client, err = _get_client()
+    client, _ = _get_client()
     if not client:
-        # Context-aware clinical guidance fallback
         user_lower = user_input.lower()
         if "treatment" in user_lower or "protocol" in user_lower or "surgery" in user_lower:
-            return (
-                "Based on clinical neuro-oncology guidelines, treatment options typically include stereotactic radiosurgery (SRS), "
-                "microsurgical resection, or stereotactic needle biopsy depending on tumor volume and eloquence. "
-                "Supportive management includes Dexamethasone for peritumoral edema and Levetiracetam for seizure prophylaxis."
-            )
+            return "This prototype cannot provide treatment or surgical advice. Consult a qualified clinician."
         elif "confidence" in user_lower or "accuracy" in user_lower:
-            return "The deep learning ResNet-18 model provides probabilistic softmax outputs calibrated against benchmark MRI datasets. Grad-CAM heatmaps highlight regions of highest neural attention."
+            return "The displayed softmax scores are uncalibrated model outputs. Grad-CAM is qualitative and has not been validated for tumor localization."
         elif "mni" in user_lower or "coordinates" in user_lower or "location" in user_lower:
-            return "MNI-152 standard coordinates provide a standardized reference space to accurately locate the lesion relative to anterior/posterior commissures and eloquent cortical areas."
+            return "This prototype does not calculate valid anatomical or MNI coordinates. Its displayed coordinate values are illustrative simulations."
         else:
             return (
-                f"Clinical Consultation Assistant: Regarding '{user_input}', our automated neuro-oncology analysis evaluates tumor volume, "
-                f"stereotactic trajectories, and isodose distributions. "
-                f"(To enable live conversational Gemini 2.0 Flash reasoning, configure OPENROUTER_API_KEY in your .env file)."
+                f"Regarding '{user_input}': this prototype provides only a binary image-classifier output and "
+                "illustrative visualizations. It does not provide medical advice."
             )
 
     try:
-        messages = [{"role": "system", "content": "You are a helpful medical AI assistant specialized in Neuro-Radiology and Neurosurgery."}]
+        messages: list[ChatCompletionMessageParam] = [{
+            "role": "system",
+            "content": (
+                "You are an accessibility-focused assistant for a research software prototype. Do not diagnose, "
+                "infer tumor subtypes, make claims about lesion presence, provide treatment advice, or claim "
+                "anatomical/MNI localization. Explain that scores are uncalibrated and coordinates/geometry "
+                "are illustrative simulations. For medical questions, direct the user to a qualified clinician."
+            ),
+        }]
         
         for msg in chat_history:
-            role = "user" if msg['role'] == 'user' else "assistant"
             content = msg['parts'][0] if isinstance(msg.get('parts'), list) else msg.get('content', '')
-            messages.append({"role": role, "content": content})
+            message_content = content if isinstance(content, str) else str(content)
+            if msg.get("role") == "user":
+                messages.append({"role": "user", "content": message_content})
+            else:
+                messages.append({"role": "assistant", "content": message_content})
             
         messages.append({"role": "user", "content": user_input})
         
@@ -118,9 +121,12 @@ def get_gemini_response(chat_history, user_input):
             model=MODEL_NAME,
             messages=messages,
         )
-        return response.choices[0].message.content
+        content = response.choices[0].message.content
+        if content is None:
+            raise RuntimeError("The assistant service returned no text.")
+        return content
     except Exception as e:
-        return f"Consultation Assistant: I received your query '{user_input}'. Clinical analysis indicates standard neuro-radiological monitoring. (API notice: {str(e)})"
+        return f"Assistant request failed: {e}"
 
 def tts_component(text, auto_play=True):
     """

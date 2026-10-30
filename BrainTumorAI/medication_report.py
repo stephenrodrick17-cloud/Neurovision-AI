@@ -2,62 +2,19 @@ import os
 from datetime import datetime
 from fpdf import FPDF
 
-# Simple Medication Database
-TUMOR_MEDICATIONS = {
-    "Glioma": {
-        "description": "A type of tumor that starts in the glial cells of the brain or spine.",
-        "treatments": [
-            "Temozolomide (Chemotherapy)",
-            "Radiation Therapy (Standard of Care)",
-            "Dexamethasone (to reduce edema/swelling)",
-            "Avastin (Bevacizumab) for recurrent cases"
-        ],
-        "followup": "MRI every 2-3 months."
-    },
-    "Meningioma": {
-        "description": "Typically slow-growing tumors that arise from the meninges.",
-        "treatments": [
-            "Surgical Resection (Total/Partial)",
-            "Stereotactic Radiosurgery (Gamma Knife)",
-            "Observation (for asymptomatic cases)",
-            "Hydroxyurea (experimental for refractory cases)"
-        ],
-        "followup": "MRI every 6 months to 1 year."
-    },
-    "Pituitary Tumor": {
-        "description": "Tumors in the pituitary gland affecting hormone production.",
-        "treatments": [
-            "Transsphenoidal Surgery",
-            "Dopamine agonists (Cabergoline/Bromocriptine)",
-            "Somatostatin analogs",
-            "Stereotactic Radiotherapy"
-        ],
-        "followup": "Endocrine evaluation + MRI every 6 months."
-    },
-    "no_tumor": {
-        "description": "No evidence of intracranial mass or lesion detected.",
-        "treatments": [
-            "No immediate intervention required.",
-            "Maintain regular wellness checkups."
-        ],
-        "followup": "Annual routine follow-up recommended."
-    }
-}
-
-def suggest_treatment(tumor_type):
-    if tumor_type in TUMOR_MEDICATIONS:
-        return TUMOR_MEDICATIONS[tumor_type]
+def suggest_treatment(_scenario):
+    _ = _scenario
     return {
-        "description": "Unknown tumor type.",
-        "treatments": ["Consult a neurosurgeon for specialized treatment plan."],
-        "followup": "Immediate specialist consultation."
+        "description": "Treatment examples are not provided by this research prototype.",
+        "treatments": ["No treatment advice is generated."],
+        "followup": "No follow-up guidance is generated.",
     }
 
 class MedicalReportPDF(FPDF):
     def header(self):
         self.set_font('Arial', 'B', 16)
         self.set_text_color(30, 60, 120)  # Medical Blue
-        self.cell(0, 10, 'NEURO-AI DIAGNOSTIC REPORT', 0, 1, 'C')
+        self.cell(0, 10, 'NEUROVISION AI - DEMONSTRATION SUMMARY', 0, 1, 'C')
         self.ln(5)
         self.set_draw_color(30, 60, 120)
         self.line(10, 25, 200, 25)
@@ -66,7 +23,7 @@ class MedicalReportPDF(FPDF):
     def footer(self):
         self.set_y(-15)
         self.set_font('Arial', 'I', 8)
-        self.cell(0, 10, f'Page {self.page_no()} | AI-Generated Clinical Support Document', 0, 0, 'C')
+        self.cell(0, 10, f'Page {self.page_no()} | Prototype output - not a clinical report', 0, 0, 'C')
 
 def create_pdf_report(patient_name, scan_id, classification, confidence, location, size_cm, notes):
     pdf = MedicalReportPDF()
@@ -74,57 +31,47 @@ def create_pdf_report(patient_name, scan_id, classification, confidence, locatio
     
     # Patient Info
     pdf.set_font('Arial', 'B', 12)
-    pdf.cell(0, 10, 'PATIENT INFORMATION', 0, 1, 'L')
+    pdf.cell(0, 10, 'DEMONSTRATION RECORD CONTEXT', 0, 1, 'L')
     pdf.set_font('Arial', '', 10)
-    pdf.cell(100, 7, f'Patient Name: {patient_name}', 0, 0)
-    pdf.cell(0, 7, f'Date: {datetime.now().strftime("%Y-%m-%d %H:%M")}', 0, 1)
-    pdf.cell(100, 7, f'Scan ID: {scan_id}', 0, 0)
-    pdf.cell(0, 7, f'Facility: Neuro-AI Imaging Center', 0, 1)
+    pdf.cell(100, 7, f'Demo record name: {patient_name}', 0, 0)
+    pdf.cell(0, 7, f'Generated: {datetime.now().strftime("%Y-%m-%d %H:%M")}', 0, 1)
+    pdf.cell(100, 7, f'Demo identifier: {scan_id}', 0, 1)
     pdf.ln(5)
     
     # Findings
     pdf.set_font('Arial', 'B', 12)
-    pdf.cell(0, 10, 'DIAGNOSTIC FINDINGS', 0, 1, 'L')
+    pdf.cell(0, 10, 'BINARY IMAGE-CLASSIFIER OUTPUT', 0, 1, 'L')
     pdf.set_font('Arial', '', 10)
     
-    status_color = (200, 0, 0) if classification != "no_tumor" else (0, 150, 0)
+    status_color = (30, 60, 120)
     pdf.set_text_color(*status_color)
     pdf.set_font('Arial', 'B', 10)
-    pdf.cell(0, 7, f'Primary Classification: {classification.upper()}', 0, 1)
+    pdf.cell(0, 7, f'Folder-label model output: {classification.upper()}', 0, 1)
     pdf.set_text_color(0, 0, 0)
     pdf.set_font('Arial', '', 10)
     
-    pdf.cell(100, 7, f'Confidence Level: {confidence:.2f}%', 0, 1)
+    pdf.cell(100, 7, f'Top-class softmax score (uncalibrated): {confidence:.2f}%', 0, 1)
     if classification != "no_tumor":
-        pdf.cell(100, 7, f'Estimated Location: {location}', 0, 1)
-        pdf.cell(100, 7, f'Approximate Size: {size_cm} cm', 0, 1)
+        pdf.cell(100, 7, f'Anatomical location: Not assessed ({location})', 0, 1)
+        pdf.cell(100, 7, f'Lesion size/volume: Not measured ({size_cm})', 0, 1)
     pdf.ln(5)
     
     # Treatment
-    med_info = suggest_treatment(classification)
     pdf.set_font('Arial', 'B', 12)
-    pdf.cell(0, 10, 'CLINICAL RECOMMENDATIONS', 0, 1, 'L')
+    pdf.cell(0, 10, 'INTERPRETATION LIMITS', 0, 1, 'L')
     pdf.set_font('Arial', 'I', 10)
-    pdf.multi_cell(0, 7, f'Description: {med_info["description"]}')
-    pdf.ln(2)
-    
-    pdf.set_font('Arial', 'B', 10)
-    pdf.cell(0, 7, 'Suggested Treatments:', 0, 1)
-    pdf.set_font('Arial', '', 10)
-    for t in med_info["treatments"]:
-        pdf.cell(0, 7, f'- {t}', 0, 1)
-    
-    pdf.ln(2)
-    pdf.set_font('Arial', 'B', 10)
-    pdf.cell(30, 7, 'Follow-up:', 0, 0)
-    pdf.set_font('Arial', '', 10)
-    pdf.cell(0, 7, med_info["followup"], 0, 1)
+    pdf.multi_cell(
+        0,
+        7,
+        'This prototype classifies a single 2D image using folder-derived labels. It does not identify '
+        'tumor subtype, measure lesions, localize anatomy, recommend treatment, or provide clinical decision support.',
+    )
     pdf.ln(5)
     
     # Notes
     if notes:
         pdf.set_font('Arial', 'B', 12)
-        pdf.cell(0, 10, 'PHYSICIAN NOTES', 0, 1, 'L')
+        pdf.cell(0, 10, 'ADDITIONAL NOTES', 0, 1, 'L')
         pdf.set_font('Arial', '', 10)
         pdf.multi_cell(0, 7, notes)
         pdf.ln(5)
@@ -133,41 +80,38 @@ def create_pdf_report(patient_name, scan_id, classification, confidence, locatio
     pdf.set_y(-40)
     pdf.set_font('Arial', 'I', 7)
     pdf.set_text_color(100, 100, 100)
-    disclaimer = "DISCLAIMER: This report is generated by an artificial intelligence system to assist in medical diagnosis. It must be reviewed and verified by a board-certified radiologist or neurosurgeon. Final treatment decisions should not be based solely on this automated analysis."
+    disclaimer = (
+        "RESEARCH / EDUCATION DEMONSTRATION ONLY. Not a diagnosis, clinical report, anatomical localization, "
+        "treatment recommendation, or validated medical-device output. Do not use for patient-care decisions."
+    )
     pdf.multi_cell(0, 4, disclaimer)
     
     output_dir = os.path.join(os.path.dirname(__file__), "reports")
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
     
-    filename = os.path.join(output_dir, f"Report_{scan_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf")
+    filename = os.path.join(output_dir, f"Demo_Summary_{scan_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf")
     pdf.output(filename)
     return filename
 
 def generate_report_text(patient_name, scan_id, classification, size_cm=None, location=None):
-    # Keep original text report generator for backward compatibility
-    report_content = f"""
-    BRAIN TUMOR ANALYSIS REPORT
+    return f"""
+    NEUROVISION AI - DEMONSTRATION SUMMARY
     ----------------------------
     Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-    Patient Name: {patient_name}
-    Scan ID: {scan_id}
+    Demo record name: {patient_name}
+    Demo identifier: {scan_id}
     
-    DIAGNOSTIC RESULTS:
+    BINARY IMAGE-CLASSIFIER OUTPUT:
     -------------------
-    Classification: {classification}
-    Tumor Detected: {'Yes' if classification != 'no_tumor' else 'No'}
-    Estimated Size: {size_cm if size_cm else 'N/A'} cm
-    Location: {location if location else 'N/A'}
+    Folder-label class output: {classification}
+    Top-class score: Not reported as calibrated probability
+    Lesion size/volume: Not measured ({size_cm if size_cm else 'N/A'})
+    Anatomical location: Not assessed ({location if location else 'N/A'})
+    
+    This software does not identify tumor subtype, measure lesions, localize anatomy, or recommend treatment.
+    RESEARCH / EDUCATION DEMONSTRATION ONLY — NOT FOR PATIENT-CARE DECISIONS.
     """
-    
-    med_info = suggest_treatment(classification if classification != 'no_tumor' else 'no_tumor')
-    report_content += f"\nDESCRIPTION: {med_info['description']}\n\nSUGGESTED TREATMENT:\n"
-    for t in med_info['treatments']:
-        report_content += f"- {t}\n"
-    
-    report_content += f"\nFOLLOW-UP: {med_info['followup']}\n"
-    return report_content
 
 if __name__ == "__main__":
     pass

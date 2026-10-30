@@ -1,0 +1,58 @@
+[
+  {
+    "filename": "Cancer (892).jpg",
+    "true_label": "tumor",
+    "predicted_label": "tumor",
+    "tumor_score": 1.0,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Cancer (892)_overlay.png"
+  },
+  {
+    "filename": "Cancer (1).jpg",
+    "true_label": "tumor",
+    "predicted_label": "tumor",
+    "tumor_score": 1.0,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Cancer (1)_overlay.png"
+  },
+  {
+    "filename": "Not Cancer  (739).jpg",
+    "true_label": "no_tumor",
+    "predicted_label": "no_tumor",
+    "tumor_score": 2.8872477741970215e-07,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Not Cancer  (739)_overlay.png"
+  },
+  {
+    "filename": "Not Cancer  (1809).jpg",
+    "true_label": "no_tumor",
+    "predicted_label": "no_tumor",
+    "tumor_score": 4.5044924945614184e-07,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Not Cancer  (1809)_overlay.png"
+  },
+  {
+    "filename": "Not Cancer  (164).jpg",
+    "true_label": "no_tumor",
+    "predicted_label": "tumor",
+    "tumor_score": 0.9330859780311584,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Not Cancer  (164)_overlay.png"
+  },
+  {
+    "filename": "Not Cancer  (121).jpg",
+    "true_label": "no_tumor",
+    "predicted_label": "tumor",
+    "tumor_score": 0.7724126577377319,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Not Cancer  (121)_overlay.png"
+  },
+  {
+    "filename": "Cancer (882).jpg",
+    "true_label": "tumor",
+    "predicted_label": "no_tumor",
+    "tumor_score": 0.4488016366958618,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Cancer (882)_overlay.png"
+  },
+  {
+    "filename": "Cancer (2315).jpg",
+    "true_label": "tumor",
+    "predicted_label": "no_tumor",
+    "tumor_score": 0.4488016366958618,
+    "output_png": "C:\\Users\\asus\\Downloads\\Brain Imaging\\experiments_results\\phase0\\gradcam_examples\\Cancer (2315)_overlay.png"
+  }
+]

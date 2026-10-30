@@ -1,0 +1,28 @@
+{
+  "checkpoint": "C:\\Users\\asus\\Downloads\\Brain Imaging\\BrainTumorAI\\models\\small_cnn_best.pth",
+  "checkpoint_sha256": "f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c",
+  "validation_temperature": 0.7713215892680555,
+  "ece_bins": 15,
+  "test_scores_source": "original small_cnn_small_cnn_best rows in stored test_predictions.csv",
+  "validation_scores_source": "inference using small_cnn_best.pth on fixed validation manifest",
+  "test_before": {
+    "nll": 0.37609996567409115,
+    "brier": 0.24266608993265854,
+    "ece_15_equal_width": 0.06536628548424729
+  },
+  "test_after_validation_temperature_scaling": {
+    "nll": 0.37069122289877593,
+    "brier": 0.24331048492557703,
+    "ece_15_equal_width": 0.057979353695754215
+  },
+  "validation_before": {
+    "nll": 0.3661166375316866,
+    "brier": 0.23074466341269648,
+    "ece_15_equal_width": 0.05722555104281603
+  },
+  "validation_after": {
+    "nll": 0.3576205262221355,
+    "brier": 0.22845524955122706,
+    "ece_15_equal_width": 0.05843672846547718
+  }
+}
