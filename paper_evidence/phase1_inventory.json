@@ -1,0 +1,947 @@
+[
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/densenet121_seed42/checkpoint.pth",
+    "sha256": "e52a163e30c65c0a6e31d7c8af125dd54c3a30161ecffad793d3438d82212710",
+    "last_modified": "2026-10-12 23:48:53",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/densenet121_seed42_INTERRUPTED_DO_NOT_USE/checkpoint.pth",
+    "sha256": "939e1340d6b2013787c6db45c49fc9b7cbd8221c02731726639873829d2acbf6",
+    "last_modified": "2026-10-12 22:23:25",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/densenet121_seed43/checkpoint.pth",
+    "sha256": "e726bf3b102c966dc243d4347dd20fb83e9dcaba4affea43ee665b11eed5ca96",
+    "last_modified": "2026-10-13 00:37:24",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/densenet121_seed44/checkpoint.pth",
+    "sha256": "a344234c7bb7c3ed90663cc4ae212f2ab93bd0974d6d0624384ae9a02a29026b",
+    "last_modified": "2026-10-13 00:47:10",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/resnet18_seed42/checkpoint.pth",
+    "sha256": "f8514128c1b9037a84b42c9aa731e0427ac8b790213914e83e05c963a7478b59",
+    "last_modified": "2026-10-12 20:45:20",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/resnet18_seed43/checkpoint.pth",
+    "sha256": "c59b9f1460b41d8fd43a8429cae0fa07ba664d8adadaf765e62ddf55a28badaf",
+    "last_modified": "2026-10-12 20:52:11",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/resnet18_seed44/checkpoint.pth",
+    "sha256": "70e860e2fe34c52df72d6d50186bb7c2fbfc5d004edc37b5549c5cf218594e94",
+    "last_modified": "2026-10-12 20:56:37",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/resnet18_seed45/checkpoint.pth",
+    "sha256": "4eacfee5d06311008f5dc82443e0ab2802336b75717a9f326a229ff0323e88dd",
+    "last_modified": "2026-10-12 21:03:44",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/resnet18_seed46/checkpoint.pth",
+    "sha256": "7460f019efcfb193e035da0058dc8331cfb1c917af771c2e6a5cff354dfc8ea7",
+    "last_modified": "2026-10-12 21:13:11",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/small_cnn_seed42/checkpoint.pth",
+    "sha256": "ab014f1e56dcd09437aed28b2af29648f6f082294577328f020e7ae92fa9e1d1",
+    "last_modified": "2026-10-12 21:22:22",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/small_cnn_seed43/checkpoint.pth",
+    "sha256": "87b866c6873d19331256131c766ffb19aeb804886f36799058b2390ea32a691f",
+    "last_modified": "2026-10-12 21:31:45",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/small_cnn_seed44/checkpoint.pth",
+    "sha256": "22d2096d80c36d2169f18e7d57df609a2e43241e4094bd0e7b5feca3180846fe",
+    "last_modified": "2026-10-12 21:41:10",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/small_cnn_seed45/checkpoint.pth",
+    "sha256": "b7b4ad7c09e79bae746616de78895f2af57b3fbea6c6b08e85bec4ef8a27de8d",
+    "last_modified": "2026-10-12 21:49:10",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/small_cnn_seed46/checkpoint.pth",
+    "sha256": "622af97b878e2e3d3aacd2550ed7b8440eae06eabf8e143798d294f145dcdd70",
+    "last_modified": "2026-10-12 22:10:40",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/checkpoint.pth",
+    "sha256": "f8514128c1b9037a84b42c9aa731e0427ac8b790213914e83e05c963a7478b59",
+    "last_modified": "2026-10-12 20:35:37",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "BrainTumorAI/models/small_cnn_best.pth",
+    "sha256": "f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c",
+    "last_modified": "2026-10-10 19:12:25",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "BrainTumorAI/models/tumor_classifier.pth",
+    "sha256": "779d87161a8118df39a9518b8b02fc663ed95990ce1dc5450c0266fdca3f3a97",
+    "last_modified": "2026-04-03 20:37:15",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "BrainTumorAI/models/tumor_classifier_reproducible.pth",
+    "sha256": "0ce4741c3ce2cbc287c7b716395b1571bac143200e2f3489e48efd002310b40e",
+    "last_modified": "2026-10-10 19:02:35",
+    "git_tracked": false
+  },
+  {
+    "type": "checkpoint",
+    "path": "BrainTumorAI/results/interrupted_exact-only_checkpoint.pth",
+    "sha256": "c50bf4918641fca3355814997a699d3ec7cb178475e2f124a5f6af17aa839c70",
+    "last_modified": "2026-10-10 18:49:42",
+    "git_tracked": false
+  },
+  {
+    "type": "split_manifest",
+    "path": "BrainTumorAI/results/split_manifest.csv",
+    "sha256": "c0d909039b77d1d2ccb3fb27105e411eafee792b868b8203794ac5bf979d66ab",
+    "last_modified": "2026-10-10 18:54:27",
+    "git_tracked": false
+  },
+  {
+    "type": "split_manifest",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/manifest.csv",
+    "sha256": "5b6779ffc613b79e7369de774132784bca2ca585db809c400120ddb77ae3914e",
+    "last_modified": "2026-10-18 11:59:25",
+    "git_tracked": false
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/app.py",
+    "last_modified": "2026-10-10 20:23:05",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/classifier_pipeline.py",
+    "last_modified": "2026-10-12 22:47:20",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/evaluate_classifier.py",
+    "last_modified": "2026-10-18 11:25:05",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/external_validation.py",
+    "last_modified": "2026-10-20 00:45:01",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/gemini_assistant.py",
+    "last_modified": "2026-10-10 20:14:32",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/heatmap_gen.py",
+    "last_modified": "2026-10-10 20:01:06",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/medication_report.py",
+    "last_modified": "2026-10-10 20:19:38",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/preprocess.py",
+    "last_modified": "2026-10-10 18:53:06",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/radiosurgery.py",
+    "last_modified": "2026-10-10 17:05:09",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/stereotactic_robot.py",
+    "last_modified": "2026-10-10 20:01:06",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/surgery_viz.py",
+    "last_modified": "2026-10-10 20:18:42",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/surgical_task_queue.py",
+    "last_modified": "2026-10-10 20:20:42",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/train_classifier.py",
+    "last_modified": "2026-10-10 19:28:32",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "BrainTumorAI/__init__.py",
+    "last_modified": "2026-10-10 18:40:21",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "experiments/gradcam_utils.py",
+    "last_modified": "2026-10-12 00:50:10",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "experiments/make_gradcam_examples.py",
+    "last_modified": "2026-10-12 00:50:58",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "experiments/phase1b_training.py",
+    "last_modified": "2026-10-12 22:47:20",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "experiments/__init__.py",
+    "last_modified": "2026-10-12 00:50:44",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "tests/test_classifier_pipeline.py",
+    "last_modified": "2026-10-10 20:18:56",
+    "git_tracked": true
+  },
+  {
+    "type": "script",
+    "path": "tests/test_external_validation.py",
+    "last_modified": "2026-10-20 14:20:08",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/dataset_audit.json",
+    "last_modified": "2026-10-10 18:54:27",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/resnet18_checkpoint_metadata.json",
+    "last_modified": "2026-10-10 19:02:35",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/resnet18_training_history.csv",
+    "last_modified": "2026-10-10 19:03:18",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/resnet18_training_history.json",
+    "last_modified": "2026-10-10 19:03:18",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/resnet18_training_summary.json",
+    "last_modified": "2026-10-10 19:03:19",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/small_cnn_checkpoint_metadata.json",
+    "last_modified": "2026-10-10 19:12:25",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/small_cnn_training_history.csv",
+    "last_modified": "2026-10-10 19:13:01",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/small_cnn_training_history.json",
+    "last_modified": "2026-10-10 19:13:01",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/small_cnn_training_summary.json",
+    "last_modified": "2026-10-10 19:13:02",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/split_manifest.csv",
+    "last_modified": "2026-10-10 18:54:27",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/evaluation/evaluation_metrics.json",
+    "last_modified": "2026-10-10 19:33:45",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/evaluation/test_predictions.csv",
+    "last_modified": "2026-10-10 19:33:45",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/v2_patient_level/mask_area_distribution.json",
+    "last_modified": "2026-10-21 00:33:25",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/dataset_metadata.json",
+    "last_modified": "2026-10-18 11:59:26",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/manifest.csv",
+    "last_modified": "2026-10-18 11:59:25",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/metrics.json",
+    "last_modified": "2026-10-18 12:01:48",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/overlap_audit.json",
+    "last_modified": "2026-10-18 12:06:34",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/predictions.csv",
+    "last_modified": "2026-10-18 12:01:48",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8_overlap_screened/metrics.json",
+    "last_modified": "2026-10-18 12:22:55",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8_overlap_screened/predictions.csv",
+    "last_modified": "2026-10-18 12:22:55",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8_patient_disjoint/metrics.json",
+    "last_modified": "2026-10-18 12:12:37",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8_patient_disjoint/predictions.csv",
+    "last_modified": "2026-10-18 12:12:37",
+    "git_tracked": false
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/checkpoint_hashes.csv",
+    "last_modified": "2026-10-13 00:53:31",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/paired_seed_comparisons_resnet18.csv",
+    "last_modified": "2026-10-13 00:53:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/paired_seed_comparison_resnet18_smallcnn.csv",
+    "last_modified": "2026-10-12 22:42:33",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/paired_seed_comparison_summary.csv",
+    "last_modified": "2026-10-13 00:53:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/phase1b_aggregate_summary.csv",
+    "last_modified": "2026-10-13 00:53:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/phase1b_per_seed_metrics.csv",
+    "last_modified": "2026-10-13 00:53:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/phase1b_summary.json",
+    "last_modified": "2026-10-13 00:52:53",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/duplicate_group_label_audit.csv",
+    "last_modified": "2026-10-12 22:51:09",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/reliability_bin_counts.json",
+    "last_modified": "2026-10-12 22:48:40",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/resnet18_group_bootstrap_2000_seed0.json",
+    "last_modified": "2026-10-12 22:48:51",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/shared_pixel_sha256_label_audit.csv",
+    "last_modified": "2026-10-12 22:51:09",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/small_cnn_calibration.csv",
+    "last_modified": "2026-10-12 22:48:39",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1c/small_cnn_calibration.json",
+    "last_modified": "2026-10-12 22:48:39",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/phase1b_summary.json",
+    "last_modified": "2026-10-12 20:36:34",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 23:48:53",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42/history.csv",
+    "last_modified": "2026-10-12 23:50:08",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42/history.json",
+    "last_modified": "2026-10-12 23:50:08",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42/summary.json",
+    "last_modified": "2026-10-12 23:50:50",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42/test_predictions.csv",
+    "last_modified": "2026-10-12 23:50:50",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed42_INTERRUPTED_DO_NOT_USE/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 22:23:25",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed43/checkpoint_metadata.json",
+    "last_modified": "2026-10-13 00:37:24",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed43/history.csv",
+    "last_modified": "2026-10-13 00:42:22",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed43/history.json",
+    "last_modified": "2026-10-13 00:42:22",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed43/summary.json",
+    "last_modified": "2026-10-13 00:42:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed43/test_predictions.csv",
+    "last_modified": "2026-10-13 00:42:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed44/checkpoint_metadata.json",
+    "last_modified": "2026-10-13 00:47:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed44/history.csv",
+    "last_modified": "2026-10-13 00:52:19",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed44/history.json",
+    "last_modified": "2026-10-13 00:52:19",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed44/summary.json",
+    "last_modified": "2026-10-13 00:52:53",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/densenet121_seed44/test_predictions.csv",
+    "last_modified": "2026-10-13 00:52:53",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/logs/densenet121_seed42.log",
+    "last_modified": "2026-10-12 23:50:52",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/logs/densenet121_seed43.log",
+    "last_modified": "2026-10-12 23:50:52",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/logs/densenet121_seed43_20261013_002921.log",
+    "last_modified": "2026-10-13 00:42:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/logs/densenet121_seed44_20261013_002921.log",
+    "last_modified": "2026-10-13 00:52:53",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed42/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 20:45:20",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed42/history.csv",
+    "last_modified": "2026-10-12 20:46:04",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed42/history.json",
+    "last_modified": "2026-10-12 20:46:04",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed42/summary.json",
+    "last_modified": "2026-10-12 20:46:16",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed42/test_predictions.csv",
+    "last_modified": "2026-10-12 20:46:16",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed43/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 20:52:11",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed43/history.csv",
+    "last_modified": "2026-10-12 20:55:04",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed43/history.json",
+    "last_modified": "2026-10-12 20:55:04",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed43/summary.json",
+    "last_modified": "2026-10-12 20:55:14",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed43/test_predictions.csv",
+    "last_modified": "2026-10-12 20:55:14",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed44/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 20:56:37",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed44/history.csv",
+    "last_modified": "2026-10-12 20:59:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed44/history.json",
+    "last_modified": "2026-10-12 20:59:30",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed44/summary.json",
+    "last_modified": "2026-10-12 20:59:40",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed44/test_predictions.csv",
+    "last_modified": "2026-10-12 20:59:40",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed45/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:03:44",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed45/history.csv",
+    "last_modified": "2026-10-12 21:06:37",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed45/history.json",
+    "last_modified": "2026-10-12 21:06:37",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed45/summary.json",
+    "last_modified": "2026-10-12 21:06:48",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed45/test_predictions.csv",
+    "last_modified": "2026-10-12 21:06:48",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed46/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:13:11",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed46/history.csv",
+    "last_modified": "2026-10-12 21:15:21",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed46/history.json",
+    "last_modified": "2026-10-12 21:15:21",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed46/summary.json",
+    "last_modified": "2026-10-12 21:15:31",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/resnet18_seed46/test_predictions.csv",
+    "last_modified": "2026-10-12 21:15:31",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed42/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:22:22",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed42/history.csv",
+    "last_modified": "2026-10-12 21:22:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed42/history.json",
+    "last_modified": "2026-10-12 21:22:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed42/summary.json",
+    "last_modified": "2026-10-12 21:23:06",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed42/test_predictions.csv",
+    "last_modified": "2026-10-12 21:23:06",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed43/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:31:45",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed43/history.csv",
+    "last_modified": "2026-10-12 21:31:45",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed43/history.json",
+    "last_modified": "2026-10-12 21:31:45",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed43/summary.json",
+    "last_modified": "2026-10-12 21:31:52",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed43/test_predictions.csv",
+    "last_modified": "2026-10-12 21:31:52",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed44/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:41:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed44/history.csv",
+    "last_modified": "2026-10-12 21:41:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed44/history.json",
+    "last_modified": "2026-10-12 21:41:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed44/summary.json",
+    "last_modified": "2026-10-12 21:41:18",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed44/test_predictions.csv",
+    "last_modified": "2026-10-12 21:41:18",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed45/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 21:49:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed45/history.csv",
+    "last_modified": "2026-10-12 21:49:51",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed45/history.json",
+    "last_modified": "2026-10-12 21:49:51",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed45/summary.json",
+    "last_modified": "2026-10-12 21:49:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed45/test_predictions.csv",
+    "last_modified": "2026-10-12 21:49:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed46/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 22:10:40",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed46/history.csv",
+    "last_modified": "2026-10-12 22:13:01",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed46/history.json",
+    "last_modified": "2026-10-12 22:13:01",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed46/summary.json",
+    "last_modified": "2026-10-12 22:13:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/small_cnn_seed46/test_predictions.csv",
+    "last_modified": "2026-10-12 22:13:10",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/checkpoint_metadata.json",
+    "last_modified": "2026-10-12 20:35:37",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/history.csv",
+    "last_modified": "2026-10-12 20:36:20",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/history.json",
+    "last_modified": "2026-10-12 20:36:20",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/summary.json",
+    "last_modified": "2026-10-12 20:36:34",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase1b/debug/resnet18_seed42/test_predictions.csv",
+    "last_modified": "2026-10-12 20:36:34",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase0/gradcam_examples/gradcam_metadata.json",
+    "last_modified": "2026-10-12 00:51:59",
+    "git_tracked": true
+  },
+  {
+    "type": "result_file",
+    "path": "experiments_results/phase0/logs/phase0_run.log",
+    "last_modified": "2026-10-12 00:54:14",
+    "git_tracked": true
+  }
+]

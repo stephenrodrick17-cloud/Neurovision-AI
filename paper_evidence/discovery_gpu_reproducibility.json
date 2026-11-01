@@ -1,0 +1,27 @@
+{
+  "resnet18": {
+    "n_images": 606,
+    "max_abs_score_diff": 0.0013947784900665283,
+    "mean_abs_score_diff": 1.115480973761126e-05,
+    "flipped_count": 0,
+    "flipped_details": [],
+    "near_threshold_0_001": 0,
+    "near_threshold_0_01": 0
+  },
+  "small_cnn": {
+    "n_images": 606,
+    "max_abs_score_diff": 0.0006316900253295898,
+    "mean_abs_score_diff": 0.00012044294463723682,
+    "flipped_count": 1,
+    "flipped_details": [
+      {
+        "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+        "stored_score": 0.49978768825531,
+        "live_score": 0.500150203704834,
+        "diff": 0.0003625154495239813
+      }
+    ],
+    "near_threshold_0_001": 1,
+    "near_threshold_0_01": 3
+  }
+}

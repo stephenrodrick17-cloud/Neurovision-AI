@@ -1,0 +1,24 @@
+{
+  "device": "cuda:0",
+  "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "unscreened": {
+    "n_slices": 3064,
+    "runtime_seconds": 73.11806225776672,
+    "throughput_imgs_per_s": 41.90483042614463,
+    "max_abs_score_diff": 0.0027030110359191895,
+    "mean_abs_score_diff": 7.769033105878646e-05,
+    "flipped_predictions": 0,
+    "stored_positives": 2592,
+    "live_positives": 2592
+  },
+  "screened": {
+    "n_slices": 1689,
+    "runtime_seconds": 38.62621760368347,
+    "throughput_imgs_per_s": 43.72677690913577,
+    "max_abs_score_diff": 0.0027030110359191895,
+    "mean_abs_score_diff": 0.0001323897615090013,
+    "flipped_predictions": 0,
+    "stored_positives": 1223,
+    "live_positives": 1223
+  }
+}

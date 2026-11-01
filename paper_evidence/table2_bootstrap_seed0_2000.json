@@ -1,0 +1,1895 @@
+{
+  "analysis": "Second-pass bootstrap (2,000 resamples, seed 0 and seed 42) for Table 2 (Internal Discovery Test Set)",
+  "script_path": "paper_evidence/run_table2_bootstrap_seed0.py",
+  "predictions_source": "BrainTumorAI/results/evaluation/test_predictions.csv",
+  "verification_vs_phase1c_json": {
+    "accuracy": {
+      "phase1c_saved_lower_95": 0.9600623003194888,
+      "recomputed_lower_95": 0.9600623003194888,
+      "phase1c_saved_upper_95": 1.0,
+      "recomputed_upper_95": 1.0,
+      "abs_diff": 0.0
+    },
+    "sensitivity": {
+      "phase1c_saved_lower_95": 0.9837387327677625,
+      "recomputed_lower_95": 0.9837387327677625,
+      "phase1c_saved_upper_95": 1.0,
+      "recomputed_upper_95": 1.0,
+      "abs_diff": 0.0
+    },
+    "specificity": {
+      "phase1c_saved_lower_95": 0.9042091954022988,
+      "recomputed_lower_95": 0.9042091954022988,
+      "phase1c_saved_upper_95": 1.0,
+      "recomputed_upper_95": 1.0,
+      "abs_diff": 0.0
+    },
+    "roc_auc": {
+      "phase1c_saved_lower_95": 0.9985273371770279,
+      "recomputed_lower_95": 0.9985273371770279,
+      "phase1c_saved_upper_95": 1.0,
+      "recomputed_upper_95": 1.0,
+      "abs_diff": 0.0
+    },
+    "exact_match_with_phase1c_json": true
+  },
+  "models": {
+    "resnet18": {
+      "test_full_606": {
+        "n": 606,
+        "point_estimates": {
+          "accuracy": 0.9851485148514851,
+          "balanced_accuracy": 0.9815654933301992,
+          "tumor_sensitivity_recall": 0.9948051948051948,
+          "no_tumor_specificity": 0.9683257918552036,
+          "tumor_precision": 0.982051282051282,
+          "tumor_f1": 0.9883870967741936,
+          "roc_auc": 0.9996474114121172,
+          "average_precision": 0.9998002588695116,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              2,
+              383
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9628384271690744,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9507579459759763,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9839989304812834,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9095143592357925,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.952128880086655,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.9711414523623695,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9986648446367108,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.9992344997955309,
+              "upper_95": 1.0
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.9600623003194888,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9494226483189929,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9837387327677625,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9042091954022988,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.9484469312536723,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.9689037788568483,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9985273371770279,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.9991650635291761,
+              "upper_95": 1.0
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9619443938773342,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9509048329119675,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.984,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9090689503732982,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.9512726098191214,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.9705497110426689,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9986379479473788,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.9992252139882857,
+              "upper_95": 1.0
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9752475247524752,
+              "upper_95": 0.9933993399339934
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.967990832696715,
+              "upper_95": 0.9932126696832579
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.987012987012987,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9411764705882353,
+              "upper_95": 0.9865384615384615
+            },
+            "tumor_precision": {
+              "lower_95": 0.967252340788235,
+              "upper_95": 0.9923304501538295
+            },
+            "tumor_f1": {
+              "lower_95": 0.9806451612903225,
+              "upper_95": 0.9948320413436692
+            },
+            "roc_auc": {
+              "lower_95": 0.9991296938355763,
+              "upper_95": 0.9999647411412117
+            },
+            "average_precision": {
+              "lower_95": 0.9995102865748331,
+              "upper_95": 0.999979815534607
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.9752475247524752,
+              "upper_95": 0.9933993399339934
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9683257918552036,
+              "upper_95": 0.9928777105247694
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.987012987012987,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9455882352941176,
+              "upper_95": 0.9909502262443439
+            },
+            "tumor_precision": {
+              "lower_95": 0.9693364783099169,
+              "upper_95": 0.9947780678851175
+            },
+            "tumor_f1": {
+              "lower_95": 0.9806937352098642,
+              "upper_95": 0.9948320413436692
+            },
+            "roc_auc": {
+              "lower_95": 0.9991185285302934,
+              "upper_95": 0.9999529881882824
+            },
+            "average_precision": {
+              "lower_95": 0.999504600387414,
+              "upper_95": 0.9999731534615255
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9752475247524752,
+              "upper_95": 0.9933993399339934
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.967990832696715,
+              "upper_95": 0.9928777105247694
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.987012987012987,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9411764705882353,
+              "upper_95": 0.9909502262443439
+            },
+            "tumor_precision": {
+              "lower_95": 0.9672544080604534,
+              "upper_95": 0.9947784078546562
+            },
+            "tumor_f1": {
+              "lower_95": 0.9805950840879689,
+              "upper_95": 0.9948320413436692
+            },
+            "roc_auc": {
+              "lower_95": 0.999083269671505,
+              "upper_95": 0.9999647411412117
+            },
+            "average_precision": {
+              "lower_95": 0.9994797119016984,
+              "upper_95": 0.9999797779772209
+            }
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "point_estimates": {
+          "accuracy": 0.9806451612903225,
+          "balanced_accuracy": 0.9800645352718641,
+          "tumor_sensitivity_recall": 0.9918032786885246,
+          "no_tumor_specificity": 0.9683257918552036,
+          "tumor_precision": 0.9718875502008032,
+          "tumor_f1": 0.9817444219066938,
+          "roc_auc": 0.9994436614494474,
+          "average_precision": 0.9995064295371265,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              2,
+              242
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9495609005311444,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9475149863650496,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9747872566748218,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9086439220183486,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.9236494421608925,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.953712947053518,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9977197750277452,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.9980291493169299,
+              "upper_95": 1.0
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.9509578224946695,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.950320599632606,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9744653573376977,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9090909090909091,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.9243027888446215,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.9540185676392573,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9979299424293456,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.998212372067603,
+              "upper_95": 1.0
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9502262443438914,
+              "upper_95": 1.0
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9481832047881236,
+              "upper_95": 1.0
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9745762711864406,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.907798690671031,
+              "upper_95": 1.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.9230769230769231,
+              "upper_95": 1.0
+            },
+            "tumor_f1": {
+              "lower_95": 0.9539550350526951,
+              "upper_95": 1.0
+            },
+            "roc_auc": {
+              "lower_95": 0.9978812600450101,
+              "upper_95": 1.0
+            },
+            "average_precision": {
+              "lower_95": 0.9981585948014172,
+              "upper_95": 1.0
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9655913978494624,
+              "upper_95": 0.9913978494623656
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9646486258437801,
+              "upper_95": 0.9911634893553891
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9795081967213115,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9411764705882353,
+              "upper_95": 0.9865384615384615
+            },
+            "tumor_precision": {
+              "lower_95": 0.9490196078431372,
+              "upper_95": 0.987950425857174
+            },
+            "tumor_f1": {
+              "lower_95": 0.9678714859437751,
+              "upper_95": 0.991869918699187
+            },
+            "roc_auc": {
+              "lower_95": 0.9984788776796973,
+              "upper_95": 0.9999258215265929
+            },
+            "average_precision": {
+              "lower_95": 0.9986610174633042,
+              "upper_95": 0.9999333599893376
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.967741935483871,
+              "upper_95": 0.9935483870967742
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9669164008604703,
+              "upper_95": 0.9932126696832579
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9795081967213115,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9411764705882353,
+              "upper_95": 0.9909502262443439
+            },
+            "tumor_precision": {
+              "lower_95": 0.9494163424124513,
+              "upper_95": 0.9917695473251029
+            },
+            "tumor_f1": {
+              "lower_95": 0.9698189134808853,
+              "upper_95": 0.9938650306748467
+            },
+            "roc_auc": {
+              "lower_95": 0.9986462428603219,
+              "upper_95": 0.9999443661449446
+            },
+            "average_precision": {
+              "lower_95": 0.9988050657054934,
+              "upper_95": 0.9999496783129362
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.9655913978494624,
+              "upper_95": 0.9913978494623656
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.9650804836436466,
+              "upper_95": 0.9911634893553891
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.9795081967213115,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.9411764705882353,
+              "upper_95": 0.9909502262443439
+            },
+            "tumor_precision": {
+              "lower_95": 0.94921875,
+              "upper_95": 0.9917355371900827
+            },
+            "tumor_f1": {
+              "lower_95": 0.968250806298615,
+              "upper_95": 0.991869918699187
+            },
+            "roc_auc": {
+              "lower_95": 0.9985535197685632,
+              "upper_95": 0.999925821526593
+            },
+            "average_precision": {
+              "lower_95": 0.9987471355996635,
+              "upper_95": 0.9999338974087784
+            }
+          }
+        }
+      }
+    },
+    "small_cnn_small_cnn_best": {
+      "test_full_606": {
+        "n": 606,
+        "point_estimates": {
+          "accuracy": 0.8102310231023102,
+          "balanced_accuracy": 0.7870423693953106,
+          "tumor_sensitivity_recall": 0.8727272727272727,
+          "no_tumor_specificity": 0.7013574660633484,
+          "tumor_precision": 0.835820895522388,
+          "tumor_f1": 0.8538754764930114,
+          "roc_auc": 0.9044719985896457,
+          "average_precision": 0.9462362207071379,
+          "confusion_matrix": [
+            [
+              155,
+              66
+            ],
+            [
+              49,
+              336
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7381316998468607,
+              "upper_95": 0.8741482820417749
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7131113556936062,
+              "upper_95": 0.8660856037825949
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.8294463188335944,
+              "upper_95": 0.9105610853558768
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5549901868642194,
+              "upper_95": 0.8539573266577399
+            },
+            "tumor_precision": {
+              "lower_95": 0.7414257063516552,
+              "upper_95": 0.9222229669347632
+            },
+            "tumor_f1": {
+              "lower_95": 0.7947120953644615,
+              "upper_95": 0.9032343290578259
+            },
+            "roc_auc": {
+              "lower_95": 0.8633226427206947,
+              "upper_95": 0.9455263102697087
+            },
+            "average_precision": {
+              "lower_95": 0.9163003167056236,
+              "upper_95": 0.9721482987258201
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.7369148264984227,
+              "upper_95": 0.8733034932689805
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7060160338077944,
+              "upper_95": 0.8659970831150887
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.830378607920341,
+              "upper_95": 0.9105727351916376
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5493974269549717,
+              "upper_95": 0.8535606060606059
+            },
+            "tumor_precision": {
+              "lower_95": 0.7347541649735879,
+              "upper_95": 0.9220081955739701
+            },
+            "tumor_f1": {
+              "lower_95": 0.793381305215161,
+              "upper_95": 0.9033078880407125
+            },
+            "roc_auc": {
+              "lower_95": 0.8600806147065614,
+              "upper_95": 0.9448445482137544
+            },
+            "average_precision": {
+              "lower_95": 0.9137463627872316,
+              "upper_95": 0.9720502683430242
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7382717493796813,
+              "upper_95": 0.8737243799974539
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.711458764159545,
+              "upper_95": 0.8670047137708878
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.8304228353167714,
+              "upper_95": 0.9123735267576362
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5478079710144927,
+              "upper_95": 0.8564480874316938
+            },
+            "tumor_precision": {
+              "lower_95": 0.7367284886927744,
+              "upper_95": 0.9230769230769231
+            },
+            "tumor_f1": {
+              "lower_95": 0.7959320035987805,
+              "upper_95": 0.9032258064516129
+            },
+            "roc_auc": {
+              "lower_95": 0.8629440652677083,
+              "upper_95": 0.9461437228453615
+            },
+            "average_precision": {
+              "lower_95": 0.9167020917497694,
+              "upper_95": 0.9726415150703339
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7788778877887789,
+              "upper_95": 0.8399339933993399
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7524654757007698,
+              "upper_95": 0.8200647881530234
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.8389610389610389,
+              "upper_95": 0.9064935064935065
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6380090497737556,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.8072246633593196,
+              "upper_95": 0.8635263929618768
+            },
+            "tumor_f1": {
+              "lower_95": 0.829759031086669,
+              "upper_95": 0.8776796973518285
+            },
+            "roc_auc": {
+              "lower_95": 0.8807539519304226,
+              "upper_95": 0.9266471763530587
+            },
+            "average_precision": {
+              "lower_95": 0.9319512669881322,
+              "upper_95": 0.9591815773592961
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.7788778877887789,
+              "upper_95": 0.8383250825082507
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.75239466415937,
+              "upper_95": 0.8200564141740612
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.8389610389610389,
+              "upper_95": 0.9038961038961039
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6380090497737556,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.8078793762659859,
+              "upper_95": 0.8637562416721625
+            },
+            "tumor_f1": {
+              "lower_95": 0.8296961171696308,
+              "upper_95": 0.8758002560819462
+            },
+            "roc_auc": {
+              "lower_95": 0.8819283657518953,
+              "upper_95": 0.9254809895986367
+            },
+            "average_precision": {
+              "lower_95": 0.9331198665555411,
+              "upper_95": 0.9588086101843605
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7788778877887789,
+              "upper_95": 0.8399339933993399
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7514235764235764,
+              "upper_95": 0.8203913733325499
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.8389610389610389,
+              "upper_95": 0.9038961038961039
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6380090497737556,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.80824995343531,
+              "upper_95": 0.8647233462350458
+            },
+            "tumor_f1": {
+              "lower_95": 0.8294573643410853,
+              "upper_95": 0.8772411658006796
+            },
+            "roc_auc": {
+              "lower_95": 0.8804806957748135,
+              "upper_95": 0.9264147617088793
+            },
+            "average_precision": {
+              "lower_95": 0.9318435437089853,
+              "upper_95": 0.959087430286983
+            }
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "point_estimates": {
+          "accuracy": 0.7548387096774194,
+          "balanced_accuracy": 0.7523180772939693,
+          "tumor_sensitivity_recall": 0.8032786885245902,
+          "no_tumor_specificity": 0.7013574660633484,
+          "tumor_precision": 0.7480916030534351,
+          "tumor_f1": 0.7747035573122529,
+          "roc_auc": 0.8619353163711891,
+          "average_precision": 0.8837237106306763,
+          "confusion_matrix": [
+            [
+              155,
+              66
+            ],
+            [
+              48,
+              196
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6640146972416513,
+              "upper_95": 0.836405529953917
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.6669049448875596,
+              "upper_95": 0.837162881546061
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.7434627329192547,
+              "upper_95": 0.8600020576131687
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5352330855018587,
+              "upper_95": 0.8516625615763547
+            },
+            "tumor_precision": {
+              "lower_95": 0.6158668154761905,
+              "upper_95": 0.8726456471367097
+            },
+            "tumor_f1": {
+              "lower_95": 0.6933529065160412,
+              "upper_95": 0.8509093951144617
+            },
+            "roc_auc": {
+              "lower_95": 0.798084989916268,
+              "upper_95": 0.9217168690386646
+            },
+            "average_precision": {
+              "lower_95": 0.8245843997870973,
+              "upper_95": 0.9389906527128743
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.6615824579493459,
+              "upper_95": 0.8352682057046663
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.6661350706827525,
+              "upper_95": 0.8355065395076839
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.7437780401416765,
+              "upper_95": 0.8621081504702192
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5384387351778656,
+              "upper_95": 0.8550138888888887
+            },
+            "tumor_precision": {
+              "lower_95": 0.6120981563693927,
+              "upper_95": 0.8766002823434507
+            },
+            "tumor_f1": {
+              "lower_95": 0.6878224206349206,
+              "upper_95": 0.8499100314889788
+            },
+            "roc_auc": {
+              "lower_95": 0.8008275361359605,
+              "upper_95": 0.9205241646682084
+            },
+            "average_precision": {
+              "lower_95": 0.8216403549158052,
+              "upper_95": 0.9389266761026404
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6626231060606061,
+              "upper_95": 0.8366901794274757
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.6669737886463146,
+              "upper_95": 0.8375535757189834
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.7398373983739838,
+              "upper_95": 0.8623519736842106
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.5381531986531987,
+              "upper_95": 0.8516625615763546
+            },
+            "tumor_precision": {
+              "lower_95": 0.6156457270408163,
+              "upper_95": 0.8733073229291717
+            },
+            "tumor_f1": {
+              "lower_95": 0.690470177970178,
+              "upper_95": 0.8520807061790668
+            },
+            "roc_auc": {
+              "lower_95": 0.7997943473078238,
+              "upper_95": 0.921535460744166
+            },
+            "average_precision": {
+              "lower_95": 0.8249893520934954,
+              "upper_95": 0.9393900886894739
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7182795698924731,
+              "upper_95": 0.7935483870967742
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7166129645426897,
+              "upper_95": 0.7906961649729248
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.75,
+              "upper_95": 0.8524590163934426
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6380090497737556,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.7111794094894276,
+              "upper_95": 0.788235294117647
+            },
+            "tumor_f1": {
+              "lower_95": 0.7411729552378721,
+              "upper_95": 0.8103082243843113
+            },
+            "roc_auc": {
+              "lower_95": 0.8315717491284029,
+              "upper_95": 0.8939104109487426
+            },
+            "average_precision": {
+              "lower_95": 0.8564290666761027,
+              "upper_95": 0.9100284417161713
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.7161290322580646,
+              "upper_95": 0.7935483870967742
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7140053593947038,
+              "upper_95": 0.7904882334396557
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.75,
+              "upper_95": 0.8524590163934426
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6380090497737556,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.7083296263345196,
+              "upper_95": 0.7888500684760955
+            },
+            "tumor_f1": {
+              "lower_95": 0.7385182980894195,
+              "upper_95": 0.8101786391095503
+            },
+            "roc_auc": {
+              "lower_95": 0.8281409947333285,
+              "upper_95": 0.8908510125361621
+            },
+            "average_precision": {
+              "lower_95": 0.8545434619983607,
+              "upper_95": 0.9097934220480399
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.7182795698924731,
+              "upper_95": 0.7935483870967742
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.7152174820117202,
+              "upper_95": 0.7906961649729248
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 0.7540983606557377,
+              "upper_95": 0.8524590163934426
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.6425339366515838,
+              "upper_95": 0.7601809954751131
+            },
+            "tumor_precision": {
+              "lower_95": 0.7107142857142857,
+              "upper_95": 0.7886235545622388
+            },
+            "tumor_f1": {
+              "lower_95": 0.7410322273658403,
+              "upper_95": 0.8112449799196787
+            },
+            "roc_auc": {
+              "lower_95": 0.8309440137971961,
+              "upper_95": 0.8929423818707811
+            },
+            "average_precision": {
+              "lower_95": 0.8571348457675823,
+              "upper_95": 0.9101159805148469
+            }
+          }
+        }
+      }
+    },
+    "legacy_existing_checkpoint": {
+      "test_full_606": {
+        "n": 606,
+        "point_estimates": {
+          "accuracy": 0.6353135313531353,
+          "balanced_accuracy": 0.5,
+          "tumor_sensitivity_recall": 1.0,
+          "no_tumor_specificity": 0.0,
+          "tumor_precision": 0.6353135313531353,
+          "tumor_f1": 0.7769929364278506,
+          "roc_auc": 0.49515190691661276,
+          "average_precision": 0.6827129221189016,
+          "confusion_matrix": [
+            [
+              0,
+              221
+            ],
+            [
+              0,
+              385
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.5852497793901363,
+              "upper_95": 0.6780076423699565
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5852497793901363,
+              "upper_95": 0.6780076423699565
+            },
+            "tumor_f1": {
+              "lower_95": 0.7383691665366006,
+              "upper_95": 0.8081103130961733
+            },
+            "roc_auc": {
+              "lower_95": 0.42001019537805395,
+              "upper_95": 0.5649384406903786
+            },
+            "average_precision": {
+              "lower_95": 0.6316104844420762,
+              "upper_95": 0.7329813553130476
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.5813480938689763,
+              "upper_95": 0.6801438853221429
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5813480938689763,
+              "upper_95": 0.6801438853221429
+            },
+            "tumor_f1": {
+              "lower_95": 0.7352563226247436,
+              "upper_95": 0.8096257601680417
+            },
+            "roc_auc": {
+              "lower_95": 0.4210239998026942,
+              "upper_95": 0.5647383474125373
+            },
+            "average_precision": {
+              "lower_95": 0.6330600533245906,
+              "upper_95": 0.735959189671479
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.5841238095238096,
+              "upper_95": 0.6794513090067299
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5841238095238096,
+              "upper_95": 0.6794513090067299
+            },
+            "tumor_f1": {
+              "lower_95": 0.737472419586648,
+              "upper_95": 0.8091348695758837
+            },
+            "roc_auc": {
+              "lower_95": 0.4215022918487543,
+              "upper_95": 0.563117039808164
+            },
+            "average_precision": {
+              "lower_95": 0.6347845652198804,
+              "upper_95": 0.7329813553130476
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.44311688311688313,
+              "upper_95": 0.542990832696715
+            },
+            "average_precision": {
+              "lower_95": 0.6482985028126739,
+              "upper_95": 0.7165252042828306
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.44617353235000295,
+              "upper_95": 0.5439243109831344
+            },
+            "average_precision": {
+              "lower_95": 0.6477567845380879,
+              "upper_95": 0.7169648159074715
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.4463850855027326,
+              "upper_95": 0.5431662455191867
+            },
+            "average_precision": {
+              "lower_95": 0.6485865894064647,
+              "upper_95": 0.7167930289720329
+            }
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "point_estimates": {
+          "accuracy": 0.524731182795699,
+          "balanced_accuracy": 0.5,
+          "tumor_sensitivity_recall": 1.0,
+          "no_tumor_specificity": 0.0,
+          "tumor_precision": 0.524731182795699,
+          "tumor_f1": 0.688293370944993,
+          "roc_auc": 0.6622839551962021,
+          "average_precision": 0.7059611663110938,
+          "confusion_matrix": [
+            [
+              0,
+              221
+            ],
+            [
+              0,
+              244
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.46665297741273104,
+              "upper_95": 0.5785118960735659
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46665297741273104,
+              "upper_95": 0.5785118960735659
+            },
+            "tumor_f1": {
+              "lower_95": 0.6363509039979628,
+              "upper_95": 0.7329838854492791
+            },
+            "roc_auc": {
+              "lower_95": 0.5820941080644387,
+              "upper_95": 0.7360653988723794
+            },
+            "average_precision": {
+              "lower_95": 0.6480476320574027,
+              "upper_95": 0.7638286359136678
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.46861885425812116,
+              "upper_95": 0.5766611675802246
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46861885425812116,
+              "upper_95": 0.5766611675802246
+            },
+            "tumor_f1": {
+              "lower_95": 0.6381762723020783,
+              "upper_95": 0.7314966327155341
+            },
+            "roc_auc": {
+              "lower_95": 0.5844258802177859,
+              "upper_95": 0.7401048120794221
+            },
+            "average_precision": {
+              "lower_95": 0.6518676355654454,
+              "upper_95": 0.7673313763681333
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.46719298147087346,
+              "upper_95": 0.5787097953216375
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46719298147087346,
+              "upper_95": 0.5787097953216375
+            },
+            "tumor_f1": {
+              "lower_95": 0.6368528027385537,
+              "upper_95": 0.7331427174975562
+            },
+            "roc_auc": {
+              "lower_95": 0.5772161623841644,
+              "upper_95": 0.734157831452962
+            },
+            "average_precision": {
+              "lower_95": 0.6480578187622891,
+              "upper_95": 0.7640146524311539
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.6144457940805579,
+              "upper_95": 0.7116335027075144
+            },
+            "average_precision": {
+              "lower_95": 0.6617307326832396,
+              "upper_95": 0.7528712034031309
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.6126766374898005,
+              "upper_95": 0.7111374341666048
+            },
+            "average_precision": {
+              "lower_95": 0.6600608168845791,
+              "upper_95": 0.7505240743358564
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.6128755285216231,
+              "upper_95": 0.7107410429493359
+            },
+            "average_precision": {
+              "lower_95": 0.6608062188342393,
+              "upper_95": 0.7530405828434957
+            }
+          }
+        }
+      }
+    },
+    "training_majority_class": {
+      "test_full_606": {
+        "n": 606,
+        "point_estimates": {
+          "accuracy": 0.6353135313531353,
+          "balanced_accuracy": 0.5,
+          "tumor_sensitivity_recall": 1.0,
+          "no_tumor_specificity": 0.0,
+          "tumor_precision": 0.6353135313531353,
+          "tumor_f1": 0.7769929364278506,
+          "roc_auc": 0.5,
+          "average_precision": 0.6353135313531353,
+          "confusion_matrix": [
+            [
+              0,
+              221
+            ],
+            [
+              0,
+              385
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.5852497793901363,
+              "upper_95": 0.6780076423699565
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5852497793901363,
+              "upper_95": 0.6780076423699565
+            },
+            "tumor_f1": {
+              "lower_95": 0.7383691665366006,
+              "upper_95": 0.8081103130961733
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.5852497793901363,
+              "upper_95": 0.6780076423699565
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.5813480938689763,
+              "upper_95": 0.6801438853221429
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5813480938689763,
+              "upper_95": 0.6801438853221429
+            },
+            "tumor_f1": {
+              "lower_95": 0.7352563226247436,
+              "upper_95": 0.8096257601680417
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.5813480938689763,
+              "upper_95": 0.6801438853221429
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.5841238095238096,
+              "upper_95": 0.6794513090067299
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.5841238095238096,
+              "upper_95": 0.6794513090067299
+            },
+            "tumor_f1": {
+              "lower_95": 0.737472419586648,
+              "upper_95": 0.8091348695758837
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.5841238095238096,
+              "upper_95": 0.6794513090067299
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            },
+            "tumor_f1": {
+              "lower_95": 0.7769929364278506,
+              "upper_95": 0.7769929364278506
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.6353135313531353,
+              "upper_95": 0.6353135313531353
+            }
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "point_estimates": {
+          "accuracy": 0.524731182795699,
+          "balanced_accuracy": 0.5,
+          "tumor_sensitivity_recall": 1.0,
+          "no_tumor_specificity": 0.0,
+          "tumor_precision": 0.524731182795699,
+          "tumor_f1": 0.688293370944993,
+          "roc_auc": 0.5,
+          "average_precision": 0.524731182795699,
+          "confusion_matrix": [
+            [
+              0,
+              221
+            ],
+            [
+              0,
+              244
+            ]
+          ]
+        },
+        "duplicate_group_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.46665297741273104,
+              "upper_95": 0.5785118960735659
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46665297741273104,
+              "upper_95": 0.5785118960735659
+            },
+            "tumor_f1": {
+              "lower_95": 0.6363509039979628,
+              "upper_95": 0.7329838854492791
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.46665297741273104,
+              "upper_95": 0.5785118960735659
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.46861885425812116,
+              "upper_95": 0.5766611675802246
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46861885425812116,
+              "upper_95": 0.5766611675802246
+            },
+            "tumor_f1": {
+              "lower_95": 0.6381762723020783,
+              "upper_95": 0.7314966327155341
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.46861885425812116,
+              "upper_95": 0.5766611675802246
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.46719298147087346,
+              "upper_95": 0.5787097953216375
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.46719298147087346,
+              "upper_95": 0.5787097953216375
+            },
+            "tumor_f1": {
+              "lower_95": 0.6368528027385537,
+              "upper_95": 0.7331427174975562
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.46719298147087346,
+              "upper_95": 0.5787097953216375
+            }
+          }
+        },
+        "image_stratified_95_ci": {
+          "replicates_1000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            }
+          },
+          "replicates_2000_seed_0": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            }
+          },
+          "replicates_2000_seed_42": {
+            "accuracy": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "balanced_accuracy": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "tumor_sensitivity_recall": {
+              "lower_95": 1.0,
+              "upper_95": 1.0
+            },
+            "no_tumor_specificity": {
+              "lower_95": 0.0,
+              "upper_95": 0.0
+            },
+            "tumor_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            },
+            "tumor_f1": {
+              "lower_95": 0.688293370944993,
+              "upper_95": 0.688293370944993
+            },
+            "roc_auc": {
+              "lower_95": 0.5,
+              "upper_95": 0.5
+            },
+            "average_precision": {
+              "lower_95": 0.524731182795699,
+              "upper_95": 0.524731182795699
+            }
+          }
+        }
+      }
+    }
+  },
+  "runtime_seconds": 1841.23
+}

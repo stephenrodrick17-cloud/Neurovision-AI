@@ -1,0 +1,89 @@
+{
+  "functions_used": {
+    "perceptual_hash": "BrainTumorAI.preprocess._perceptual_hash (DCT 63 AC coefficients vs median)",
+    "structural_similarity": "BrainTumorAI.preprocess._structural_similarity (OpenCV GaussianBlur 11x11, sigma=1.5)",
+    "rule": "pHash Hamming distance <= 4 and 64x64 grayscale SSIM >= 0.95",
+    "imagehash_used": false,
+    "scikit_image_used": false
+  },
+  "positive_control_1_cheng_discovery_50_pairs": {
+    "source_archive": "C:/Users/asus/Downloads/Brain Imaging/1512427.zip",
+    "pairs_tested": 50,
+    "pairs_detected": 50,
+    "exact_expected_discovery_file_matched": 50,
+    "detection_rate_percent": 100.0,
+    "hamming_distance_min_max": [
+      0,
+      0
+    ],
+    "ssim_min_mean_max": [
+      0.9999285936355591,
+      0.9999619686603546,
+      0.9999885559082031
+    ],
+    "sample_5_verified_pairs": [
+      {
+        "cheng_slice": "brainTumorDataPublic_1-766.zip!210.mat",
+        "patient_id": "100820",
+        "expected_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (3).jpg",
+        "matched_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (3).jpg",
+        "phash_hamming_distance": 0,
+        "ssim_64x64": 0.9999803900718689,
+        "detected": true,
+        "expected_pair_matched": true
+      },
+      {
+        "cheng_slice": "brainTumorDataPublic_1-766.zip!715.mat",
+        "patient_id": "100820",
+        "expected_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (4).jpg",
+        "matched_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (4).jpg",
+        "phash_hamming_distance": 0,
+        "ssim_64x64": 0.9999804496765137,
+        "detected": true,
+        "expected_pair_matched": true
+      },
+      {
+        "cheng_slice": "brainTumorDataPublic_1-766.zip!716.mat",
+        "patient_id": "100820",
+        "expected_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (5).jpg",
+        "matched_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (5).jpg",
+        "phash_hamming_distance": 0,
+        "ssim_64x64": 0.999945878982544,
+        "detected": true,
+        "expected_pair_matched": true
+      },
+      {
+        "cheng_slice": "brainTumorDataPublic_1-766.zip!717.mat",
+        "patient_id": "100820",
+        "expected_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (6).jpg",
+        "matched_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (6).jpg",
+        "phash_hamming_distance": 0,
+        "ssim_64x64": 0.9999774694442749,
+        "detected": true,
+        "expected_pair_matched": true
+      },
+      {
+        "cheng_slice": "brainTumorDataPublic_1-766.zip!718.mat",
+        "patient_id": "101020",
+        "expected_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (7).jpg",
+        "matched_discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (7).jpg",
+        "phash_hamming_distance": 0,
+        "ssim_64x64": 0.9999688863754272,
+        "detected": true,
+        "expected_pair_matched": true
+      }
+    ]
+  },
+  "positive_control_2_brats_50_injected_slices": {
+    "slices_injected": 50,
+    "slices_detected": 50,
+    "detection_rate_percent": 100.0,
+    "hamming_distance_all": 0,
+    "ssim_min_mean_max": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "runtime_seconds": 29.51695203781128
+}

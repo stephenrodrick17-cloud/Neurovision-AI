@@ -1,0 +1,1351 @@
+{
+  "analysis": "Header-only (non-pixel metadata) baseline on Kaggle Brain Tumor Detection discovery dataset",
+  "reference": "Vangala et al., 2026 (metadata/header shortcut audit)",
+  "manifest_path": "BrainTumorAI/results/split_manifest.csv",
+  "train_n": 3191,
+  "val_n": 803,
+  "test_n": 606,
+  "n_features_total": 163,
+  "feature_names": [
+    "fmt_JPEG",
+    "fmt_PNG",
+    "fmt_TIFF",
+    "mode_RGB",
+    "mode_L",
+    "mode_RGBA",
+    "mode_P",
+    "mode_OTHER",
+    "width",
+    "height",
+    "aspect_ratio",
+    "pixel_area",
+    "is_square",
+    "file_size_bytes",
+    "bytes_per_pixel",
+    "has_jfif",
+    "jfif_unit",
+    "jfif_density_x",
+    "jfif_density_y",
+    "has_exif",
+    "has_adobe",
+    "has_icc_profile",
+    "dpi_x",
+    "dpi_y",
+    "n_quant_tables",
+    "q0_mean",
+    "q0_std",
+    "q0_min",
+    "q0_max",
+    "q0_sum",
+    "q1_mean",
+    "q1_std",
+    "q1_min",
+    "q1_max",
+    "q1_sum",
+    "q0_00",
+    "q0_01",
+    "q0_02",
+    "q0_03",
+    "q0_04",
+    "q0_05",
+    "q0_06",
+    "q0_07",
+    "q0_08",
+    "q0_09",
+    "q0_10",
+    "q0_11",
+    "q0_12",
+    "q0_13",
+    "q0_14",
+    "q0_15",
+    "q0_16",
+    "q0_17",
+    "q0_18",
+    "q0_19",
+    "q0_20",
+    "q0_21",
+    "q0_22",
+    "q0_23",
+    "q0_24",
+    "q0_25",
+    "q0_26",
+    "q0_27",
+    "q0_28",
+    "q0_29",
+    "q0_30",
+    "q0_31",
+    "q0_32",
+    "q0_33",
+    "q0_34",
+    "q0_35",
+    "q0_36",
+    "q0_37",
+    "q0_38",
+    "q0_39",
+    "q0_40",
+    "q0_41",
+    "q0_42",
+    "q0_43",
+    "q0_44",
+    "q0_45",
+    "q0_46",
+    "q0_47",
+    "q0_48",
+    "q0_49",
+    "q0_50",
+    "q0_51",
+    "q0_52",
+    "q0_53",
+    "q0_54",
+    "q0_55",
+    "q0_56",
+    "q0_57",
+    "q0_58",
+    "q0_59",
+    "q0_60",
+    "q0_61",
+    "q0_62",
+    "q0_63",
+    "q1_00",
+    "q1_01",
+    "q1_02",
+    "q1_03",
+    "q1_04",
+    "q1_05",
+    "q1_06",
+    "q1_07",
+    "q1_08",
+    "q1_09",
+    "q1_10",
+    "q1_11",
+    "q1_12",
+    "q1_13",
+    "q1_14",
+    "q1_15",
+    "q1_16",
+    "q1_17",
+    "q1_18",
+    "q1_19",
+    "q1_20",
+    "q1_21",
+    "q1_22",
+    "q1_23",
+    "q1_24",
+    "q1_25",
+    "q1_26",
+    "q1_27",
+    "q1_28",
+    "q1_29",
+    "q1_30",
+    "q1_31",
+    "q1_32",
+    "q1_33",
+    "q1_34",
+    "q1_35",
+    "q1_36",
+    "q1_37",
+    "q1_38",
+    "q1_39",
+    "q1_40",
+    "q1_41",
+    "q1_42",
+    "q1_43",
+    "q1_44",
+    "q1_45",
+    "q1_46",
+    "q1_47",
+    "q1_48",
+    "q1_49",
+    "q1_50",
+    "q1_51",
+    "q1_52",
+    "q1_53",
+    "q1_54",
+    "q1_55",
+    "q1_56",
+    "q1_57",
+    "q1_58",
+    "q1_59",
+    "q1_60",
+    "q1_61",
+    "q1_62",
+    "q1_63"
+  ],
+  "header_distribution_summary": {
+    "by_class_all_4600": {
+      "no_tumor": {
+        "n": 2087,
+        "format_counts": {
+          "JPEG": 2078,
+          "PNG": 9
+        },
+        "mode_counts": {
+          "RGB": 2040,
+          "L": 40,
+          "RGBA": 5,
+          "P": 2
+        },
+        "is_512x512_count": 21,
+        "is_square_count": 647,
+        "median_width": 232.0,
+        "median_height": 243.0,
+        "median_file_size_bytes": 12550.0,
+        "median_bytes_per_pixel": 0.1842471749164412,
+        "median_q0_mean": 29.03125
+      },
+      "tumor": {
+        "n": 2513,
+        "format_counts": {
+          "JPEG": 2418,
+          "TIFF": 86,
+          "PNG": 9
+        },
+        "mode_counts": {
+          "RGB": 2421,
+          "L": 92
+        },
+        "is_512x512_count": 864,
+        "is_square_count": 1079,
+        "median_width": 353.0,
+        "median_height": 380.0,
+        "median_file_size_bytes": 23230.0,
+        "median_bytes_per_pixel": 0.15257761698138153,
+        "median_q0_mean": 24.25
+      }
+    },
+    "by_class_test_606": {
+      "no_tumor": {
+        "n": 221,
+        "format_counts": {
+          "JPEG": 221
+        },
+        "mode_counts": {
+          "RGB": 217,
+          "L": 4
+        },
+        "is_512x512_count": 3,
+        "is_square_count": 52,
+        "median_width": 228.0,
+        "median_height": 251.0,
+        "median_file_size_bytes": 11782.0,
+        "median_bytes_per_pixel": 0.19031887388681412,
+        "median_q0_mean": 29.03125
+      },
+      "tumor": {
+        "n": 385,
+        "format_counts": {
+          "JPEG": 369,
+          "TIFF": 16
+        },
+        "mode_counts": {
+          "RGB": 372,
+          "L": 13
+        },
+        "is_512x512_count": 145,
+        "is_square_count": 170,
+        "median_width": 421.0,
+        "median_height": 456.0,
+        "median_file_size_bytes": 23230.0,
+        "median_bytes_per_pixel": 0.14868545532226562,
+        "median_q0_mean": 24.25
+      }
+    }
+  },
+  "models": {
+    "HistGradientBoostingClassifier": {
+      "train_3191": {
+        "n": 3191,
+        "accuracy": 0.993105609526794,
+        "balanced_accuracy": 0.9933667128298,
+        "sensitivity": 0.9894179894179894,
+        "specificity": 0.9973154362416108,
+        "precision": 0.997628927089508,
+        "f1": 0.9935064935064936,
+        "roc_auc": 0.9997968033016504,
+        "pr_auc": 0.9998235008519243,
+        "confusion_matrix": [
+          [
+            1486,
+            4
+          ],
+          [
+            18,
+            1683
+          ]
+        ]
+      },
+      "validation_803": {
+        "n": 803,
+        "accuracy": 0.925280199252802,
+        "balanced_accuracy": 0.9251364044048034,
+        "sensitivity": 0.927400468384075,
+        "specificity": 0.9228723404255319,
+        "precision": 0.9317647058823529,
+        "f1": 0.9295774647887324,
+        "roc_auc": 0.9778514126264388,
+        "pr_auc": 0.9840028067950728,
+        "confusion_matrix": [
+          [
+            347,
+            29
+          ],
+          [
+            31,
+            396
+          ]
+        ]
+      },
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.9405940594059405,
+        "balanced_accuracy": 0.9368631368631368,
+        "sensitivity": 0.9506493506493506,
+        "specificity": 0.9230769230769231,
+        "precision": 0.9556135770234987,
+        "f1": 0.953125,
+        "roc_auc": 0.9814362108479756,
+        "pr_auc": 0.9899977316969693,
+        "confusion_matrix": [
+          [
+            204,
+            17
+          ],
+          [
+            19,
+            366
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.916922773312283,
+            "upper_95": 0.9641056218057922
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9100625616336623,
+            "upper_95": 0.9628356719720222
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9240479586379035,
+            "upper_95": 0.9738219895287958
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8776590133764252,
+            "upper_95": 0.9660316114646722
+          },
+          "tumor_precision": {
+            "lower_95": 0.9268260758523816,
+            "upper_95": 0.981284670231729
+          },
+          "tumor_f1": {
+            "lower_95": 0.932463634705014,
+            "upper_95": 0.9723635407614514
+          },
+          "roc_auc": {
+            "lower_95": 0.9703813691396671,
+            "upper_95": 0.9907349801433686
+          },
+          "average_precision": {
+            "lower_95": 0.9836818302096265,
+            "upper_95": 0.9954058723739695
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9207920792079208,
+            "upper_95": 0.9587458745874587
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9148674854557207,
+            "upper_95": 0.956596344831639
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9272727272727272,
+            "upper_95": 0.9714285714285714
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8868778280542986,
+            "upper_95": 0.9547511312217195
+          },
+          "tumor_precision": {
+            "lower_95": 0.9348958333333334,
+            "upper_95": 0.9736165115956117
+          },
+          "tumor_f1": {
+            "lower_95": 0.9373348923352601,
+            "upper_95": 0.9675745784695201
+          },
+          "roc_auc": {
+            "lower_95": 0.9721804665922313,
+            "upper_95": 0.9895525063172123
+          },
+          "average_precision": {
+            "lower_95": 0.9847975271919308,
+            "upper_95": 0.9942434337769271
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.9225806451612903,
+        "balanced_accuracy": 0.9226040353089533,
+        "sensitivity": 0.9221311475409836,
+        "specificity": 0.9230769230769231,
+        "precision": 0.9297520661157025,
+        "f1": 0.9259259259259259,
+        "roc_auc": 0.9719141755062681,
+        "pr_auc": 0.9768247908126662,
+        "confusion_matrix": [
+          [
+            204,
+            17
+          ],
+          [
+            19,
+            225
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.8903508771929824,
+            "upper_95": 0.9497721671347509
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.8903294042231609,
+            "upper_95": 0.9503053669815033
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.8806552496449251,
+            "upper_95": 0.9580232188295165
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8709607897664071,
+            "upper_95": 0.964294733044733
+          },
+          "tumor_precision": {
+            "lower_95": 0.8841698841698842,
+            "upper_95": 0.968609865470852
+          },
+          "tumor_f1": {
+            "lower_95": 0.8937005983842317,
+            "upper_95": 0.9533898305084746
+          },
+          "roc_auc": {
+            "lower_95": 0.9538757692450514,
+            "upper_95": 0.9862891005127614
+          },
+          "average_precision": {
+            "lower_95": 0.9609077111649589,
+            "upper_95": 0.9894456022982145
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.896774193548387,
+            "upper_95": 0.9462903225806449
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.8977139121726875,
+            "upper_95": 0.9472016170907204
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.8852459016393442,
+            "upper_95": 0.9549180327868853
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8823529411764706,
+            "upper_95": 0.9547511312217195
+          },
+          "tumor_precision": {
+            "lower_95": 0.8976353749838647,
+            "upper_95": 0.9583376556016597
+          },
+          "tumor_f1": {
+            "lower_95": 0.9014675052410901,
+            "upper_95": 0.9495023456320527
+          },
+          "roc_auc": {
+            "lower_95": 0.9571243787552852,
+            "upper_95": 0.9847760273718565
+          },
+          "average_precision": {
+            "lower_95": 0.9648039330784448,
+            "upper_95": 0.9877107804501727
+          }
+        }
+      },
+      "test_jpeg_only_590": {
+        "n": 590,
+        "accuracy": 0.9389830508474576,
+        "balanced_accuracy": 0.9357932040858871,
+        "sensitivity": 0.948509485094851,
+        "specificity": 0.9230769230769231,
+        "precision": 0.9536784741144414,
+        "f1": 0.9510869565217391,
+        "roc_auc": 0.9806312769010044,
+        "pr_auc": 0.9891187623014546,
+        "confusion_matrix": [
+          [
+            204,
+            17
+          ],
+          [
+            19,
+            350
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9140978897510393,
+            "upper_95": 0.9621342512908778
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9077874069721895,
+            "upper_95": 0.9606588242250214
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9218317547320393,
+            "upper_95": 0.9728279280075409
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8760683760683761,
+            "upper_95": 0.9659610530111792
+          },
+          "tumor_precision": {
+            "lower_95": 0.9245283018867925,
+            "upper_95": 0.9804523287755795
+          },
+          "tumor_f1": {
+            "lower_95": 0.9302309341301805,
+            "upper_95": 0.9696153524192198
+          },
+          "roc_auc": {
+            "lower_95": 0.9686197803784053,
+            "upper_95": 0.9903947709805779
+          },
+          "average_precision": {
+            "lower_95": 0.9819810622618012,
+            "upper_95": 0.9948488192265181
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9186440677966101,
+            "upper_95": 0.9576271186440678
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9131807256986597,
+            "upper_95": 0.9565785601294927
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.924119241192412,
+            "upper_95": 0.9701897018970189
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8868778280542986,
+            "upper_95": 0.9592760180995475
+          },
+          "tumor_precision": {
+            "lower_95": 0.9333333333333333,
+            "upper_95": 0.9746478873239437
+          },
+          "tumor_f1": {
+            "lower_95": 0.9346004377540538,
+            "upper_95": 0.9661727833688519
+          },
+          "roc_auc": {
+            "lower_95": 0.9698575396387449,
+            "upper_95": 0.9892215109933905
+          },
+          "average_precision": {
+            "lower_95": 0.9832005685120769,
+            "upper_95": 0.9938472290673945
+          }
+        }
+      },
+      "top_15_permutation_importances_on_test_auc": [
+        {
+          "feature": "pixel_area",
+          "importance_mean_auc_drop": 0.12195157783393085,
+          "importance_std": 0.009969105107730284
+        },
+        {
+          "feature": "width",
+          "importance_mean_auc_drop": 0.054886290180407894,
+          "importance_std": 0.003868643840474644
+        },
+        {
+          "feature": "height",
+          "importance_mean_auc_drop": 0.027491919844861122,
+          "importance_std": 0.0031950317152899367
+        },
+        {
+          "feature": "aspect_ratio",
+          "importance_mean_auc_drop": 0.023448316389492952,
+          "importance_std": 0.002917352815280666
+        },
+        {
+          "feature": "bytes_per_pixel",
+          "importance_mean_auc_drop": 0.015473937826879064,
+          "importance_std": 0.0027029987854710062
+        },
+        {
+          "feature": "q0_mean",
+          "importance_mean_auc_drop": 0.014617441382147328,
+          "importance_std": 0.0023388830164836416
+        },
+        {
+          "feature": "file_size_bytes",
+          "importance_mean_auc_drop": 0.004047716988893574,
+          "importance_std": 0.0013442208384283872
+        },
+        {
+          "feature": "is_square",
+          "importance_mean_auc_drop": 0.0009437621202327828,
+          "importance_std": 0.0005169375720712239
+        },
+        {
+          "feature": "q1_mean",
+          "importance_mean_auc_drop": 0.0009255450431922107,
+          "importance_std": 0.0002232171675804041
+        },
+        {
+          "feature": "q0_12",
+          "importance_mean_auc_drop": 0.000559440559440616,
+          "importance_std": 0.00020321565945868964
+        },
+        {
+          "feature": "q0_04",
+          "importance_mean_auc_drop": 0.0005115472762532269,
+          "importance_std": 0.0001418469313181955
+        },
+        {
+          "feature": "fmt_TIFF",
+          "importance_mean_auc_drop": 0.0001780572368808131,
+          "importance_std": 6.277386279588736e-05
+        },
+        {
+          "feature": "q0_40",
+          "importance_mean_auc_drop": 0.0001621907504261,
+          "importance_std": 2.3015991100139792e-05
+        },
+        {
+          "feature": "q0_std",
+          "importance_mean_auc_drop": 0.0001378033730975614,
+          "importance_std": 7.314915066513388e-05
+        },
+        {
+          "feature": "q0_19",
+          "importance_mean_auc_drop": 0.0001263442439913609,
+          "importance_std": 0.00010700190686871572
+        }
+      ]
+    },
+    "GradientBoostingClassifier": {
+      "train_3191": {
+        "n": 3191,
+        "accuracy": 0.9943591350673769,
+        "balanced_accuracy": 0.9945424917833569,
+        "sensitivity": 0.9917695473251029,
+        "specificity": 0.9973154362416108,
+        "precision": 0.9976345357776464,
+        "f1": 0.9946933962264151,
+        "roc_auc": 0.9997715516731176,
+        "pr_auc": 0.9998060238951342,
+        "confusion_matrix": [
+          [
+            1486,
+            4
+          ],
+          [
+            14,
+            1687
+          ]
+        ]
+      },
+      "validation_803": {
+        "n": 803,
+        "accuracy": 0.9315068493150684,
+        "balanced_accuracy": 0.9313088594349495,
+        "sensitivity": 0.9344262295081968,
+        "specificity": 0.9281914893617021,
+        "precision": 0.9366197183098591,
+        "f1": 0.9355216881594373,
+        "roc_auc": 0.9752260949723455,
+        "pr_auc": 0.9827336794579227,
+        "confusion_matrix": [
+          [
+            349,
+            27
+          ],
+          [
+            28,
+            399
+          ]
+        ]
+      },
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.9405940594059405,
+        "balanced_accuracy": 0.9378268790033496,
+        "sensitivity": 0.948051948051948,
+        "specificity": 0.9276018099547512,
+        "precision": 0.958005249343832,
+        "f1": 0.9530026109660574,
+        "roc_auc": 0.9779279543985426,
+        "pr_auc": 0.9873196515277052,
+        "confusion_matrix": [
+          [
+            205,
+            16
+          ],
+          [
+            20,
+            365
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9179983432671948,
+            "upper_95": 0.9622656319421818
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9116915367542858,
+            "upper_95": 0.9618477975494064
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9217122171077867,
+            "upper_95": 0.9711342478674541
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8831144327370742,
+            "upper_95": 0.9689181940608522
+          },
+          "tumor_precision": {
+            "lower_95": 0.9285714285714286,
+            "upper_95": 0.983652336808435
+          },
+          "tumor_f1": {
+            "lower_95": 0.9329647362821097,
+            "upper_95": 0.9708994708994709
+          },
+          "roc_auc": {
+            "lower_95": 0.963197725010308,
+            "upper_95": 0.9903196920258907
+          },
+          "average_precision": {
+            "lower_95": 0.976820194299576,
+            "upper_95": 0.9952900489869997
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9207508250825083,
+            "upper_95": 0.9587458745874587
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9158301992125522,
+            "upper_95": 0.9569386495857083
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9246753246753247,
+            "upper_95": 0.9688311688311688
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8914027149321267,
+            "upper_95": 0.9592760180995475
+          },
+          "tumor_precision": {
+            "lower_95": 0.9384615384615385,
+            "upper_95": 0.976
+          },
+          "tumor_f1": {
+            "lower_95": 0.9364461738002594,
+            "upper_95": 0.9671484888304862
+          },
+          "roc_auc": {
+            "lower_95": 0.9669014808720691,
+            "upper_95": 0.9871374214021273
+          },
+          "average_precision": {
+            "lower_95": 0.980949023069297,
+            "upper_95": 0.9926275268209216
+          }
+        }
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.9225806451612903,
+        "balanced_accuracy": 0.9228172984199985,
+        "sensitivity": 0.9180327868852459,
+        "specificity": 0.9276018099547512,
+        "precision": 0.9333333333333333,
+        "f1": 0.9256198347107438,
+        "roc_auc": 0.966786588532008,
+        "pr_auc": 0.970025889707695,
+        "confusion_matrix": [
+          [
+            205,
+            16
+          ],
+          [
+            20,
+            224
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.8911050482553823,
+            "upper_95": 0.9496414189403194
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.8909556148382565,
+            "upper_95": 0.9505319452630848
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.8765957446808511,
+            "upper_95": 0.9533094539339181
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8767650364000585,
+            "upper_95": 0.9693082137161084
+          },
+          "tumor_precision": {
+            "lower_95": 0.8857142857142857,
+            "upper_95": 0.9733362831858408
+          },
+          "tumor_f1": {
+            "lower_95": 0.8924937685955784,
+            "upper_95": 0.9529658906192648
+          },
+          "roc_auc": {
+            "lower_95": 0.9449772963962748,
+            "upper_95": 0.9850614887194289
+          },
+          "average_precision": {
+            "lower_95": 0.9455803129344278,
+            "upper_95": 0.9891247657502719
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.896774193548387,
+            "upper_95": 0.946236559139785
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.8975873451524368,
+            "upper_95": 0.9468564553816482
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.8811475409836066,
+            "upper_95": 0.9508196721311475
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8914027149321267,
+            "upper_95": 0.9592760180995475
+          },
+          "tumor_precision": {
+            "lower_95": 0.90234375,
+            "upper_95": 0.9618684295215618
+          },
+          "tumor_f1": {
+            "lower_95": 0.9010526315789473,
+            "upper_95": 0.9490886669999132
+          },
+          "roc_auc": {
+            "lower_95": 0.9507612565833394,
+            "upper_95": 0.9810110062309918
+          },
+          "average_precision": {
+            "lower_95": 0.9560317848005399,
+            "upper_95": 0.9833860580894517
+          }
+        }
+      },
+      "test_jpeg_only_590": {
+        "n": 590,
+        "accuracy": 0.9389830508474576,
+        "balanced_accuracy": 0.9367006339746655,
+        "sensitivity": 0.94579945799458,
+        "specificity": 0.9276018099547512,
+        "precision": 0.9561643835616438,
+        "f1": 0.9509536784741145,
+        "roc_auc": 0.9769709009307288,
+        "pr_auc": 0.9861652458618092,
+        "confusion_matrix": [
+          [
+            205,
+            16
+          ],
+          [
+            20,
+            349
+          ]
+        ],
+        "dup_group_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9155154892066162,
+            "upper_95": 0.9607176357492426
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9100545975160086,
+            "upper_95": 0.9619798473102896
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9183072577947898,
+            "upper_95": 0.9698691557474687
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.880595363888522,
+            "upper_95": 0.9701529481306339
+          },
+          "tumor_precision": {
+            "lower_95": 0.9271343697654941,
+            "upper_95": 0.9830040332261007
+          },
+          "tumor_f1": {
+            "lower_95": 0.9306916385280147,
+            "upper_95": 0.9693617359716196
+          },
+          "roc_auc": {
+            "lower_95": 0.9616671439804382,
+            "upper_95": 0.9896539504996963
+          },
+          "average_precision": {
+            "lower_95": 0.9750383389047627,
+            "upper_95": 0.9946751484887482
+          }
+        },
+        "image_bootstrap_95_seed42": {
+          "accuracy": {
+            "lower_95": 0.9186016949152542,
+            "upper_95": 0.9576694915254235
+          },
+          "balanced_accuracy": {
+            "lower_95": 0.9149836294743038,
+            "upper_95": 0.9579458362456927
+          },
+          "tumor_sensitivity_recall": {
+            "lower_95": 0.9186991869918699,
+            "upper_95": 0.967479674796748
+          },
+          "no_tumor_specificity": {
+            "lower_95": 0.8914027149321267,
+            "upper_95": 0.9592760180995475
+          },
+          "tumor_precision": {
+            "lower_95": 0.9358245759917421,
+            "upper_95": 0.9752066115702479
+          },
+          "tumor_f1": {
+            "lower_95": 0.933509724106739,
+            "upper_95": 0.9664554329136391
+          },
+          "roc_auc": {
+            "lower_95": 0.9650568983065395,
+            "upper_95": 0.9867814136286158
+          },
+          "average_precision": {
+            "lower_95": 0.979087435563214,
+            "upper_95": 0.9923509567979031
+          }
+        }
+      },
+      "top_15_permutation_importances_on_test_auc": [
+        {
+          "feature": "pixel_area",
+          "importance_mean_auc_drop": 0.1523726273726274,
+          "importance_std": 0.010440186667430785
+        },
+        {
+          "feature": "width",
+          "importance_mean_auc_drop": 0.07164041840512432,
+          "importance_std": 0.007500724402095707
+        },
+        {
+          "feature": "height",
+          "importance_mean_auc_drop": 0.016133278486219687,
+          "importance_std": 0.00203546453016277
+        },
+        {
+          "feature": "bytes_per_pixel",
+          "importance_mean_auc_drop": 0.01404184051242876,
+          "importance_std": 0.0027483794170056167
+        },
+        {
+          "feature": "aspect_ratio",
+          "importance_mean_auc_drop": 0.01276928953399543,
+          "importance_std": 0.0022762920338929263
+        },
+        {
+          "feature": "file_size_bytes",
+          "importance_mean_auc_drop": 0.0011350414291590727,
+          "importance_std": 0.0008220963219816575
+        },
+        {
+          "feature": "q0_28",
+          "importance_mean_auc_drop": 0.00016865487453723849,
+          "importance_std": 0.00017971932963968082
+        },
+        {
+          "feature": "q0_15",
+          "importance_mean_auc_drop": 0.00013398366339544275,
+          "importance_std": 0.0002696566436911771
+        },
+        {
+          "feature": "q0_02",
+          "importance_mean_auc_drop": 7.639419404127934e-05,
+          "importance_std": 2.0859422165245803e-05
+        },
+        {
+          "feature": "q0_44",
+          "importance_mean_auc_drop": 7.492507492508627e-05,
+          "importance_std": 8.233098721623684e-05
+        },
+        {
+          "feature": "q1_32",
+          "importance_mean_auc_drop": 7.110536522303979e-05,
+          "importance_std": 5.3534023278568586e-05
+        },
+        {
+          "feature": "q0_18",
+          "importance_mean_auc_drop": 7.051771757654035e-05,
+          "importance_std": 5.64264153924382e-05
+        },
+        {
+          "feature": "q1_45",
+          "importance_mean_auc_drop": 6.846095081390891e-05,
+          "importance_std": 5.279924990948512e-05
+        },
+        {
+          "feature": "q1_33",
+          "importance_mean_auc_drop": 5.6120350238003656e-05,
+          "importance_std": 2.279550286674033e-05
+        },
+        {
+          "feature": "q0_min",
+          "importance_mean_auc_drop": 5.347593582887278e-05,
+          "importance_std": 3.612479964576573e-05
+        }
+      ]
+    }
+  },
+  "feature_group_ablations_hist_gbdt": {
+    "format_and_mode_only": {
+      "n_features": 8,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.6353135313531353,
+        "balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "precision": 0.6353135313531353,
+        "f1": 0.7769929364278506,
+        "roc_auc": 0.5289886584004231,
+        "pr_auc": 0.6586905443791132,
+        "confusion_matrix": [
+          [
+            0,
+            221
+          ],
+          [
+            0,
+            385
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.524731182795699,
+        "balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "precision": 0.524731182795699,
+        "f1": 0.688293370944993,
+        "roc_auc": 0.5509698835397968,
+        "pr_auc": 0.5747600275627774,
+        "confusion_matrix": [
+          [
+            0,
+            221
+          ],
+          [
+            0,
+            244
+          ]
+        ]
+      }
+    },
+    "dimensions_only": {
+      "n_features": 5,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.9471947194719472,
+        "balanced_accuracy": 0.9468766527590057,
+        "sensitivity": 0.948051948051948,
+        "specificity": 0.9457013574660633,
+        "precision": 0.9681697612732095,
+        "f1": 0.958005249343832,
+        "roc_auc": 0.9744490803314332,
+        "pr_auc": 0.9795216102240196,
+        "confusion_matrix": [
+          [
+            209,
+            12
+          ],
+          [
+            20,
+            365
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.9311827956989247,
+        "balanced_accuracy": 0.9318670721756546,
+        "sensitivity": 0.9180327868852459,
+        "specificity": 0.9457013574660633,
+        "precision": 0.9491525423728814,
+        "f1": 0.9333333333333333,
+        "roc_auc": 0.9740653512350717,
+        "pr_auc": 0.9737214752375902,
+        "confusion_matrix": [
+          [
+            209,
+            12
+          ],
+          [
+            20,
+            224
+          ]
+        ]
+      }
+    },
+    "file_size_and_bpp_only": {
+      "n_features": 2,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.8564356435643564,
+        "balanced_accuracy": 0.8552094963859669,
+        "sensitivity": 0.8597402597402597,
+        "specificity": 0.8506787330316742,
+        "precision": 0.9093406593406593,
+        "f1": 0.8838451268357811,
+        "roc_auc": 0.9097079391197038,
+        "pr_auc": 0.9501784410157148,
+        "confusion_matrix": [
+          [
+            188,
+            33
+          ],
+          [
+            54,
+            331
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.8172043010752689,
+        "balanced_accuracy": 0.8187819894666568,
+        "sensitivity": 0.7868852459016393,
+        "specificity": 0.8506787330316742,
+        "precision": 0.8533333333333334,
+        "f1": 0.8187633262260128,
+        "roc_auc": 0.8676377865143535,
+        "pr_auc": 0.8909941824227963,
+        "confusion_matrix": [
+          [
+            188,
+            33
+          ],
+          [
+            52,
+            192
+          ]
+        ]
+      }
+    },
+    "dimensions_and_filesize": {
+      "n_features": 7,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.9422442244224423,
+        "balanced_accuracy": 0.9352706117412,
+        "sensitivity": 0.961038961038961,
+        "specificity": 0.9095022624434389,
+        "precision": 0.9487179487179487,
+        "f1": 0.9548387096774194,
+        "roc_auc": 0.9798671916318975,
+        "pr_auc": 0.9892745515394755,
+        "confusion_matrix": [
+          [
+            201,
+            20
+          ],
+          [
+            15,
+            370
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.9247311827956989,
+        "balanced_accuracy": 0.9240134263036867,
+        "sensitivity": 0.9385245901639344,
+        "specificity": 0.9095022624434389,
+        "precision": 0.9196787148594378,
+        "f1": 0.9290060851926978,
+        "roc_auc": 0.971237296936429,
+        "pr_auc": 0.97736611072045,
+        "confusion_matrix": [
+          [
+            201,
+            20
+          ],
+          [
+            15,
+            229
+          ]
+        ]
+      }
+    },
+    "jpeg_quantization_tables_only": {
+      "n_features": 139,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.6122112211221122,
+        "balanced_accuracy": 0.6331256978315802,
+        "sensitivity": 0.5558441558441558,
+        "specificity": 0.7104072398190046,
+        "precision": 0.7697841726618705,
+        "f1": 0.6455505279034691,
+        "roc_auc": 0.6537168713639302,
+        "pr_auc": 0.7335048293881467,
+        "confusion_matrix": [
+          [
+            157,
+            64
+          ],
+          [
+            171,
+            214
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.4946236559139785,
+        "balanced_accuracy": 0.5047937838439285,
+        "sensitivity": 0.29918032786885246,
+        "specificity": 0.7104072398190046,
+        "precision": 0.5328467153284672,
+        "f1": 0.38320209973753283,
+        "roc_auc": 0.5451283287589941,
+        "pr_auc": 0.6169474669579044,
+        "confusion_matrix": [
+          [
+            157,
+            64
+          ],
+          [
+            171,
+            73
+          ]
+        ]
+      }
+    },
+    "container_markers_only": {
+      "n_features": 9,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.6336633663366337,
+        "balanced_accuracy": 0.4996650408415114,
+        "sensitivity": 0.9948051948051948,
+        "specificity": 0.004524886877828055,
+        "precision": 0.6351575456053068,
+        "f1": 0.7753036437246964,
+        "roc_auc": 0.5438032555679614,
+        "pr_auc": 0.6733942835359642,
+        "confusion_matrix": [
+          [
+            1,
+            220
+          ],
+          [
+            2,
+            383
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.5225806451612903,
+        "balanced_accuracy": 0.4981640827831763,
+        "sensitivity": 0.9918032786885246,
+        "specificity": 0.004524886877828055,
+        "precision": 0.5238095238095238,
+        "f1": 0.6855524079320113,
+        "roc_auc": 0.574345374972183,
+        "pr_auc": 0.6033154825288733,
+        "confusion_matrix": [
+          [
+            1,
+            220
+          ],
+          [
+            2,
+            242
+          ]
+        ]
+      }
+    },
+    "all_163_header_features": {
+      "n_features": 163,
+      "test_full_606": {
+        "n": 606,
+        "accuracy": 0.9405940594059405,
+        "balanced_accuracy": 0.9368631368631368,
+        "sensitivity": 0.9506493506493506,
+        "specificity": 0.9230769230769231,
+        "precision": 0.9556135770234987,
+        "f1": 0.953125,
+        "roc_auc": 0.9814362108479756,
+        "pr_auc": 0.9899977316969693,
+        "confusion_matrix": [
+          [
+            204,
+            17
+          ],
+          [
+            19,
+            366
+          ]
+        ]
+      },
+      "test_clean_465": {
+        "n": 465,
+        "accuracy": 0.9225806451612903,
+        "balanced_accuracy": 0.9226040353089533,
+        "sensitivity": 0.9221311475409836,
+        "specificity": 0.9230769230769231,
+        "precision": 0.9297520661157025,
+        "f1": 0.9259259259259259,
+        "roc_auc": 0.9719141755062681,
+        "pr_auc": 0.9768247908126662,
+        "confusion_matrix": [
+          [
+            204,
+            17
+          ],
+          [
+            19,
+            225
+          ]
+        ]
+      }
+    }
+  },
+  "predictions_csv": "paper_evidence/header_only_test_predictions.csv",
+  "runtime_seconds": 701.36
+}

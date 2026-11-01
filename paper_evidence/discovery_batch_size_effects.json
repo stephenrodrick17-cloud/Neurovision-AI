@@ -1,0 +1,26 @@
+{
+  "resnet18": {
+    "checkpoint": "BrainTumorAI/models/tumor_classifier_reproducible.pth",
+    "max_abs_diff": 0.0013947784900665283,
+    "mean_abs_diff": 1.1154809737598406e-05,
+    "flips": 0,
+    "flipped_cases": []
+  },
+  "smallcnn": {
+    "checkpoint": "BrainTumorAI/models/small_cnn_best.pth",
+    "max_abs_diff": 0.0006316900253295898,
+    "mean_abs_diff": 0.0001204429446372262,
+    "flips": 1,
+    "flipped_cases": [
+      {
+        "image": "Cancer (2164).jpg",
+        "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+        "label": "tumor",
+        "score_b1": 0.500150203704834,
+        "score_b32": 0.49978768825531006,
+        "pred_b1": 1,
+        "pred_b32": 0
+      }
+    ]
+  }
+}

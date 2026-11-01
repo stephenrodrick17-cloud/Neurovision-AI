@@ -1,0 +1,36 @@
+{
+  "total_slices": 3064,
+  "total_patients": 233,
+  "subtype_breakdown": {
+    "glioma": {
+      "slices": 1426,
+      "patients": 89,
+      "shapes": {
+        "512x512": 1426
+      }
+    },
+    "meningioma": {
+      "slices": 708,
+      "patients": 82,
+      "shapes": {
+        "512x512": 708
+      }
+    },
+    "pituitary": {
+      "slices": 930,
+      "patients": 62,
+      "shapes": {
+        "512x512": 915,
+        "256x256": 15
+      }
+    }
+  },
+  "cjdata_fields": [
+    "PID",
+    "image",
+    "label",
+    "tumorBorder",
+    "tumorMask"
+  ],
+  "plane_metadata_in_mat": "None. The MAT structure cjdata contains only PID, image, label, tumorBorder, tumorMask. No acquisition plane/view angle (axial, coronal, sagittal) is stored in the files."
+}

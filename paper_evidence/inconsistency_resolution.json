@@ -1,0 +1,206 @@
+{
+  "inconsistency_1_zeroshot_resnet18_confusion_matrix_on_250_subset": {
+    "question": "Zero-shot discovery ResNet-18 on the 250-patient subset: confusion matrix [[17380,242],[9472,6602]] vs [[17380,242],[9473,6601]]",
+    "correct_value": [
+      [
+        17380,
+        242
+      ],
+      [
+        9472,
+        6602
+      ]
+    ],
+    "verified_from_files": [
+      "paper_evidence/brats_250_leakage_free_baseline_predictions.csv.gz (column score_zeroshot_resnet18)",
+      "paper_evidence/leakage_free_baselines.json (lines 22-31)",
+      "paper_evidence/brats_250_5seeds_with_cis.json (lines 25-34 & 84-93)",
+      "paper_evidence/brats_250_other_checkpoints.json (lines 25-34 & 84-93)"
+    ],
+    "explanation_of_discrepancy": "In standard inference across the 33,696 slices (batch_size=128 in torch.inference_mode(), saved in brats_250_leakage_free_baseline_predictions.csv.gz, leakage_free_baselines.json, and brats_250_5seeds_with_cis.json), the confusion matrix is [[17380, 242], [9472, 6602]] (TP=6,602, FN=9,472). In run_gradcam_brats_evaluation.py (saved in gradcam_brats_evaluation.json lines 123 and 272), forward passes were run only on the 16,074 tumor-positive slices with batch_size=64 and requires_grad_(True) enabled; due to cuDNN/FP32 reduction order differences between batch_size=128 (all slices) and batch_size=64 (tumor slices only), 1 boundary tumor slice close to 0.5 shifted across the 0.5 threshold, yielding 6,601 TP and 9,473 FN in the Grad-CAM subgroup count. For standard classification evaluation (batch_size=128 on all 33,696 slices), [[17380, 242], [9472, 6602]] is the exact value.",
+    "confusion_matrix_in_brats_250_leakage_free_baseline_predictions_csv": [
+      [
+        17380,
+        242
+      ],
+      [
+        9472,
+        6602
+      ]
+    ],
+    "confusion_matrix_in_brats_oriented_predictions_csv_subset": [
+      [
+        17380,
+        242
+      ],
+      [
+        9472,
+        6602
+      ]
+    ],
+    "slices_within_5e4_of_threshold_05": [
+      {
+        "row_index": 1024,
+        "patient_id": "BraTS-GLI-00054-000",
+        "slice_id": 87,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.50017005,
+        "score_in_brats_oriented_predictions_csv": 0.5006786
+      },
+      {
+        "row_index": 1528,
+        "patient_id": "BraTS-GLI-00064-000",
+        "slice_id": 34,
+        "label_idx": 0,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.49978355,
+        "score_in_brats_oriented_predictions_csv": 0.49984992
+      },
+      {
+        "row_index": 4997,
+        "patient_id": "BraTS-GLI-00237-000",
+        "slice_id": 32,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.5001164,
+        "score_in_brats_oriented_predictions_csv": 0.49993327
+      },
+      {
+        "row_index": 8833,
+        "patient_id": "BraTS-GLI-00391-000",
+        "slice_id": 94,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.49994823,
+        "score_in_brats_oriented_predictions_csv": 0.4999164
+      },
+      {
+        "row_index": 9078,
+        "patient_id": "BraTS-GLI-00414-000",
+        "slice_id": 63,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.499648,
+        "score_in_brats_oriented_predictions_csv": 0.50011927
+      },
+      {
+        "row_index": 10455,
+        "patient_id": "BraTS-GLI-00478-000",
+        "slice_id": 82,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.49966723,
+        "score_in_brats_oriented_predictions_csv": 0.4999406
+      },
+      {
+        "row_index": 32133,
+        "patient_id": "BraTS-GLI-01487-000",
+        "slice_id": 47,
+        "label_idx": 1,
+        "score_in_brats_250_leakage_free_baseline_predictions_csv": 0.50009257,
+        "score_in_brats_oriented_predictions_csv": 0.50002027
+      }
+    ]
+  },
+  "inconsistency_2_patient_split_imagenet_resnet18_cm_and_prauc": {
+    "question": "Patient-split ImageNet ResNet-18: [[16683,939],[1490,14584]] vs [[16682,940],[1490,14584]], and PR-AUC 0.9791 vs 0.9776",
+    "correct_confusion_matrix": [
+      [
+        16683,
+        939
+      ],
+      [
+        1490,
+        14584
+      ]
+    ],
+    "correct_pr_auc": 0.9791319069413886,
+    "correct_pr_auc_rounded_4dp": 0.9791,
+    "verified_from_files": [
+      "paper_evidence/brats_250_leakage_free_baseline_predictions.csv.gz (column score_brats_patient_split_resnet18)",
+      "paper_evidence/leakage_free_baselines.json (lines 74-91)"
+    ],
+    "recomputed_from_saved_predictions_csv": {
+      "confusion_matrix": [
+        [
+          16683,
+          939
+        ],
+        [
+          1490,
+          14584
+        ]
+      ],
+      "accuracy": 0.9279142924976258,
+      "roc_auc": 0.9751087945072788,
+      "pr_auc": 0.9791319069413886
+    },
+    "values_in_leakage_free_baselines_json": {
+      "confusion_matrix": [
+        [
+          16683,
+          939
+        ],
+        [
+          1490,
+          14584
+        ]
+      ],
+      "pr_auc": 0.9791319069413886
+    },
+    "explanation_of_discrepancy": "Both the saved prediction file (paper_evidence/brats_250_leakage_free_baseline_predictions.csv.gz) and the saved metrics file (paper_evidence/leakage_free_baselines.json lines 81-91) agree 100%: confusion_matrix = [[16683, 939], [1490, 14584]] and pr_auc = 0.9791319069413886 (0.9791). The values [[16682, 940], [1490, 14584]] and PR-AUC 0.9776 came from an aborted earlier run (task-2506) that crashed at KeyError: 'overlapping_patient_ids' before saving JSON, and were erroneously quoted in chat text. The authoritative saved files on disk have [[16683, 939], [1490, 14584]] and PR-AUC = 0.9791."
+  },
+  "inconsistency_3_cheng_3class_strict_patient_split_slice_counts": {
+    "question": "Cheng 3-class strict patient split: train/val slice counts 2,103/499 vs 2,175/427 (test = 462 in both)",
+    "correct_n_train_slices": 2103,
+    "correct_n_val_slices": 499,
+    "correct_n_test_slices": 462,
+    "verified_from_files": [
+      "paper_evidence/leakage_free_baselines.json (lines 453-457)"
+    ],
+    "values_in_leakage_free_baselines_json": {
+      "n_train_slices": 2103,
+      "n_val_slices": 499,
+      "n_test_slices": 462,
+      "n_test_patients": 35,
+      "confusion_matrix": [
+        [
+          75,
+          14,
+          1
+        ],
+        [
+          1,
+          209,
+          0
+        ],
+        [
+          3,
+          2,
+          157
+        ]
+      ]
+    },
+    "explanation_of_discrepancy": "The saved file paper_evidence/leakage_free_baselines.json (lines 454-456) records the exact slice counts for the 163 train / 35 val / 35 test patient split (np.random.default_rng(42).permutation(sorted(unique_pids))): n_train_slices = 2,103, n_val_slices = 499, n_test_slices = 462 (total = 3,064). The numbers 2,175/427 were from an ad-hoc chat calculation using a different patient sort order and do not appear in any saved file."
+  },
+  "inconsistency_4_250_subset_last_digit_rounding": {
+    "question": "250-subset values that differ in the last digit between exports (e.g. ResNet-18 5-seed mean accuracy 0.6235 vs 0.6236)",
+    "correct_unrounded_mean": 0.6235517568850902,
+    "correct_4dp_rounded_mean": 0.6236,
+    "mean_of_4dp_rounded_seed_values": 0.62354,
+    "per_seed_unrounded_accuracies": [
+      0.7117165242165242,
+      0.6451210826210826,
+      0.5265016619183286,
+      0.5577813390313391,
+      0.6766381766381766
+    ],
+    "per_seed_4dp_rounded_accuracies": [
+      0.7117,
+      0.6451,
+      0.5265,
+      0.5578,
+      0.6766
+    ],
+    "verified_from_files": [
+      "paper_evidence/brats_250_5seeds_with_cis.json (lines 370-377)",
+      "paper_evidence/brats_250_other_checkpoints.json (lines 370-377)"
+    ],
+    "explanation_of_discrepancy": "In paper_evidence/brats_250_5seeds_with_cis.json (line 371), the exact 5-seed mean accuracy of ResNet-18 computed from unrounded floating-point values is 0.6235517568850902, which rounds to 4 decimal places as 0.6236 (line 376: '0.6236 +/- 0.0787'). If one instead averages the 4-decimal-place rounded per-seed numbers (0.7117 + 0.6451 + 0.5265 + 0.5578 + 0.6766) / 5 = 3.1177 / 5 = 0.62354, that rounds to 0.6235. The exact unrounded mean is 0.623552 (0.6236 at 4 decimal places)."
+  }
+}

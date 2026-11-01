@@ -1,0 +1,672 @@
+{
+  "environment": {
+    "torch": "2.14.0+cpu",
+    "device": "cpu",
+    "date": "2026-10-31 13:48:10"
+  },
+  "item_c_cheng_overlap_detail": {
+    "source": "BrainTumorAI/results/external_validation/cheng_figshare_v8/overlap_audit.json",
+    "total_match_edges": 846,
+    "unique_cheng_patients_matched": 81,
+    "patient_split_breakdown": {
+      "both_train_and_test": 55,
+      "both_train_and_validation": 56,
+      "all_three_splits": 46,
+      "train_only": 10,
+      "test_only": 1,
+      "validation_only": 2
+    },
+    "test_matched_images": {
+      "total": 141,
+      "unique_patients": 59,
+      "belonging_to_patients_also_in_train": 134
+    },
+    "label_distribution_all": {
+      "tumor": 846
+    },
+    "split_distribution": {
+      "train": 543,
+      "validation": 162,
+      "test": 141
+    },
+    "per_split_labels": {
+      "train": {
+        "tumor": 543
+      },
+      "validation": {
+        "tumor": 162
+      },
+      "test": {
+        "tumor": 141
+      }
+    }
+  },
+  "item_d_clean_test_cis": {
+    "seed": 0,
+    "n_resamples": 2000,
+    "method": "duplicate_group_stratified_bootstrap",
+    "models": {
+      "resnet18": {
+        "n_clean_test": 465,
+        "n_duplicate_groups": 262,
+        "point_estimates": {
+          "accuracy": 0.9806451612903225,
+          "balanced_accuracy": 0.9800645352718641,
+          "sensitivity": 0.9918032786885246,
+          "specificity": 0.9683257918552036,
+          "precision": 0.9718875502008032,
+          "f1": 0.9817444219066938,
+          "roc_auc": 0.9994436614494474,
+          "pr_auc": 0.9995064295371265,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              2,
+              242
+            ]
+          ],
+          "n": 465
+        },
+        "bootstrap_ci_95": {
+          "accuracy": {
+            "point": 0.9803895814823548,
+            "ci_2.5": 0.9490706264775414,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "balanced_accuracy": {
+            "point": 0.9797638596098656,
+            "ci_2.5": 0.9474202537946386,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "sensitivity": {
+            "point": 0.9919919664312083,
+            "ci_2.5": 0.9740231507622812,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "specificity": {
+            "point": 0.9675357527885228,
+            "ci_2.5": 0.9041078594160785,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "precision": {
+            "point": 0.9715703414715459,
+            "ci_2.5": 0.919831223628692,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "f1": {
+            "point": 0.9815145833546864,
+            "ci_2.5": 0.9519828427127112,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "roc_auc": {
+            "point": 0.9994287540750758,
+            "ci_2.5": 0.9977710674264035,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          },
+          "pr_auc": {
+            "point": 0.9995009283627284,
+            "ci_2.5": 0.9980451638576979,
+            "ci_97.5": 1.0,
+            "valid_resamples": 2000
+          }
+        }
+      },
+      "small_cnn": {
+        "n_clean_test": 465,
+        "n_duplicate_groups": 262,
+        "point_estimates": {
+          "accuracy": 0.7548387096774194,
+          "balanced_accuracy": 0.7523180772939693,
+          "sensitivity": 0.8032786885245902,
+          "specificity": 0.7013574660633484,
+          "precision": 0.7480916030534351,
+          "f1": 0.7747035573122529,
+          "roc_auc": 0.8619353163711891,
+          "pr_auc": 0.8837237106306763,
+          "confusion_matrix": [
+            [
+              155,
+              66
+            ],
+            [
+              48,
+              196
+            ]
+          ],
+          "n": 465
+        },
+        "bootstrap_ci_95": {
+          "accuracy": {
+            "point": 0.7565137595389373,
+            "ci_2.5": 0.6630594815572649,
+            "ci_97.5": 0.836405529953917,
+            "valid_resamples": 2000
+          },
+          "balanced_accuracy": {
+            "point": 0.755744255333451,
+            "ci_2.5": 0.6683329375617427,
+            "ci_97.5": 0.8372095066328874,
+            "valid_resamples": 2000
+          },
+          "sensitivity": {
+            "point": 0.8022286709724377,
+            "ci_2.5": 0.7387563069508246,
+            "ci_97.5": 0.865225611983924,
+            "valid_resamples": 2000
+          },
+          "specificity": {
+            "point": 0.7092598396944646,
+            "ci_2.5": 0.5442151860744299,
+            "ci_97.5": 0.8556348553407376,
+            "valid_resamples": 2000
+          },
+          "precision": {
+            "point": 0.7546634341392503,
+            "ci_2.5": 0.6065752207056555,
+            "ci_97.5": 0.8801874455100261,
+            "valid_resamples": 2000
+          },
+          "f1": {
+            "point": 0.7757041480903911,
+            "ci_2.5": 0.6842953458025228,
+            "ci_97.5": 0.8507244485054171,
+            "valid_resamples": 2000
+          },
+          "roc_auc": {
+            "point": 0.8635421696237936,
+            "ci_2.5": 0.7978380400170146,
+            "ci_97.5": 0.9206436420602796,
+            "valid_resamples": 2000
+          },
+          "pr_auc": {
+            "point": 0.8855160130802415,
+            "ci_2.5": 0.8153079024796231,
+            "ci_97.5": 0.9406292804063532,
+            "valid_resamples": 2000
+          }
+        }
+      }
+    }
+  },
+  "item_e_clean_vs_removed": {
+    "checkpoints": [
+      {
+        "model": "resnet18",
+        "seed": 42,
+        "pred_file": "experiments_results/phase1b/resnet18_seed42\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9806451612903225,
+          "sensitivity": 0.9918032786885246,
+          "specificity": 0.9683257918552036,
+          "roc_auc": 0.9994436614494473,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              2,
+              242
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "resnet18",
+        "seed": 43,
+        "pred_file": "experiments_results/phase1b/resnet18_seed43\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.978494623655914,
+          "sensitivity": 0.9877049180327869,
+          "specificity": 0.9683257918552036,
+          "roc_auc": 0.9971626733921816,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              3,
+              241
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "resnet18",
+        "seed": 44,
+        "pred_file": "experiments_results/phase1b/resnet18_seed44\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9698924731182795,
+          "sensitivity": 0.9754098360655737,
+          "specificity": 0.9638009049773756,
+          "roc_auc": 0.9931014019731473,
+          "confusion_matrix": [
+            [
+              213,
+              8
+            ],
+            [
+              6,
+              238
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "resnet18",
+        "seed": 45,
+        "pred_file": "experiments_results/phase1b/resnet18_seed45\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9763440860215054,
+          "sensitivity": 0.9877049180327869,
+          "specificity": 0.9638009049773756,
+          "roc_auc": 0.9926934203694089,
+          "confusion_matrix": [
+            [
+              213,
+              8
+            ],
+            [
+              3,
+              241
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "resnet18",
+        "seed": 46,
+        "pred_file": "experiments_results/phase1b/resnet18_seed46\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9763440860215054,
+          "sensitivity": 0.9877049180327869,
+          "specificity": 0.9638009049773756,
+          "roc_auc": 0.996003634745197,
+          "confusion_matrix": [
+            [
+              213,
+              8
+            ],
+            [
+              3,
+              241
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "small_cnn",
+        "seed": 42,
+        "pred_file": "experiments_results/phase1b/small_cnn_seed42\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.7569892473118279,
+          "sensitivity": 0.8073770491803278,
+          "specificity": 0.7013574660633484,
+          "roc_auc": 0.8618611378977822,
+          "confusion_matrix": [
+            [
+              155,
+              66
+            ],
+            [
+              47,
+              197
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 0.9929078014184397,
+          "sensitivity": 0.9929078014184397,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              140
+            ]
+          ]
+        }
+      },
+      {
+        "model": "small_cnn",
+        "seed": 43,
+        "pred_file": "experiments_results/phase1b/small_cnn_seed43\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.7870967741935484,
+          "sensitivity": 0.7704918032786885,
+          "specificity": 0.8054298642533937,
+          "roc_auc": 0.8736926044062014,
+          "confusion_matrix": [
+            [
+              178,
+              43
+            ],
+            [
+              56,
+              188
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 0.950354609929078,
+          "sensitivity": 0.950354609929078,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              7,
+              134
+            ]
+          ]
+        }
+      },
+      {
+        "model": "small_cnn",
+        "seed": 44,
+        "pred_file": "experiments_results/phase1b/small_cnn_seed44\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.8150537634408602,
+          "sensitivity": 0.7336065573770492,
+          "specificity": 0.9049773755656109,
+          "roc_auc": 0.9056264372079224,
+          "confusion_matrix": [
+            [
+              200,
+              21
+            ],
+            [
+              65,
+              179
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 0.8226950354609929,
+          "sensitivity": 0.8226950354609929,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              25,
+              116
+            ]
+          ]
+        }
+      },
+      {
+        "model": "small_cnn",
+        "seed": 45,
+        "pred_file": "experiments_results/phase1b/small_cnn_seed45\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.8258064516129032,
+          "sensitivity": 0.7336065573770492,
+          "specificity": 0.9276018099547512,
+          "roc_auc": 0.9147874786736889,
+          "confusion_matrix": [
+            [
+              205,
+              16
+            ],
+            [
+              65,
+              179
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 0.8865248226950354,
+          "sensitivity": 0.8865248226950354,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              16,
+              125
+            ]
+          ]
+        }
+      },
+      {
+        "model": "small_cnn",
+        "seed": 46,
+        "pred_file": "experiments_results/phase1b/small_cnn_seed46\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.7913978494623656,
+          "sensitivity": 0.7336065573770492,
+          "specificity": 0.8552036199095022,
+          "roc_auc": 0.8723944811215786,
+          "confusion_matrix": [
+            [
+              189,
+              32
+            ],
+            [
+              65,
+              179
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 0.900709219858156,
+          "sensitivity": 0.900709219858156,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              0,
+              0
+            ],
+            [
+              14,
+              127
+            ]
+          ]
+        }
+      },
+      {
+        "model": "densenet121",
+        "seed": 42,
+        "pred_file": "experiments_results/phase1b/densenet121_seed42\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9806451612903225,
+          "sensitivity": 0.9959016393442623,
+          "specificity": 0.9638009049773756,
+          "roc_auc": 0.9975335657592167,
+          "confusion_matrix": [
+            [
+              213,
+              8
+            ],
+            [
+              1,
+              243
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "densenet121",
+        "seed": 43,
+        "pred_file": "experiments_results/phase1b/densenet121_seed43\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.978494623655914,
+          "sensitivity": 0.9877049180327869,
+          "specificity": 0.9683257918552036,
+          "roc_auc": 0.9985720643869148,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              3,
+              241
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      },
+      {
+        "model": "densenet121",
+        "seed": 44,
+        "pred_file": "experiments_results/phase1b/densenet121_seed44\\test_predictions.csv",
+        "clean": {
+          "n": 465,
+          "accuracy": 0.9827956989247312,
+          "sensitivity": 0.9959016393442623,
+          "specificity": 0.9683257918552036,
+          "roc_auc": 0.9968103256434981,
+          "confusion_matrix": [
+            [
+              214,
+              7
+            ],
+            [
+              1,
+              243
+            ]
+          ]
+        },
+        "removed": {
+          "n": 141,
+          "accuracy": 1.0,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "roc_auc": NaN,
+          "confusion_matrix": [
+            [
+              141
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "status": "EXPLORATORY PRE-SPECIFIED SUBGROUP ANALYSIS",
+  "quartile_boundaries": {
+    "Q25": 488.0,
+    "Q50": 1269.0,
+    "Q75": 2248.0
+  },
+  "bins": {
+    "tiny (<=50 voxels)": {
+      "n_slices": 4529,
+      "n_patients": 1217,
+      "sensitivity": 0.013910355486862442,
+      "auc": NaN,
+      "mean_score": 0.03907866916879012,
+      "median_score": 0.0020963158
+    },
+    "Q1 (<=Q25=488)": {
+      "n_slices": 20374,
+      "n_patients": 1251,
+      "sensitivity": 0.023804849317757927,
+      "auc": NaN,
+      "mean_score": 0.05191995620950659,
+      "median_score": 0.0030691249
+    },
+    "Q2 (Q25-Q50, 488-1269)": {
+      "n_slices": 20350,
+      "n_patients": 1233,
+      "sensitivity": 0.2637346437346437,
+      "auc": NaN,
+      "mean_score": 0.28413113613911123,
+      "median_score": 0.06659058200000001
+    },
+    "Q3 (Q50-Q75, 1269-2248)": {
+      "n_slices": 20353,
+      "n_patients": 1048,
+      "sensitivity": 0.5761804156635385,
+      "auc": NaN,
+      "mean_score": 0.5707645293255975,
+      "median_score": 0.73114055
+    },
+    "Q4 (>Q75=2248)": {
+      "n_slices": 20336,
+      "n_patients": 699,
+      "sensitivity": 0.7492623918174666,
+      "auc": NaN,
+      "mean_score": 0.7355050368205,
+      "median_score": 0.9739739199999999
+    }
+  },
+  "post_hoc_tumor_gte_1pct_brain": {
+    "status": "POST HOC SECONDARY ANALYSIS",
+    "n_slices": 73556,
+    "n_patients": 1251,
+    "sensitivity": 0.44466800804828976,
+    "auc": NaN,
+    "mean_score": 0.45081191615792177,
+    "median_tumor_fraction": 0.1020193088015124
+  }
+}

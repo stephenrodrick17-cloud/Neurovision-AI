@@ -1,0 +1,54 @@
+{
+  "model_key": "resnet18_discovery_decontaminated",
+  "architecture": "resnet18",
+  "initialization": "imagenet",
+  "seed": 43,
+  "selected_epoch": 2,
+  "validation_balanced_accuracy": 0.992526317740381,
+  "validation_loss": 0.05143946437530365,
+  "training_seconds": 85.65,
+  "checkpoint_path": "paper_evidence/models/resnet18_discovery_decontaminated_seed43.pth",
+  "checkpoint_sha256": "d84c1bf9cffaa53f6ed12e061ff0b1ce6912bb3251a0840b2caac756c60106fe",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.19451134166745251,
+      "train_accuracy": 0.9164244186046512,
+      "train_balanced_accuracy": 0.9163924313170742,
+      "val_loss": 0.06439401334654511,
+      "val_accuracy": 0.9819004524886877,
+      "val_balanced_accuracy": 0.9790940766550522,
+      "val_roc_auc": 0.9936059011046035
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.058670571607234344,
+      "train_accuracy": 0.9792877906976745,
+      "train_balanced_accuracy": 0.9790537019113158,
+      "val_loss": 0.05143946437530365,
+      "val_accuracy": 0.9924585218702866,
+      "val_balanced_accuracy": 0.992526317740381,
+      "val_roc_auc": 0.9959411372229223
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.02428287713515009,
+      "train_accuracy": 0.9920058139534884,
+      "train_balanced_accuracy": 0.9916474329656771,
+      "val_loss": 0.06473744156952844,
+      "val_accuracy": 0.9849170437405732,
+      "val_balanced_accuracy": 0.9825783972125435,
+      "val_roc_auc": 0.9961450070427755
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.015201105763269373,
+      "train_accuracy": 0.9956395348837209,
+      "train_balanced_accuracy": 0.9956700241440559,
+      "val_loss": 0.04657881317462149,
+      "val_accuracy": 0.9909502262443439,
+      "val_balanced_accuracy": 0.9895470383275261,
+      "val_roc_auc": 0.997655497071688
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "model_key": "small_cnn_brats_patient_split",
+  "architecture": "small_cnn",
+  "initialization": "scratch",
+  "seed": 42,
+  "selected_epoch": 6,
+  "selection_metric": "validation_balanced_accuracy",
+  "validation_balanced_accuracy": 0.8211920529801324,
+  "validation_loss": 0.3822993642052278,
+  "learning_rate": 0.0001,
+  "batch_size": 32,
+  "max_epochs": 6,
+  "early_stopping_patience": 2,
+  "manifest_sha256": "57a6c10226ee99ed36a2791550dcf68b667bee06234eaf65e68fb8038d78fe91",
+  "reused_from_checkpoint": "paper_evidence/models/small_cnn_brats_patient_split.pth",
+  "checkpoint_path": "paper_evidence/models/small_cnn_brats_patient_split_seed42.pth",
+  "checkpoint_sha256": "1dd6e1da10f1f827887a5d2614c6f803d9b151916ba85ffc8e870cc7079de6bb",
+  "history": "NOT VERIFIED (seed 42 was trained in task-2518 and reused as-is; checkpoint metadata stores selected_epoch, validation_balanced_accuracy, and validation_loss)"
+}

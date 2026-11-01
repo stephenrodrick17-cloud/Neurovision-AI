@@ -1,0 +1,148 @@
+{
+  "source_files": {
+    "manifest": "BrainTumorAI/results/split_manifest.csv",
+    "overlap_audit": "BrainTumorAI/results/external_validation/cheng_figshare_v8/overlap_audit.json"
+  },
+  "matches_and_edges": {
+    "exact_pixel_matches": 0,
+    "high_similarity_match_edges": 846,
+    "distinct_cheng_slices_all": 818,
+    "distinct_discovery_files_all": 846
+  },
+  "patient_counts": {
+    "total_unique_patients": 81,
+    "patients_in_train": 75,
+    "patients_in_validation": 61,
+    "patients_in_test": 59,
+    "patients_in_both_train_and_test": 55,
+    "patients_in_both_train_and_validation": 56,
+    "patients_in_all_three_splits": 46,
+    "patients_train_only": 10,
+    "patients_validation_only": 2,
+    "patients_test_only": 1,
+    "patients_validation_and_test_only": 3
+  },
+  "test_split_breakdown": {
+    "total_test_match_edges": 141,
+    "distinct_discovery_test_files": 141,
+    "distinct_cheng_slices_in_test": 134,
+    "distinct_patients_in_test": 59,
+    "test_images_with_patient_also_in_train": 134,
+    "test_images_with_patient_NOT_in_train": 7
+  },
+  "non_train_matched_test_details": [
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (116).jpg",
+      "cheng_slice": "brainTumorDataPublic_2299-3064.zip!3040.mat",
+      "patient_id": "MR024780E",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (116).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (117).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (299).jpg",
+      "cheng_slice": "brainTumorDataPublic_2299-3064.zip!2622.mat",
+      "patient_id": "MR053110B",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (297).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (298).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (299).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (577).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (578).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (91).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (92).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (93).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (543).jpg",
+      "cheng_slice": "brainTumorDataPublic_1533-2298.zip!2016.mat",
+      "patient_id": "MR051461B",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (542).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (543).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (577).jpg",
+      "cheng_slice": "brainTumorDataPublic_1533-2298.zip!2087.mat",
+      "patient_id": "MR053110B",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (297).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (298).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (299).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (577).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (578).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (91).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (92).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (93).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (578).jpg",
+      "cheng_slice": "brainTumorDataPublic_1533-2298.zip!2088.mat",
+      "patient_id": "MR053110B",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (297).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (298).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (299).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (577).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (578).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (91).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (92).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (93).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (581).jpg",
+      "cheng_slice": "brainTumorDataPublic_1533-2298.zip!2099.mat",
+      "patient_id": "MR054683",
+      "splits_for_patient": [
+        "test"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (581).jpg"
+      ]
+    },
+    {
+      "discovery_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (92).jpg",
+      "cheng_slice": "brainTumorDataPublic_2299-3064.zip!3000.mat",
+      "patient_id": "MR053110B",
+      "splits_for_patient": [
+        "test",
+        "validation"
+      ],
+      "all_discovery_files_for_patient": [
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (297).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (298).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (299).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (577).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (578).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (91).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (92).jpg",
+        "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (93).jpg"
+      ]
+    }
+  ]
+}

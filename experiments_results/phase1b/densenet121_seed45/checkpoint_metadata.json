@@ -1,0 +1,13 @@
+{
+  "architecture": "densenet121",
+  "seed": 45,
+  "selected_epoch": 3,
+  "selection_metric": "validation_balanced_accuracy",
+  "validation_balanced_accuracy": 0.9871194379391101,
+  "validation_loss": 0.04077880168600405,
+  "threshold": 0.5,
+  "class_to_idx": {
+    "no_tumor": 0,
+    "tumor": 1
+  }
+}

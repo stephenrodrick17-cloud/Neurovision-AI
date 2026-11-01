@@ -1,0 +1,210 @@
+{
+  "analysis": "Per-image reproducibility log across all 606 Discovery test images",
+  "script_path": "paper_evidence/run_reproducibility_606_log.py",
+  "csv_log_path": "paper_evidence/discovery_606_reproducibility_log.csv",
+  "csv_log_sha256": "baeb016cef40d5058e32bff3df5245ad860991b23120ddc10728b7e7fceeb451",
+  "environment": {
+    "python": "3.13.1",
+    "torch": "2.7.1+cu118",
+    "gpu_device": "NVIDIA GeForce RTX 3050 Laptop GPU"
+  },
+  "models": {
+    "resnet18": {
+      "checkpoint_path": "BrainTumorAI/models/tumor_classifier_reproducible.pth",
+      "checkpoint_sha256": "0ce4741c3ce2cbc287c7b716395b1571bac143200e2f3489e48efd002310b40e",
+      "n_test_images": 606,
+      "comparisons": {
+        "stored_b32_vs_gpu_b32_run1": {
+          "max_abs_diff": 1.1102230246251565e-16,
+          "mean_abs_diff": 3.61317104992406e-17,
+          "median_abs_diff": 0.0,
+          "p99_abs_diff": 1.1102230246251565e-16,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (1002).JPG",
+          "max_diff_score_a": 0.9999662637710572,
+          "max_diff_score_b": 0.9999662637710571,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "stored_b32_vs_cpu_b32": {
+          "max_abs_diff": 0.0013161897659301758,
+          "mean_abs_diff": 9.234107583817333e-06,
+          "median_abs_diff": 2.7821442927233028e-08,
+          "p99_abs_diff": 0.00014287233352661133,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2315).jpg",
+          "max_diff_score_a": 0.450117826461792,
+          "max_diff_score_b": 0.4488016366958618,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "gpu_b32_run1_vs_gpu_b32_run2": {
+          "max_abs_diff": 0.0,
+          "mean_abs_diff": 0.0,
+          "median_abs_diff": 0.0,
+          "p99_abs_diff": 0.0,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (1).jpg",
+          "max_diff_score_a": 1.0,
+          "max_diff_score_b": 1.0,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "gpu_b32_run1_vs_cpu_b32": {
+          "max_abs_diff": 0.0013161897659301758,
+          "mean_abs_diff": 9.234107583806796e-06,
+          "median_abs_diff": 2.7821442927233875e-08,
+          "p99_abs_diff": 0.00014287233352661133,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2315).jpg",
+          "max_diff_score_a": 0.450117826461792,
+          "max_diff_score_b": 0.4488016366958618,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "gpu_b1_vs_cpu_b1": {
+          "max_abs_diff": 0.00028640031814575195,
+          "mean_abs_diff": 4.083353951650694e-06,
+          "median_abs_diff": 2.9487523534044158e-09,
+          "p99_abs_diff": 0.00012370198965072645,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2039).jpg",
+          "max_diff_score_a": 0.7315497398376465,
+          "max_diff_score_b": 0.7318361401557922,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "stored_b32_vs_gpu_b1": {
+          "max_abs_diff": 0.0013947784900665283,
+          "mean_abs_diff": 1.115480973761126e-05,
+          "median_abs_diff": 1.48265826203876e-08,
+          "p99_abs_diff": 0.00022499263286596127,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2315).jpg",
+          "max_diff_score_a": 0.450117826461792,
+          "max_diff_score_b": 0.44872304797172546,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "gpu_b32_run1_vs_gpu_b1": {
+          "max_abs_diff": 0.0013947784900665283,
+          "mean_abs_diff": 1.1154809737598406e-05,
+          "median_abs_diff": 1.4826582628302276e-08,
+          "p99_abs_diff": 0.00022499263286590576,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2315).jpg",
+          "max_diff_score_a": 0.450117826461792,
+          "max_diff_score_b": 0.44872304797172546,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        }
+      }
+    },
+    "small_cnn": {
+      "checkpoint_path": "BrainTumorAI/models/small_cnn_best.pth",
+      "checkpoint_sha256": "f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c",
+      "n_test_images": 606,
+      "comparisons": {
+        "stored_b32_vs_gpu_b32_run1": {
+          "max_abs_diff": 1.1102230246251565e-16,
+          "mean_abs_diff": 2.4915896262214734e-17,
+          "median_abs_diff": 0.0,
+          "p99_abs_diff": 1.1102230246251565e-16,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (1).jpg",
+          "max_diff_score_a": 0.9610660076141356,
+          "max_diff_score_b": 0.9610660076141357,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "stored_b32_vs_cpu_b32": {
+          "max_abs_diff": 0.0007069408893585205,
+          "mean_abs_diff": 0.00015006598589248116,
+          "median_abs_diff": 0.00011204555630686674,
+          "p99_abs_diff": 0.0005285084247589117,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Healthy/Not Cancer  (926).jpg",
+          "max_diff_score_a": 0.4881770610809326,
+          "max_diff_score_b": 0.48888400197029114,
+          "flipped_predictions_at_0_5": 1,
+          "flipped_details": [
+            {
+              "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+              "score_a": 0.49978768825531,
+              "score_b": 0.5002126097679138,
+              "abs_diff": 0.0004249215126038153
+            }
+          ]
+        },
+        "gpu_b32_run1_vs_gpu_b32_run2": {
+          "max_abs_diff": 0.0,
+          "mean_abs_diff": 0.0,
+          "median_abs_diff": 0.0,
+          "p99_abs_diff": 0.0,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (1).jpg",
+          "max_diff_score_a": 0.9610660076141357,
+          "max_diff_score_b": 0.9610660076141357,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "gpu_b32_run1_vs_cpu_b32": {
+          "max_abs_diff": 0.0007069408893585205,
+          "mean_abs_diff": 0.0001500659858924721,
+          "median_abs_diff": 0.00011204555630683899,
+          "p99_abs_diff": 0.0005285084247589117,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Healthy/Not Cancer  (926).jpg",
+          "max_diff_score_a": 0.4881770610809326,
+          "max_diff_score_b": 0.48888400197029114,
+          "flipped_predictions_at_0_5": 1,
+          "flipped_details": [
+            {
+              "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+              "score_a": 0.49978768825531006,
+              "score_b": 0.5002126097679138,
+              "abs_diff": 0.00042492151260375977
+            }
+          ]
+        },
+        "gpu_b1_vs_cpu_b1": {
+          "max_abs_diff": 0.00029098987579345703,
+          "mean_abs_diff": 5.521596695231919e-05,
+          "median_abs_diff": 4.233792424201965e-05,
+          "p99_abs_diff": 0.00020780712366104227,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (581).jpg",
+          "max_diff_score_a": 0.57661372423172,
+          "max_diff_score_b": 0.5763227343559265,
+          "flipped_predictions_at_0_5": 0,
+          "flipped_details": []
+        },
+        "stored_b32_vs_gpu_b1": {
+          "max_abs_diff": 0.0006316900253295898,
+          "mean_abs_diff": 0.00012044294463723682,
+          "median_abs_diff": 9.441375732421875e-05,
+          "p99_abs_diff": 0.00044798851013183594,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Healthy/Not Cancer  (926).jpg",
+          "max_diff_score_a": 0.4881770610809326,
+          "max_diff_score_b": 0.4888087511062622,
+          "flipped_predictions_at_0_5": 1,
+          "flipped_details": [
+            {
+              "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+              "score_a": 0.49978768825531,
+              "score_b": 0.500150203704834,
+              "abs_diff": 0.0003625154495239813
+            }
+          ]
+        },
+        "gpu_b32_run1_vs_gpu_b1": {
+          "max_abs_diff": 0.0006316900253295898,
+          "mean_abs_diff": 0.0001204429446372262,
+          "median_abs_diff": 9.441375732421875e-05,
+          "p99_abs_diff": 0.00044798851013183594,
+          "max_diff_source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Healthy/Not Cancer  (926).jpg",
+          "max_diff_score_a": 0.4881770610809326,
+          "max_diff_score_b": 0.4888087511062622,
+          "flipped_predictions_at_0_5": 1,
+          "flipped_details": [
+            {
+              "source_file": "archive/Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor/Cancer (2164).jpg",
+              "score_a": 0.49978768825531006,
+              "score_b": 0.500150203704834,
+              "abs_diff": 0.0003625154495239258
+            }
+          ]
+        }
+      }
+    }
+  },
+  "runtime_seconds": 100.38
+}

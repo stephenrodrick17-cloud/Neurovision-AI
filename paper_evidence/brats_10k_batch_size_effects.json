@@ -1,0 +1,35 @@
+{
+  "n_slices": 10000,
+  "n_patients": 1251,
+  "max_abs_diff": 0.0026067495346069336,
+  "mean_abs_diff": 0.000128786894492805,
+  "flips": 0,
+  "batch_1_metrics": {
+    "accuracy": 0.7019,
+    "balanced_accuracy": 0.6919806058847008,
+    "sensitivity": 0.39499275812124973,
+    "specificity": 0.9889684536481518,
+    "auc": 0.7064428393738919,
+    "tp": 1909,
+    "tn": 5110,
+    "fp": 57,
+    "fn": 2924
+  },
+  "batch_128_metrics": {
+    "accuracy": 0.7019,
+    "balanced_accuracy": 0.6919806058847008,
+    "sensitivity": 0.39499275812124973,
+    "specificity": 0.9889684536481518,
+    "auc": 0.7064534912567063,
+    "tp": 1909,
+    "tn": 5110,
+    "fp": 57,
+    "fn": 2924
+  },
+  "metric_changes": {
+    "accuracy_delta": 0.0,
+    "sensitivity_delta": 0.0,
+    "specificity_delta": 0.0,
+    "auc_delta": 1.0651882814460834e-05
+  }
+}

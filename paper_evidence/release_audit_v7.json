@@ -1,0 +1,317 @@
+{
+  "analysis": "Pre-Submission Analysis 6: Release & Archival Inventory (v7)",
+  "git_repository": {
+    "head_commit": "0a771501fc9139975070b956bed2b01a676e72c1",
+    "branch": "main",
+    "existing_tags": []
+  },
+  "kaggle_discovery_dataset_license_audit": {
+    "source_record": "DATASET_PROVENANCE.md (lines 10-13)",
+    "official_dataset_name_status": "UNVERIFIED locally (folder structure matches Kaggle 'Brain Tumor Data Set' / 'Brain Tumor Detection' 4,600-image collection: 2,513 Brain Tumor, 2,087 Healthy)",
+    "license_status_in_local_archive": "UNVERIFIED (No LICENSE file or redistribution terms are bundled inside archive/; DATASET_PROVENANCE.md explicitly states: 'Do not redistribute until verified')",
+    "external_cohorts_licenses": {
+      "cheng_2015_figshare_1512427": "CC BY 4.0 (Figshare doi:10.6084/m9.figshare.1512427.v8)",
+      "brats_2023_gli": "CC BY-SA 4.0 / Synapse Challenge Data Use Terms (ASNR-MICCAI BraTS 2023)"
+    }
+  },
+  "checkpoints_inventory": [
+    {
+      "path": "BrainTumorAI/models/small_cnn_best.pth",
+      "size_bytes": 1572597,
+      "sha256": "f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c"
+    },
+    {
+      "path": "BrainTumorAI/models/tumor_classifier.pth",
+      "size_bytes": 44788811,
+      "sha256": "779d87161a8118df39a9518b8b02fc663ed95990ce1dc5450c0266fdca3f3a97"
+    },
+    {
+      "path": "BrainTumorAI/models/tumor_classifier_reproducible.pth",
+      "size_bytes": 44793931,
+      "sha256": "0ce4741c3ce2cbc287c7b716395b1571bac143200e2f3489e48efd002310b40e"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned.pth",
+      "size_bytes": 44790219,
+      "sha256": "f83dbc3dee790390fbcca95a9c434652da91817b114ce7263393a63dfab113ca"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned_seed42.pth",
+      "size_bytes": 44790219,
+      "sha256": "f83dbc3dee790390fbcca95a9c434652da91817b114ce7263393a63dfab113ca"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned_seed43.pth",
+      "size_bytes": 44791947,
+      "sha256": "d01037eed7844ee65e055f8f02a05ef1156b556904e038acbfe81faa93f48d61"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned_seed44.pth",
+      "size_bytes": 44791947,
+      "sha256": "ee1303be23d33b01655065f9c63d25d3ae1bc44e70fe077aa00f8a3e6b3755fe"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned_seed45.pth",
+      "size_bytes": 44791947,
+      "sha256": "e3c39e62da208432091cc2464b9b56d66c42981dc5320456a570fd8632f29c81"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_finetuned_seed46.pth",
+      "size_bytes": 44791947,
+      "sha256": "adbcb3555d0794de572cb7bd2d03918ba90edcbfc373db132e4c9e7342de345b"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split.pth",
+      "size_bytes": 44790795,
+      "sha256": "0cb5f0fcf16103904015331934f3aed8db05b38d88973e1a655ff730371fdafb"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split_seed42.pth",
+      "size_bytes": 44790795,
+      "sha256": "0cb5f0fcf16103904015331934f3aed8db05b38d88973e1a655ff730371fdafb"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split_seed43.pth",
+      "size_bytes": 44792459,
+      "sha256": "f8e023a076be20a29bec7dc2096ac12bb650f58545bc99edf4e87022016c5fca"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split_seed44.pth",
+      "size_bytes": 44792459,
+      "sha256": "70c36e8f683bfab88d29c2fbba2ef22a94b9fc8024c1446586d6c7d946fba29b"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split_seed45.pth",
+      "size_bytes": 44792459,
+      "sha256": "8fc1298b3dd6666e687bcb91d1dea6b1a0b63af1fee8fa85afbd377ac7a679aa"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_brats_patient_split_seed46.pth",
+      "size_bytes": 44792459,
+      "sha256": "54d1e1a82cabdceb80d0c61e384cb939aba08426f23bdf6d19475935823e9d55"
+    },
+    {
+      "path": "paper_evidence/models/resnet18_discovery_decontaminated.pth",
+      "size_bytes": 44791435,
+      "sha256": "1286c88dfa5f13bd17a2b101e9e7f06adb592b94efd02eb861a1e41e274c0ee6"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split.pth",
+      "size_bytes": 1571477,
+      "sha256": "1dd6e1da10f1f827887a5d2614c6f803d9b151916ba85ffc8e870cc7079de6bb"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split_seed42.pth",
+      "size_bytes": 1571477,
+      "sha256": "1dd6e1da10f1f827887a5d2614c6f803d9b151916ba85ffc8e870cc7079de6bb"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split_seed43.pth",
+      "size_bytes": 1572533,
+      "sha256": "de2fc91661081a5157063019110f3b741be3580dd46ae89b5e98083989cb3c28"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split_seed44.pth",
+      "size_bytes": 1572533,
+      "sha256": "59dead3f0bc0a08a942d6c8f7dad9ca6b1d91d4ca7eb93f86759a792a3999d23"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split_seed45.pth",
+      "size_bytes": 1572533,
+      "sha256": "b66ac19790fbc895260027a122e882cb57c1d86d609078e801ec3daaf8f9dd0b"
+    },
+    {
+      "path": "paper_evidence/models/small_cnn_brats_patient_split_seed46.pth",
+      "size_bytes": 1572533,
+      "sha256": "387b2a6469d1ceb8e751769834374a774c255b7e9d6268f2071fb59759c66c62"
+    }
+  ],
+  "manifests_and_predictions_inventory": [
+    {
+      "path": "BrainTumorAI/results/split_manifest.csv",
+      "size_bytes": 1592547,
+      "sha256": "c0d909039b77d1d2ccb3fb27105e411eafee792b868b8203794ac5bf979d66ab"
+    },
+    {
+      "path": "BrainTumorAI/results/evaluation/test_predictions.csv",
+      "size_bytes": 526582,
+      "sha256": "98d0d0deb1f756e3e50049cf02a287b58442947b02d10af05db7c5e2f90b1cd1"
+    },
+    {
+      "path": "BrainTumorAI/results/evaluation/evaluation_metrics.json",
+      "size_bytes": 20786,
+      "sha256": "41abe731cfafad3021cdae89e12aa2e38dfd7d4904d93a2c1b438b2cc48e0d9d"
+    },
+    {
+      "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/predictions.csv",
+      "size_bytes": 456245,
+      "sha256": "39f2441e51037d360d565fcf9c5668e17131c27f4247a672b228bb79d193726e"
+    },
+    {
+      "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/overlap_audit.json",
+      "size_bytes": 260688,
+      "sha256": "15bcfd4cdcceab987c9edb45c16490eb94332687d195ea4e9632505ce0c9cecc"
+    },
+    {
+      "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8_overlap_screened/predictions.csv",
+      "size_bytes": 251706,
+      "sha256": "fb359a9e7c01ec2ee3cad592ed5d4098ae9812e5ec507ad464af994a85aaa719"
+    },
+    {
+      "path": "paper_evidence/brats_patient_split_manifest.csv",
+      "size_bytes": 4050964,
+      "sha256": "57a6c10226ee99ed36a2791550dcf68b667bee06234eaf65e68fb8038d78fe91"
+    },
+    {
+      "path": "paper_evidence/brats_250_patients_manifest.csv",
+      "size_bytes": 3978256,
+      "sha256": "ac40baab4e6cf2d632e590694d621c1e902b8c955477c2a7469d9f285c92a6c8"
+    },
+    {
+      "path": "paper_evidence/brats_10k_stratified_manifest.csv",
+      "size_bytes": 1181219,
+      "sha256": "7c1f73d3595997abf05e8c5c81393b521227f11ded7bc7b5b0065c8ac385a930"
+    },
+    {
+      "path": "paper_evidence/brats_oriented_predictions.csv.gz",
+      "size_bytes": 1373084,
+      "sha256": "83073ef9bfc4ad2828b2551cc6f38cfd0b37dfba6ac1afc97dc4fc705015bdef"
+    },
+    {
+      "path": "paper_evidence/brats_old_predictions.csv.gz",
+      "size_bytes": 1339297,
+      "sha256": "28447cc82f58a10d86a02fd615eef78a907104cae167f0fdeba7a465ddb84aed"
+    },
+    {
+      "path": "paper_evidence/brats_oriented_flipLR_predictions.csv.gz",
+      "size_bytes": 1372702,
+      "sha256": "2f4850c26f6c2f12b5504632cf054fcac6ed0de285c6bf2bd66af18b9e777469"
+    },
+    {
+      "path": "paper_evidence/brats_250_leakage_free_baseline_predictions.csv.gz",
+      "size_bytes": 893049,
+      "sha256": "bd426be5b5797c1a47e2765caacbbbe339ff6e021bf608ff6abec7723f1f6e9e"
+    },
+    {
+      "path": "paper_evidence/brats_250_leakage_free_multiseed_predictions.csv.gz",
+      "size_bytes": 3894533,
+      "sha256": "798ad4fd36f37d3572dad2c2be20d0ee0b18e9fcced30a35f71c56d66b26c1d3"
+    },
+    {
+      "path": "paper_evidence/leakage_free_multiseed.json",
+      "size_bytes": 101893,
+      "sha256": "2ec6dd4d1a9e0566ed56b5ea5d58b0d4815c1aa1cc3244a261518ca306eae1bc"
+    },
+    {
+      "path": "paper_evidence/leakage_free_multiseed_summary.csv",
+      "size_bytes": 6733,
+      "sha256": "afbe7f26275edf4e5c2cbb24c610a6e90bf479d07938e25fc93057b784ce6d87"
+    },
+    {
+      "path": "paper_evidence/gradcam_brats_evaluation.json",
+      "size_bytes": 120028,
+      "sha256": "75da6c07e606c40cff3e6b6bc2ef9af297efcbc16715fa95066b6fabf5943a7f"
+    },
+    {
+      "path": "paper_evidence/gradcam_brats_multiseed.json",
+      "size_bytes": 219311,
+      "sha256": "fc45c27c75af7c85c2175c01da7a7fa12a736226d8ea510cfcb67f22683fd6dd"
+    }
+  ],
+  "docx_yellow_highlights_and_section_2_8_check": {
+    "C:\\Users\\asus\\Downloads\\Brain Imaging\\NeuroVision-AI_manuscript_complete.docx": [
+      {
+        "paragraph_index": 1,
+        "has_yellow_highlight": true,
+        "text": "[Author Name 1]1, [Author Name 2]1,*"
+      },
+      {
+        "paragraph_index": 2,
+        "has_yellow_highlight": true,
+        "text": "1 [Department, Institution, City, Country]"
+      },
+      {
+        "paragraph_index": 3,
+        "has_yellow_highlight": true,
+        "text": "* Corresponding author: [e-mail address]"
+      },
+      {
+        "paragraph_index": 118,
+        "has_yellow_highlight": false,
+        "text": "2.8. Illustrative Three-Dimensional Visualization"
+      },
+      {
+        "paragraph_index": 349,
+        "has_yellow_highlight": true,
+        "text": "[To be completed by the authors, e.g., using the CRediT taxonomy: conceptualization, methodology, software, validation, formal analysis, writing \u2013 original draft, writing \u2013 review and editing, supervision.]"
+      },
+      {
+        "paragraph_index": 351,
+        "has_yellow_highlight": true,
+        "text": "[State the funding sources, or: \u201cThis research received no external funding.\u201d]"
+      },
+      {
+        "paragraph_index": 354,
+        "has_yellow_highlight": true,
+        "text": "[Confirm or edit: These files are available from the corresponding author on reasonable request. / These files have been deposited at (repository and DOI).]"
+      },
+      {
+        "paragraph_index": 358,
+        "has_yellow_highlight": true,
+        "text": "[Optional: acknowledge individuals or institutions that supported the work, or delete this section.]"
+      },
+      {
+        "paragraph_index": 360,
+        "has_yellow_highlight": true,
+        "text": "[Declare any competing interests, or state: \u201cThe authors declare no conflict of interest.\u201d]"
+      }
+    ],
+    "c:\\Users\\asus\\Downloads\\NeuroVision-AI_manuscript_final.docx": [
+      {
+        "paragraph_index": 1,
+        "has_yellow_highlight": true,
+        "text": "[Author Name 1]1, [Author Name 2]1,*"
+      },
+      {
+        "paragraph_index": 2,
+        "has_yellow_highlight": true,
+        "text": "1 [Department, Institution, City, Country]"
+      },
+      {
+        "paragraph_index": 3,
+        "has_yellow_highlight": true,
+        "text": "* Corresponding author: [e-mail address]"
+      },
+      {
+        "paragraph_index": 116,
+        "has_yellow_highlight": false,
+        "text": "2.8. Illustrative Three-Dimensional Visualization"
+      },
+      {
+        "paragraph_index": 335,
+        "has_yellow_highlight": true,
+        "text": "[To be completed by the authors, e.g., using the CRediT taxonomy: conceptualization, methodology, software, validation, formal analysis, writing \u2013 original draft, writing \u2013 review and editing, supervision.]"
+      },
+      {
+        "paragraph_index": 337,
+        "has_yellow_highlight": true,
+        "text": "[State the funding sources, or: \u201cThis research received no external funding.\u201d]"
+      },
+      {
+        "paragraph_index": 340,
+        "has_yellow_highlight": true,
+        "text": "[Confirm or edit: These files are available from the corresponding author on reasonable request. / These files have been deposited at (repository and DOI).]"
+      },
+      {
+        "paragraph_index": 344,
+        "has_yellow_highlight": true,
+        "text": "[Optional: acknowledge individuals or institutions that supported the work, or delete this section.]"
+      },
+      {
+        "paragraph_index": 346,
+        "has_yellow_highlight": true,
+        "text": "[Declare any competing interests, or state: \u201cThe authors declare no conflict of interest.\u201d]"
+      }
+    ]
+  }
+}

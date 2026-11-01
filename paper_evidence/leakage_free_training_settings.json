@@ -1,0 +1,128 @@
+{
+  "common_training_settings": {
+    "training_script": "paper_evidence/run_leakage_free_baselines.py",
+    "training_function": "train_binary_model (lines 165-282)",
+    "pipeline_definitions": "BrainTumorAI/classifier_pipeline.py",
+    "max_epochs": 6,
+    "max_epochs_source": "paper_evidence/run_leakage_free_baselines.py lines 383, 401, 419",
+    "optimizer": "torch.optim.Adam",
+    "optimizer_source": "paper_evidence/run_leakage_free_baselines.py line 196",
+    "weight_decay": 0.0001,
+    "weight_decay_source": "paper_evidence/run_leakage_free_baselines.py line 196",
+    "scheduler": "torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=2) stepped on val_balanced_accuracy",
+    "scheduler_source": "paper_evidence/run_leakage_free_baselines.py lines 197, 237",
+    "batch_size_train": 32,
+    "batch_size_val": 32,
+    "batch_size_source": "paper_evidence/run_leakage_free_baselines.py lines 174, 180-192, 384, 402, 420",
+    "augmentation_train": [
+      "transforms.Resize((224, 224))",
+      "transforms.RandomHorizontalFlip(p=0.5)",
+      "transforms.RandomRotation(degrees=10)",
+      "transforms.ToTensor()",
+      "transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))"
+    ],
+    "augmentation_val_and_test": [
+      "transforms.Resize((224, 224))",
+      "transforms.ToTensor()",
+      "transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))"
+    ],
+    "augmentation_source": "BrainTumorAI/classifier_pipeline.py lines 75-94 (make_inference_transform, make_training_transform)",
+    "input_size": [
+      224,
+      224,
+      3
+    ],
+    "input_size_source": "BrainTumorAI/classifier_pipeline.py line 21 (IMAGE_SIZE = 224)",
+    "normalization": {
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "source": "BrainTumorAI/classifier_pipeline.py lines 22-23"
+    },
+    "loss_function": "torch.nn.CrossEntropyLoss()",
+    "loss_source": "paper_evidence/run_leakage_free_baselines.py line 195",
+    "class_weighting": "None (unweighted CrossEntropyLoss; training & validation datasets are balanced by sampling 4 tumor + 4 non-tumor slices per patient)",
+    "class_weighting_source": "paper_evidence/run_leakage_free_baselines.py lines 195, 325-340",
+    "model_selection_and_early_stopping_rule": {
+      "selection_metric": "validation_balanced_accuracy (tie-broken by lower validation_loss when |va_bal - best_bal_acc| <= 1e-4)",
+      "improvement_condition": "va_bal > best_bal_acc + 1e-4 or (abs(va_bal - best_bal_acc) <= 1e-4 and va_loss < best_val_loss)",
+      "early_stopping_patience_epochs": 2,
+      "early_stopping_condition": "no_improve >= 2",
+      "test_set_used_for_selection": false,
+      "source": "paper_evidence/run_leakage_free_baselines.py lines 248-257"
+    },
+    "seeding_and_determinism": {
+      "seed_function": "seed_everything(seed) in BrainTumorAI/classifier_pipeline.py lines 110-121",
+      "rngs_seeded": [
+        "random.seed(seed)",
+        "np.random.seed(seed)",
+        "torch.manual_seed(seed)",
+        "torch.cuda.manual_seed_all(seed)",
+        "DataLoader generator=torch.Generator().manual_seed(seed)"
+      ],
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true
+    }
+  },
+  "per_model_settings": {
+    "model_A_resnet18_brats_patient_split": {
+      "model_id": "resnet18_brats_patient_split",
+      "architecture": "resnet18",
+      "initialization": "ImageNet pretrained (torchvision.models.ResNet18_Weights.IMAGENET1K_V1), final Linear(512, 2) randomly initialized after seed_everything(seed) or make_model('resnet18', pretrained=True)",
+      "initialization_source": "BrainTumorAI/classifier_pipeline.py lines 62-67 & paper_evidence/run_leakage_free_baselines.py line 374",
+      "learning_rate": 0.0001,
+      "learning_rate_source": "paper_evidence/run_leakage_free_baselines.py line 385",
+      "seed42_checkpoint_path": "paper_evidence/models/resnet18_brats_patient_split.pth",
+      "seed42_checkpoint_sha256": "0cb5f0fcf16103904015331934f3aed8db05b38d88973e1a655ff730371fdafb",
+      "seed42_checkpoint_metadata": {
+        "seed": 42,
+        "selected_epoch": 5,
+        "validation_balanced_accuracy": 0.9172185430463576,
+        "validation_loss": 0.20670690278935905,
+        "architecture": "resnet18"
+      }
+    },
+    "model_B_resnet18_brats_finetuned": {
+      "model_id": "resnet18_brats_finetuned",
+      "architecture": "resnet18",
+      "initialization": "Fine-tuned from primary Discovery ResNet-18 checkpoint (BrainTumorAI/models/tumor_classifier_reproducible.pth)",
+      "initialization_source": "paper_evidence/run_leakage_free_baselines.py line 392",
+      "learning_rate": 5e-05,
+      "learning_rate_source": "paper_evidence/run_leakage_free_baselines.py line 403",
+      "seed42_checkpoint_path": "paper_evidence/models/resnet18_brats_finetuned.pth",
+      "seed42_checkpoint_sha256": "f83dbc3dee790390fbcca95a9c434652da91817b114ce7263393a63dfab113ca",
+      "seed42_checkpoint_metadata": {
+        "seed": 42,
+        "selected_epoch": 2,
+        "validation_balanced_accuracy": 0.9122516556291391,
+        "validation_loss": 0.21233752961979796,
+        "architecture": "resnet18"
+      }
+    },
+    "model_C_small_cnn_brats_patient_split": {
+      "model_id": "small_cnn_brats_patient_split",
+      "architecture": "small_cnn",
+      "initialization": "Randomly initialized from scratch (SmallCNN: 4 Conv2d-BN-ReLU blocks [32, 64, 128, 256], AdaptiveAvgPool2d(1,1), Dropout(0.2), Linear(256, 2))",
+      "initialization_source": "BrainTumorAI/classifier_pipeline.py lines 31-71 & paper_evidence/run_leakage_free_baselines.py line 410",
+      "learning_rate": 0.0001,
+      "learning_rate_source": "paper_evidence/run_leakage_free_baselines.py line 421",
+      "seed42_checkpoint_path": "paper_evidence/models/small_cnn_brats_patient_split.pth",
+      "seed42_checkpoint_sha256": "1dd6e1da10f1f827887a5d2614c6f803d9b151916ba85ffc8e870cc7079de6bb",
+      "seed42_checkpoint_metadata": {
+        "seed": 42,
+        "selected_epoch": 6,
+        "validation_balanced_accuracy": 0.8211920529801324,
+        "validation_loss": 0.3822993642052278,
+        "architecture": "small_cnn"
+      }
+    }
+  },
+  "note_on_seed42_leakage_free_baselines_json_training_info": "In run_leakage_free_baselines.py lines 361-363, when reloading existing seed 42 checkpoints from disk, the script called meta.get('extra', {}) instead of reading meta directly, leaving training_info as {} in leakage_free_baselines.json. The actual seed 42 selected_epoch, validation_balanced_accuracy, and validation_loss are stored directly inside each .pth checkpoint's metadata dict (quoted above)."
+}

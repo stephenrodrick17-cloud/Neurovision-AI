@@ -1,0 +1,19 @@
+{
+  "model_key": "resnet18_brats_finetuned",
+  "architecture": "resnet18",
+  "initialization": "discovery_finetune",
+  "seed": 42,
+  "selected_epoch": 2,
+  "selection_metric": "validation_balanced_accuracy",
+  "validation_balanced_accuracy": 0.9122516556291391,
+  "validation_loss": 0.21233752961979796,
+  "learning_rate": 5e-05,
+  "batch_size": 32,
+  "max_epochs": 6,
+  "early_stopping_patience": 2,
+  "manifest_sha256": "57a6c10226ee99ed36a2791550dcf68b667bee06234eaf65e68fb8038d78fe91",
+  "reused_from_checkpoint": "paper_evidence/models/resnet18_brats_finetuned.pth",
+  "checkpoint_path": "paper_evidence/models/resnet18_brats_finetuned_seed42.pth",
+  "checkpoint_sha256": "f83dbc3dee790390fbcca95a9c434652da91817b114ce7263393a63dfab113ca",
+  "history": "NOT VERIFIED (seed 42 was trained in task-2518 and reused as-is; checkpoint metadata stores selected_epoch, validation_balanced_accuracy, and validation_loss)"
+}

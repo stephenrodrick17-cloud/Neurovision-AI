@@ -1,0 +1,70 @@
+{
+  "Original (0 deg)": {
+    "accuracy": 0.9851485148514851,
+    "sensitivity": 0.9948051948051948,
+    "specificity": 0.9683257918552036,
+    "roc_auc": 0.9996474114121172,
+    "confusion_matrix": [
+      [
+        214,
+        7
+      ],
+      [
+        2,
+        383
+      ]
+    ],
+    "sample_count": 606
+  },
+  "90 deg CW": {
+    "accuracy": 0.966996699669967,
+    "sensitivity": 0.9922077922077922,
+    "specificity": 0.9230769230769231,
+    "roc_auc": 0.9936298995122524,
+    "confusion_matrix": [
+      [
+        204,
+        17
+      ],
+      [
+        3,
+        382
+      ]
+    ],
+    "sample_count": 606
+  },
+  "90 deg CCW": {
+    "accuracy": 0.9521452145214522,
+    "sensitivity": 0.9766233766233766,
+    "specificity": 0.9095022624434389,
+    "roc_auc": 0.9858435681965093,
+    "confusion_matrix": [
+      [
+        201,
+        20
+      ],
+      [
+        9,
+        376
+      ]
+    ],
+    "sample_count": 606
+  },
+  "180 deg": {
+    "accuracy": 0.966996699669967,
+    "sensitivity": 0.9688311688311688,
+    "specificity": 0.9638009049773756,
+    "roc_auc": 0.9972850678733031,
+    "confusion_matrix": [
+      [
+        213,
+        8
+      ],
+      [
+        12,
+        373
+      ]
+    ],
+    "sample_count": 606
+  }
+}

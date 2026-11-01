@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "method": "Strictly internal repository functions: _perceptual_hash (DCT 63 AC coefficients) and _structural_similarity (OpenCV Gaussian 11x11, sigma 1.5)",
+    "imagehash_used": false,
+    "skimage_used": false,
+    "discovery_images_indexed": 4600,
+    "brats_patients_audited": 1251,
+    "brats_slices_audited": 169066,
+    "date": "2026-10-31 20:30:21"
+  },
+  "all_patient_oriented_audit": {
+    "exact_matches_count": 0,
+    "exact_matches": [],
+    "high_similarity_matches_count": 0,
+    "high_similarity_matches": []
+  },
+  "multi_orientation_30_patient_audit": {
+    "patients_audited": [
+      "BraTS-GLI-01021-000",
+      "BraTS-GLI-01659-000",
+      "BraTS-GLI-01365-000",
+      "BraTS-GLI-01199-000",
+      "BraTS-GLI-01405-000",
+      "BraTS-GLI-01515-000",
+      "BraTS-GLI-00810-000",
+      "BraTS-GLI-01012-000",
+      "BraTS-GLI-01000-000",
+      "BraTS-GLI-00237-000",
+      "BraTS-GLI-01459-000",
+      "BraTS-GLI-01304-000",
+      "BraTS-GLI-00765-000",
+      "BraTS-GLI-00679-000",
+      "BraTS-GLI-00054-000",
+      "BraTS-GLI-00739-000",
+      "BraTS-GLI-01338-000",
+      "BraTS-GLI-00542-000",
+      "BraTS-GLI-00630-001",
+      "BraTS-GLI-00176-000",
+      "BraTS-GLI-00258-000",
+      "BraTS-GLI-00523-000",
+      "BraTS-GLI-00537-000",
+      "BraTS-GLI-01414-000",
+      "BraTS-GLI-01275-000",
+      "BraTS-GLI-01484-000",
+      "BraTS-GLI-00085-000",
+      "BraTS-GLI-01214-000",
+      "BraTS-GLI-00339-000",
+      "BraTS-GLI-01087-000"
+    ],
+    "angles_tested": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "hits_count": 0,
+    "hits": []
+  }
+}

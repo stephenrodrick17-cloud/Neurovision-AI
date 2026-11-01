@@ -1,0 +1,306 @@
+{
+  "system_environment": {
+    "os": "Windows 11 Build 26300",
+    "python": "3.13.1 (tags/v3.13.1:0671451)",
+    "torch": "2.14.0+cpu",
+    "torchvision": "0.29.0+cpu",
+    "sklearn": "1.9.1",
+    "cuda_available": false,
+    "cuda_note": "Current PyTorch environment is CPU build; primary training was recorded on an NVIDIA GeForce RTX 3050 Laptop GPU."
+  },
+  "git_repository_state": {
+    "head_commit": "0a771501fc9139975070b956bed2b01a676e72c1",
+    "branch": "main"
+  },
+  "checkpoints": [
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/densenet121_seed42/checkpoint.pth",
+      "sha256": "e52a163e30c65c0a6e31d7c8af125dd54c3a30161ecffad793d3438d82212710",
+      "last_modified": "2026-10-12 23:48:53",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/densenet121_seed42_INTERRUPTED_DO_NOT_USE/checkpoint.pth",
+      "sha256": "939e1340d6b2013787c6db45c49fc9b7cbd8221c02731726639873829d2acbf6",
+      "last_modified": "2026-10-12 22:23:25",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/densenet121_seed43/checkpoint.pth",
+      "sha256": "e726bf3b102c966dc243d4347dd20fb83e9dcaba4affea43ee665b11eed5ca96",
+      "last_modified": "2026-10-13 00:37:24",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/densenet121_seed44/checkpoint.pth",
+      "sha256": "a344234c7bb7c3ed90663cc4ae212f2ab93bd0974d6d0624384ae9a02a29026b",
+      "last_modified": "2026-10-13 00:47:10",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/resnet18_seed42/checkpoint.pth",
+      "sha256": "f8514128c1b9037a84b42c9aa731e0427ac8b790213914e83e05c963a7478b59",
+      "last_modified": "2026-10-12 20:45:20",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/resnet18_seed43/checkpoint.pth",
+      "sha256": "c59b9f1460b41d8fd43a8429cae0fa07ba664d8adadaf765e62ddf55a28badaf",
+      "last_modified": "2026-10-12 20:52:11",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/resnet18_seed44/checkpoint.pth",
+      "sha256": "70e860e2fe34c52df72d6d50186bb7c2fbfc5d004edc37b5549c5cf218594e94",
+      "last_modified": "2026-10-12 20:56:37",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/resnet18_seed45/checkpoint.pth",
+      "sha256": "4eacfee5d06311008f5dc82443e0ab2802336b75717a9f326a229ff0323e88dd",
+      "last_modified": "2026-10-12 21:03:44",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/resnet18_seed46/checkpoint.pth",
+      "sha256": "7460f019efcfb193e035da0058dc8331cfb1c917af771c2e6a5cff354dfc8ea7",
+      "last_modified": "2026-10-12 21:13:11",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/small_cnn_seed42/checkpoint.pth",
+      "sha256": "ab014f1e56dcd09437aed28b2af29648f6f082294577328f020e7ae92fa9e1d1",
+      "last_modified": "2026-10-12 21:22:22",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/small_cnn_seed43/checkpoint.pth",
+      "sha256": "87b866c6873d19331256131c766ffb19aeb804886f36799058b2390ea32a691f",
+      "last_modified": "2026-10-12 21:31:45",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/small_cnn_seed44/checkpoint.pth",
+      "sha256": "22d2096d80c36d2169f18e7d57df609a2e43241e4094bd0e7b5feca3180846fe",
+      "last_modified": "2026-10-12 21:41:10",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/small_cnn_seed45/checkpoint.pth",
+      "sha256": "b7b4ad7c09e79bae746616de78895f2af57b3fbea6c6b08e85bec4ef8a27de8d",
+      "last_modified": "2026-10-12 21:49:10",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/small_cnn_seed46/checkpoint.pth",
+      "sha256": "622af97b878e2e3d3aacd2550ed7b8440eae06eabf8e143798d294f145dcdd70",
+      "last_modified": "2026-10-12 22:10:40",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "experiments_results/phase1b/debug/resnet18_seed42/checkpoint.pth",
+      "sha256": "f8514128c1b9037a84b42c9aa731e0427ac8b790213914e83e05c963a7478b59",
+      "last_modified": "2026-10-12 20:35:37",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "BrainTumorAI/models/small_cnn_best.pth",
+      "sha256": "f08d9e8bf8c3c01f06281909cd61052bcd465fee860c5c89d2941f44097da05c",
+      "last_modified": "2026-10-10 19:12:25",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "BrainTumorAI/models/tumor_classifier.pth",
+      "sha256": "779d87161a8118df39a9518b8b02fc663ed95990ce1dc5450c0266fdca3f3a97",
+      "last_modified": "2026-04-03 20:37:15",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "BrainTumorAI/models/tumor_classifier_reproducible.pth",
+      "sha256": "0ce4741c3ce2cbc287c7b716395b1571bac143200e2f3489e48efd002310b40e",
+      "last_modified": "2026-10-10 19:02:35",
+      "git_tracked": false
+    },
+    {
+      "type": "checkpoint",
+      "path": "BrainTumorAI/results/interrupted_exact-only_checkpoint.pth",
+      "sha256": "c50bf4918641fca3355814997a699d3ec7cb178475e2f124a5f6af17aa839c70",
+      "last_modified": "2026-10-10 18:49:42",
+      "git_tracked": false
+    }
+  ],
+  "split_manifests": [
+    {
+      "type": "split_manifest",
+      "path": "BrainTumorAI/results/split_manifest.csv",
+      "sha256": "c0d909039b77d1d2ccb3fb27105e411eafee792b868b8203794ac5bf979d66ab",
+      "last_modified": "2026-10-10 18:54:27",
+      "git_tracked": false
+    },
+    {
+      "type": "split_manifest",
+      "path": "BrainTumorAI/results/external_validation/cheng_figshare_v8/manifest.csv",
+      "sha256": "5b6779ffc613b79e7369de774132784bca2ca585db809c400120ddb77ae3914e",
+      "last_modified": "2026-10-18 11:59:25",
+      "git_tracked": false
+    }
+  ],
+  "scripts": [
+    {
+      "type": "script",
+      "path": "BrainTumorAI/app.py",
+      "last_modified": "2026-10-10 20:23:05",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/classifier_pipeline.py",
+      "last_modified": "2026-10-12 22:47:20",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/evaluate_classifier.py",
+      "last_modified": "2026-10-18 11:25:05",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/external_validation.py",
+      "last_modified": "2026-10-20 00:45:01",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/gemini_assistant.py",
+      "last_modified": "2026-10-10 20:14:32",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/heatmap_gen.py",
+      "last_modified": "2026-10-10 20:01:06",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/medication_report.py",
+      "last_modified": "2026-10-10 20:19:38",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/preprocess.py",
+      "last_modified": "2026-10-10 18:53:06",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/radiosurgery.py",
+      "last_modified": "2026-10-10 17:05:09",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/stereotactic_robot.py",
+      "last_modified": "2026-10-10 20:01:06",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/surgery_viz.py",
+      "last_modified": "2026-10-10 20:18:42",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/surgical_task_queue.py",
+      "last_modified": "2026-10-10 20:20:42",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/train_classifier.py",
+      "last_modified": "2026-10-10 19:28:32",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "BrainTumorAI/__init__.py",
+      "last_modified": "2026-10-10 18:40:21",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "experiments/gradcam_utils.py",
+      "last_modified": "2026-10-12 00:50:10",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "experiments/make_gradcam_examples.py",
+      "last_modified": "2026-10-12 00:50:58",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "experiments/phase1b_training.py",
+      "last_modified": "2026-10-12 22:47:20",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "experiments/__init__.py",
+      "last_modified": "2026-10-12 00:50:44",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "tests/test_classifier_pipeline.py",
+      "last_modified": "2026-10-10 20:18:56",
+      "git_tracked": true
+    },
+    {
+      "type": "script",
+      "path": "tests/test_external_validation.py",
+      "last_modified": "2026-10-20 14:20:08",
+      "git_tracked": true
+    }
+  ],
+  "result_files_count": 113,
+  "conflicts_and_discrepancies": [
+    {
+      "issue": "SmallCNN Seed 42 Near-Threshold Prediction Shift",
+      "details": "Original SmallCNN checkpoint (small_cnn_best.pth) on image Cancer (2164).jpg had tumor_score = 0.4997877 (predicted No-Tumor, giving confusion matrix [[155, 66], [49, 336]], acc = 81.02%). In Phase 1B multi-seed rerun (seed 42), tumor_score was 0.5001502 (predicted Tumor, giving confusion matrix [[155, 66], [48, 337]], acc = 81.19%).",
+      "status": "Documented conflict across project files. Original single-checkpoint report uses 81.02%; multi-seed summary table uses 81.19% for seed 42."
+    },
+    {
+      "issue": "Bootstrap Confidence Interval Replicate Count",
+      "details": "Stored bootstrap CI used 1,000 resamples (seed 42). Independent verification used 2,000 resamples (seed 0). Both are recorded in experiments_results/phase1c/resnet18_group_bootstrap_2000_seed0.json with minimal difference (Accuracy lower bound: 96.28% vs 96.01%).",
+      "status": "Documented variance due to resample count and random seed."
+    },
+    {
+      "issue": "Git Tracking of Model Weights and Manifests",
+      "details": "All .pth checkpoint weight files (19 files) and split_manifest.csv are correctly untracked (.gitignored) due to file size constraints, though checkpoint SHA-256 digests and hashes are strictly tracked in Git.",
+      "status": "Intended design; recorded for audit."
+    }
+  ]
+}

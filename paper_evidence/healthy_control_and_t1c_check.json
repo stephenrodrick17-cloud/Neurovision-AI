@@ -1,0 +1,95 @@
+{
+  "analysis": "Pre-Submission Analysis 2: Healthy-control external cohort audit & BraTS T1-CE (t1c) sequence-matched evaluation",
+  "standalone_healthy_control_dataset_on_local_disk": {
+    "status": "NOT VERIFIED (No standalone healthy-volunteer brain MRI dataset such as IXI or OASIS is present on local disk D:/datasets or workspace)",
+    "checked_paths": [
+      "D:/datasets",
+      "c:/Users/asus/Downloads/Brain Imaging"
+    ]
+  },
+  "sequence_matched_brats_t1c_evaluation_250_patients": {
+    "description": "Evaluates the frozen primary Discovery ResNet-18 on T1-weighted contrast-enhanced (t1c.nii.gz) BraTS 2023 volumes (oriented rot90(k=1), 1st-99th percentile non-zero brain intensity scaling matching prepare_oriented_brats.py) across the exact same 250 held-out patients (33,696 slices: 16,074 tumor, 17,622 tumor-free). Because Cheng (2015) is a T1-CE cohort, comparing BraTS T1-CE (t1c) vs BraTS T2-FLAIR (t2f) on the same 250 patients directly tests whether MRI sequence mismatch (T2-FLAIR vs T1-CE) explains the external performance drop.",
+    "brats_250_t1c_oriented_metrics": {
+      "n": 33696,
+      "accuracy": 0.6177587844254511,
+      "balanced_accuracy": 0.6005935520637887,
+      "sensitivity": 0.22695035460992907,
+      "specificity": 0.9742367495176484,
+      "f1": 0.36161776367961934,
+      "roc_auc": 0.562695590718373,
+      "pr_auc": 0.6417897638034131,
+      "confusion_matrix": [
+        [
+          17168,
+          454
+        ],
+        [
+          12426,
+          3648
+        ]
+      ]
+    },
+    "brats_250_t2f_oriented_reference_metrics": {
+      "accuracy": 0.7117165242165242,
+      "balanced_accuracy": 0.6984962805451752,
+      "sensitivity": 0.41072539504790345,
+      "specificity": 0.9862671660424469,
+      "precision": 0.9646405610753945,
+      "f1": 0.5761410245222096,
+      "roc_auc": 0.7087767625548996,
+      "pr_auc": 0.7794786761705936,
+      "confusion_matrix": [
+        [
+          17380,
+          242
+        ],
+        [
+          9472,
+          6602
+        ]
+      ],
+      "bootstrap_ci_95": {
+        "accuracy": {
+          "low": 0.6942454364761341,
+          "high": 0.7293120356689324,
+          "ci_95_str": "0.6942 - 0.7293"
+        },
+        "sensitivity": {
+          "low": 0.37479493096837496,
+          "high": 0.4467183620084799,
+          "ci_95_str": "0.3748 - 0.4467"
+        },
+        "specificity": {
+          "low": 0.9827072561299873,
+          "high": 0.9895036557941393,
+          "ci_95_str": "0.9827 - 0.9895"
+        },
+        "precision": {
+          "low": 0.9547215571946103,
+          "high": 0.9733582176034444,
+          "ci_95_str": "0.9547 - 0.9734"
+        },
+        "f1": {
+          "low": 0.5388094788965466,
+          "high": 0.6116201646651944,
+          "ci_95_str": "0.5388 - 0.6116"
+        },
+        "roc_auc": {
+          "low": 0.6843526353937632,
+          "high": 0.7321861206182226,
+          "ci_95_str": "0.6844 - 0.7322"
+        },
+        "pr_auc": {
+          "low": 0.756420024662969,
+          "high": 0.8008179959088519,
+          "ci_95_str": "0.7564 - 0.8008"
+        },
+        "balanced_accuracy": {
+          "low": 0.6802851034438594,
+          "high": 0.7167640370635676,
+          "ci_95_str": "0.6803 - 0.7168"
+        }
+      }
+    }
+  }
+}

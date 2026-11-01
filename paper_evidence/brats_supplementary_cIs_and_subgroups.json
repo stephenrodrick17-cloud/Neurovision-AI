@@ -1,0 +1,176 @@
+{
+  "paired_bootstrap_comparisons": {
+    "oriented_minus_old": {
+      "auc": {
+        "point_diff": 0.04441178133472801,
+        "ci_95_low": 0.03547578023628448,
+        "ci_95_high": 0.053517572366294404,
+        "ci_95_str": "+0.0444 (+0.0355 to +0.0535)"
+      },
+      "accuracy": {
+        "point_diff": 0.10395940047082197,
+        "ci_95_low": 0.09565587690133547,
+        "ci_95_high": 0.11183899363204958,
+        "ci_95_str": "+0.1040 (+0.0957 to +0.1118)"
+      },
+      "sensitivity": {
+        "point_diff": -0.12318671465245101,
+        "ci_95_low": -0.13635982189065957,
+        "ci_95_high": -0.10969142758022782,
+        "ci_95_str": "-0.1232 (-0.1364 to -0.1097)"
+      },
+      "specificity": {
+        "point_diff": 0.31493502789408234,
+        "ci_95_low": 0.30631057238488196,
+        "ci_95_high": 0.32351228012563343,
+        "ci_95_str": "+0.3149 (+0.3063 to +0.3235)"
+      }
+    },
+    "oriented_minus_flipLR": {
+      "auc": {
+        "point_diff": 0.003918406724830792,
+        "ci_95_low": 0.0004915929174959671,
+        "ci_95_high": 0.007512473002649695,
+        "ci_95_str": "+0.0039 (+0.0005 to +0.0075)"
+      },
+      "accuracy": {
+        "point_diff": 0.002431003276826771,
+        "ci_95_low": -0.0007565337193189941,
+        "ci_95_high": 0.005486525707717207,
+        "ci_95_str": "+0.0024 (-0.0008 to +0.0055)"
+      },
+      "sensitivity": {
+        "point_diff": 0.004114821957181325,
+        "ci_95_low": -0.0025198815323725548,
+        "ci_95_high": 0.010592438057119579,
+        "ci_95_str": "+0.0041 (-0.0025 to +0.0106)"
+      },
+      "specificity": {
+        "point_diff": 0.000867055320411203,
+        "ci_95_low": -0.00026331289236989627,
+        "ci_95_high": 0.0019140364277456467,
+        "ci_95_str": "+0.0009 (-0.0003 to +0.0019)"
+      }
+    }
+  },
+  "tumor_size_bins_with_ci_and_auc": {
+    "<=50 voxels (tiny)": {
+      "n_slices": 4529,
+      "n_patients": 1217,
+      "sensitivity": 0.013910355486862442,
+      "sensitivity_ci_95": "0.0095 - 0.0189",
+      "sensitivity_ci_low": 0.009513169147491321,
+      "sensitivity_ci_high": 0.018884233288620714,
+      "auc_vs_all_negatives": 0.36790784101031154,
+      "mean_score": 0.03907866916879012,
+      "median_score": 0.0020963158
+    },
+    "Q1 (1-488 voxels)": {
+      "n_slices": 20374,
+      "n_patients": 1251,
+      "sensitivity": 0.023804849317757927,
+      "sensitivity_ci_95": "0.0199 - 0.0281",
+      "sensitivity_ci_low": 0.01987588618118065,
+      "sensitivity_ci_high": 0.028120255543391256,
+      "auc_vs_all_negatives": 0.3972999611944442,
+      "mean_score": 0.05191995620950659,
+      "median_score": 0.0030691249
+    },
+    "Q2 (489-1269 voxels)": {
+      "n_slices": 20350,
+      "n_patients": 1233,
+      "sensitivity": 0.2637346437346437,
+      "sensitivity_ci_95": "0.2441 - 0.2838",
+      "sensitivity_ci_low": 0.24406323961095036,
+      "sensitivity_ci_high": 0.28381905952993847,
+      "auc_vs_all_negatives": 0.6656954916402967,
+      "mean_score": 0.28413113613911123,
+      "median_score": 0.06659058200000001
+    },
+    "Q3 (1270-2248 voxels)": {
+      "n_slices": 20353,
+      "n_patients": 1048,
+      "sensitivity": 0.5761804156635385,
+      "sensitivity_ci_95": "0.5508 - 0.6011",
+      "sensitivity_ci_low": 0.5508440489103092,
+      "sensitivity_ci_high": 0.6010767852334231,
+      "auc_vs_all_negatives": 0.8462828430264517,
+      "mean_score": 0.5707645293255975,
+      "median_score": 0.73114055
+    },
+    "Q4 (>2248 voxels)": {
+      "n_slices": 20336,
+      "n_patients": 699,
+      "sensitivity": 0.7492623918174666,
+      "sensitivity_ci_95": "0.7238 - 0.7757",
+      "sensitivity_ci_low": 0.7238051025672566,
+      "sensitivity_ci_high": 0.7757120305694822,
+      "auc_vs_all_negatives": 0.9181529886175068,
+      "mean_score": 0.7355050368205,
+      "median_score": 0.9739739199999999
+    },
+    "Post-hoc: tumor area >= 1% brain area": {
+      "n_slices": 73556,
+      "n_patients": 1251,
+      "sensitivity": 0.44466800804828976,
+      "sensitivity_ci_95": "0.4291 - 0.4602",
+      "sensitivity_ci_low": 0.4291170851642936,
+      "sensitivity_ci_high": 0.4602098988747507,
+      "auc_vs_all_negatives": 0.7485257896201707,
+      "mean_score": 0.45081191615792177,
+      "median_score": 0.296357735
+    }
+  },
+  "slice_position_tertiles_with_ci": {
+    "Inferior (slice_id <= 48)": {
+      "n_slices": 56391,
+      "n_tumor_slices": 9477,
+      "n_no_tumor_slices": 46914,
+      "n_patients": 1251,
+      "sensitivity": 0.18339136857655375,
+      "sensitivity_ci_95": "0.1646 - 0.2031",
+      "specificity": 0.9785991388498103,
+      "specificity_ci_95": "0.9760 - 0.9810",
+      "auc": 0.6365875711980247,
+      "auc_ci_95": "0.6176 - 0.6546"
+    },
+    "Middle (49 <= slice_id <= 94)": {
+      "n_slices": 57546,
+      "n_tumor_slices": 45831,
+      "n_no_tumor_slices": 11715,
+      "n_patients": 1251,
+      "sensitivity": 0.45765966267373615,
+      "sensitivity_ci_95": "0.4396 - 0.4764",
+      "specificity": 0.9981220657276996,
+      "specificity_ci_95": "0.9963 - 0.9994",
+      "auc": 0.8445996566297083,
+      "auc_ci_95": "0.8334 - 0.8548"
+    },
+    "Superior (slice_id > 94)": {
+      "n_slices": 55129,
+      "n_tumor_slices": 26105,
+      "n_no_tumor_slices": 29024,
+      "n_patients": 1251,
+      "sensitivity": 0.38701398199578624,
+      "sensitivity_ci_95": "0.3667 - 0.4079",
+      "specificity": 0.9964856670341786,
+      "specificity_ci_95": "0.9952 - 0.9977",
+      "auc": 0.8001827328813944,
+      "auc_ci_95": "0.7871 - 0.8134"
+    }
+  },
+  "per_patient_detection": {
+    "total_patients_with_tumor_slices": 1251,
+    "patients_with_at_least_one_detected_tumor_slice": 1073,
+    "patients_with_zero_detected_tumor_slices": 178,
+    "patient_level_any_slice_sensitivity": 0.8577138289368506,
+    "fraction_of_tumor_slices_detected": {
+      "min": 0.0,
+      "q25": 0.12739370334307043,
+      "median": 0.41935483870967744,
+      "mean": 0.38776816921371926,
+      "q75": 0.6190476190476191,
+      "max": 0.9135802469135802
+    }
+  }
+}

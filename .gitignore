@@ -1,4 +1,11 @@
 .venv/
+.venv_gpu/
+.venv_gpu_py313/
+*.docx
+*.npy
+*.nii
+*.nii.gz
+.pytest_cache/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/

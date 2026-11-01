@@ -1,0 +1,192 @@
+{
+  "cohort": "brats_oriented",
+  "status": "PRE-SPECIFIED PRIMARY COHORT",
+  "headline_metrics": {
+    "accuracy": 0.7058840926028888,
+    "balanced_accuracy": 0.695105831380292,
+    "sensitivity": 0.4030805890951077,
+    "specificity": 0.9871310736654764,
+    "precision": 0.9667687956634456,
+    "f1": 0.5689468346090831,
+    "roc_auc": 0.7067353683674431,
+    "pr_auc": 0.779509676775796,
+    "confusion_matrix": {
+      "tn": 86525,
+      "fp": 1128,
+      "fn": 48597,
+      "tp": 32816
+    }
+  },
+  "bootstrap_ci_95": {
+    "accuracy": {
+      "ci_95": "0.6984 - 0.7134",
+      "low": 0.6984080813996334,
+      "high": 0.7134111116743878
+    },
+    "balanced_accuracy": {
+      "ci_95": "0.6881 - 0.7022",
+      "low": 0.6881242371951471,
+      "high": 0.702208110473679
+    },
+    "sensitivity": {
+      "ci_95": "0.3891 - 0.4175",
+      "low": 0.38906880774522246,
+      "high": 0.4174603341787426
+    },
+    "specificity": {
+      "ci_95": "0.9856 - 0.9886",
+      "low": 0.9855814422187856,
+      "high": 0.9885581720076753
+    },
+    "precision": {
+      "ci_95": "0.9627 - 0.9705",
+      "low": 0.9627029724474891,
+      "high": 0.9704778901198817
+    },
+    "f1": {
+      "ci_95": "0.5546 - 0.5832",
+      "low": 0.5545766523595268,
+      "high": 0.5832146906317808
+    },
+    "roc_auc": {
+      "ci_95": "0.6962 - 0.7166",
+      "low": 0.6962320507629247,
+      "high": 0.7165773297707755
+    }
+  },
+  "histograms": {
+    "tumor": {
+      "mean": 0.4104244617246506,
+      "median": 0.16977273,
+      "histogram": {
+        "[0.0, 0.1)": 37307,
+        "[0.1, 0.2)": 4477,
+        "[0.2, 0.3)": 2691,
+        "[0.3, 0.4)": 2231,
+        "[0.4, 0.5)": 1891,
+        "[0.5, 0.6)": 1814,
+        "[0.6, 0.7)": 1980,
+        "[0.7, 0.8)": 2335,
+        "[0.8, 0.9)": 3345,
+        "[0.9, 1.0]": 23342
+      }
+    },
+    "no_tumor": {
+      "mean": 0.052338605827422675,
+      "median": 0.01867734,
+      "histogram": {
+        "[0.0, 0.1)": 75745,
+        "[0.1, 0.2)": 6657,
+        "[0.2, 0.3)": 2347,
+        "[0.3, 0.4)": 1141,
+        "[0.4, 0.5)": 635,
+        "[0.5, 0.6)": 439,
+        "[0.6, 0.7)": 281,
+        "[0.7, 0.8)": 189,
+        "[0.8, 0.9)": 132,
+        "[0.9, 1.0]": 87
+      }
+    }
+  },
+  "slice_position_tertiles_exploratory": {
+    "inferior (slice_id <= 50)": {
+      "n_slices": 56391,
+      "tumor_slices": 9477,
+      "sensitivity": 0.18339136857655375,
+      "specificity": 0.9785991388498103,
+      "auc": 0.6365875711980247
+    },
+    "middle (51 <= slice_id <= 100)": {
+      "n_slices": 57546,
+      "tumor_slices": 45831,
+      "sensitivity": 0.45765966267373615,
+      "specificity": 0.9981220657276996,
+      "auc": 0.8445996566297083
+    },
+    "superior (slice_id > 100)": {
+      "n_slices": 55129,
+      "tumor_slices": 26105,
+      "sensitivity": 0.38701398199578624,
+      "specificity": 0.9964856670341786,
+      "auc": 0.8001827328813944
+    }
+  },
+  "patient_level_detection": {
+    "total_tumor_patients": 1251,
+    "patients_with_at_least_one_tumor_slice_detected": 1073,
+    "patient_level_sensitivity_percent": 85.77138289368506,
+    "fraction_tumor_slices_detected_per_patient": {
+      "min": 0.0,
+      "median": 0.41935483870967744,
+      "mean": 0.38776816921371926,
+      "max": 0.9135802469135802,
+      "q25": 0.12739370334307043,
+      "q75": 0.6190476190476191
+    }
+  },
+  "roc_operating_points": [
+    {
+      "threshold": 0.1,
+      "sensitivity": 0.5417562305774262,
+      "specificity": 0.8641461216387346,
+      "accuracy": 0.70890066601209
+    },
+    {
+      "threshold": 0.2,
+      "sensitivity": 0.4867650129586184,
+      "specificity": 0.9400933225331706,
+      "accuracy": 0.7217950386239693
+    },
+    {
+      "threshold": 0.3,
+      "sensitivity": 0.4537113237443651,
+      "specificity": 0.9668693598621838,
+      "accuracy": 0.719760330285214
+    },
+    {
+      "threshold": 0.4,
+      "sensitivity": 0.42630783781459963,
+      "specificity": 0.9798865982909883,
+      "accuracy": 0.7133131439792744
+    },
+    {
+      "threshold": 0.5,
+      "sensitivity": 0.4030805890951077,
+      "specificity": 0.9871310736654764,
+      "accuracy": 0.7058840926028888
+    },
+    {
+      "threshold": 0.6,
+      "sensitivity": 0.38079913527323644,
+      "specificity": 0.9921394590031145,
+      "accuracy": 0.6977511740976896
+    },
+    {
+      "threshold": 0.7,
+      "sensitivity": 0.3564786950487023,
+      "specificity": 0.9953452819641084,
+      "accuracy": 0.6877018442501744
+    },
+    {
+      "threshold": 0.8,
+      "sensitivity": 0.32779777185461784,
+      "specificity": 0.9975015116424994,
+      "accuracy": 0.6750085765322419
+    },
+    {
+      "threshold": 0.9,
+      "sensitivity": 0.2867109675358972,
+      "specificity": 0.999007449830582,
+      "accuracy": 0.6560041640542746
+    }
+  ],
+  "oracle_threshold_non_claimable": {
+    "status": "NON-CLAIMABLE EXPLORATORY POST-HOC OPERATING POINT",
+    "oracle_threshold": 0.21050437,
+    "accuracy": 0.7223155454083021,
+    "balanced_accuracy": 0.7137956108047954,
+    "sensitivity": 0.4829572672668984,
+    "specificity": 0.9446339543426923,
+    "youden_index": 0.4275912216095906
+  }
+}

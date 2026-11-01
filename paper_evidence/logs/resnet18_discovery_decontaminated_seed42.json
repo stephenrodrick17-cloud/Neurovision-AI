@@ -1,0 +1,12 @@
+{
+  "model_key": "resnet18_discovery_decontaminated",
+  "architecture": "resnet18",
+  "initialization": "imagenet",
+  "seed": 42,
+  "selected_epoch": 3,
+  "validation_balanced_accuracy": 0.9867947957595078,
+  "validation_loss": 0.05058080627060415,
+  "reused_from_checkpoint": "paper_evidence/models/resnet18_discovery_decontaminated.pth",
+  "checkpoint_path": "paper_evidence/models/resnet18_discovery_decontaminated_seed42.pth",
+  "checkpoint_sha256": "1286c88dfa5f13bd17a2b101e9e7f06adb592b94efd02eb861a1e41e274c0ee6"
+}

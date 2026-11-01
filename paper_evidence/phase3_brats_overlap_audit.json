@@ -1,0 +1,15 @@
+{
+  "method": "Conservative near-duplicate rule (pHash Hamming distance <= 4 AND 64x64 grayscale SSIM >= 0.95)",
+  "sampled_patients_count": 30,
+  "sampled_slices_count": 4068,
+  "total_brats_patients": 1251,
+  "total_brats_slices": 169066,
+  "elapsed_seconds": 73.48821425437927,
+  "matches_found_count": 0,
+  "matches": [],
+  "libraries": {
+    "opencv": "5.0.0",
+    "pillow": "12.3.0",
+    "numpy": "2.5.3"
+  }
+}
