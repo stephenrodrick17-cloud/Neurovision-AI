@@ -19,9 +19,9 @@ NeuroVision AI is a Streamlit research and educational prototype for binary brai
 The application is in `BrainTumorAI/app.py` and provides:
 
 1. **Home:** project landing view and navigation.
-2. **Dashboard:** choose a demonstration record, upload one image, adjust image appearance, view binary class scores, qualitative Grad-CAM overlay, synthetic 3D visualization, a notice that treatment advice is not provided, demonstration PDF summary, and optional AI chat/image description.
+2. **Dashboard:** upload one JPG/JPEG/PNG image (upload is selected by default; DICOM and NIfTI are not supported), or choose a demonstration scan. Adjust image appearance, view binary class scores, qualitative Grad-CAM overlay, synthetic 3D visualization, a notice that treatment advice is not provided, demonstration PDF summary, and optional AI chat/image description.
 3. **Advanced Analytics:** inspect intermediate CNN activations and heuristic peak-activation coordinates.
-4. **Robotics Simulation:** browse local dataset folders or upload an image, view illustrative geometry and placeholder device telemetry, and manage a session-only demonstration queue.
+4. **Robotics Simulation:** upload a JPG/JPEG/PNG image by default (or browse local dataset folders), view illustrative geometry over a subdued robotics/human-interaction background and placeholder device telemetry, and manage a session-only demonstration queue.
 5. **Demonstration Records:** add/list synthetic records in Streamlit session state (not an EHR and not persistent storage).
 6. **About System:** architecture summary and disclaimer.
 

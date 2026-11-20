@@ -627,7 +627,34 @@ def dashboard_page():
         """, unsafe_allow_html=True)
 
     st.markdown("<h1 class='slide-up'>MRI Diagnostic Center</h1>", unsafe_allow_html=True)
-    
+
+    sample_scans = get_sample_scans()
+    input_source = st.radio(
+        "MRI Input Source",
+        ["Pre-loaded Benchmark Scans", "Upload Custom Scan"],
+        horizontal=True,
+        index=1,
+    )
+
+    raw_image = None
+    scan_identifier = "MRI_SCAN"
+
+    if input_source == "Pre-loaded Benchmark Scans" and sample_scans:
+        selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()))
+        scan_file_path = sample_scans[selected_scan_name]
+        if os.path.exists(scan_file_path):
+            raw_image = load_rgb_image(scan_file_path)
+            scan_identifier = os.path.splitext(os.path.basename(scan_file_path))[0]
+    else:
+        uploaded_file = st.file_uploader(
+            "Upload MRI Data (JPG, JPEG, or PNG)",
+            type=["jpg", "png", "jpeg"],
+            help="DICOM and NIfTI volumes are not supported by this image uploader.",
+        )
+        if uploaded_file:
+            raw_image = load_rgb_image(uploaded_file)
+            scan_identifier = os.path.splitext(uploaded_file.name)[0]
+
     col_l, col_r = st.columns([1, 2.5])
     
     with col_l:
@@ -643,24 +670,6 @@ def dashboard_page():
                 <p style="margin:0; color:white; font-weight:700; font-size: 1.4rem;">{p_info['age']} Years</p>
             </div>
         """, unsafe_allow_html=True)
-        
-        sample_scans = get_sample_scans()
-        input_source = st.radio("MRI Input Source", ["Pre-loaded Benchmark Scans", "Upload Custom Scan"], horizontal=True)
-        
-        raw_image = None
-        scan_identifier = "MRI_SCAN"
-        
-        if input_source == "Pre-loaded Benchmark Scans" and sample_scans:
-            selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()))
-            scan_file_path = sample_scans[selected_scan_name]
-            if os.path.exists(scan_file_path):
-                raw_image = load_rgb_image(scan_file_path)
-                scan_identifier = os.path.splitext(os.path.basename(scan_file_path))[0]
-        else:
-            uploaded_file = st.file_uploader("Upload MRI Data", type=["jpg", "png", "jpeg"])
-            if uploaded_file:
-                raw_image = load_rgb_image(uploaded_file)
-                scan_identifier = os.path.splitext(uploaded_file.name)[0]
         
         if raw_image is not None:
             st.markdown("---")
@@ -740,9 +749,7 @@ def dashboard_page():
                     except (RuntimeError, ValueError) as exc:
                         st.error(f"Grad-CAM could not be generated: {exc}")
                         return
-                    temp_path = os.path.join(os.path.dirname(__file__), "temp_viz.jpg")
-                    adj_image.save(temp_path)
-                    heatmapped_img = apply_heatmap(temp_path, heatmap)
+                    heatmapped_img = apply_heatmap(adj_image, heatmap)
                     
                     v1, v2 = st.columns(2)
                     with v1:
@@ -1073,6 +1080,29 @@ def patient_records_page():
 
 
 def robotics_page():
+    bg_path = os.path.join(os.path.dirname(__file__), "assets", "robotics_simulation_bg.jpg")
+    with open(bg_path, "rb") as bg_file:
+        bg_b64 = base64.b64encode(bg_file.read()).decode("ascii")
+
+    st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.72)),
+                url("data:image/jpeg;base64,{bg_b64}") !important;
+            background-color: #000000 !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-attachment: fixed !important;
+            background-repeat: no-repeat !important;
+        }}
+        html, body, [data-testid="stAppViewContainer"], .appview-container, .main {{
+            background: transparent !important;
+            background-color: transparent !important;
+        }}
+        </style>
+    """, unsafe_allow_html=True)
+
     st.markdown("<h1 class='slide-up'>Robotics Simulation</h1>", unsafe_allow_html=True)
     st.warning(
         "Demonstration only: coordinates, estimated volumes, trajectories, safety scores, radiosurgery outputs, "
@@ -1142,7 +1172,13 @@ def robotics_page():
     
     col_input_1, col_input_2 = st.columns([1.5, 1])
     with col_input_1:
-        input_mode = st.radio("Scan Source", ["Dataset Repository Browser", "Upload Custom MRI Scan"], horizontal=True, key="robotics_input_mode")
+        input_mode = st.radio(
+            "Scan Source",
+            ["Dataset Repository Browser", "Upload Custom MRI Scan"],
+            horizontal=True,
+            key="robotics_input_mode",
+            index=1,
+        )
         
         selected_img = None
         selected_scan_label = ""
@@ -1175,7 +1211,12 @@ def robotics_page():
                         selected_img = load_rgb_image(selected_scan_path)
                         selected_scan_label = os.path.basename(selected_scan_path)
         else:
-            uploaded = st.file_uploader("Upload MRI Scan (JPG, PNG, JPEG)", type=["jpg", "png", "jpeg"], key="robotics_custom_uploader")
+            uploaded = st.file_uploader(
+                "Upload MRI Scan (JPG, PNG, JPEG)",
+                type=["jpg", "png", "jpeg"],
+                key="robotics_custom_uploader",
+                help="Upload one 2D image for a qualitative demo. DICOM and NIfTI volumes are not supported.",
+            )
             if uploaded:
                 selected_img = load_rgb_image(uploaded)
                 selected_scan_label = uploaded.name
@@ -1212,21 +1253,23 @@ def robotics_page():
             st.error(f"Grad-CAM could not be generated: {exc}")
             return
         
-        img_np = np.array(selected_img)
-        temp_cam_path = os.path.join(os.path.dirname(__file__), "temp_rob_cam.jpg")
-        selected_img.save(temp_cam_path)
-        heatmapped_img = apply_heatmap(temp_cam_path, heatmap)
-        if os.path.exists(temp_cam_path):
-            try:
-                os.remove(temp_cam_path)
-            except Exception:
-                pass
-            
-        heatmap_resized = cv2.resize(heatmap, (img_np.shape[1], img_np.shape[0]))
+        heatmapped_img = apply_heatmap(selected_img, heatmap)
+
+        model_height, model_width = input_tensor.shape[-2:]
+        simulation_img_np = cv2.resize(
+            np.asarray(selected_img),
+            (model_width, model_height),
+            interpolation=cv2.INTER_AREA,
+        )
+        heatmap_resized = cv2.resize(
+            heatmap,
+            (model_width, model_height),
+            interpolation=cv2.INTER_LINEAR,
+        )
         mask_np = np.uint8(255 * (heatmap_resized > 0.4))
         
         illustrative_coordinates, image_region, image_side = illustrative_heatmap_mapping(heatmap)
-        stereo_plan = build_full_plan(heatmap, img_np.shape[:2])
+        stereo_plan = build_full_plan(heatmap, (model_height, model_width))
         radio_plan = build_radiosurgery_plan(
             heatmap,
             target_mm=stereo_plan["centroid"]["centroid_mm"],
@@ -1339,7 +1382,7 @@ def robotics_page():
                     "image_region": image_region,
                     "image_side": image_side,
                     "mask_arr": mask_np,
-                    "mri_arr": img_np,
+                    "mri_arr": simulation_img_np,
                     "task_id": task["id"],
                 }
                 st.session_state.selected_task_id = task["id"]
@@ -1361,7 +1404,7 @@ def robotics_page():
                     "image_region": image_region,
                     "image_side": image_side,
                     "mask_arr": mask_np,
-                    "mri_arr": img_np,
+                    "mri_arr": simulation_img_np,
                     "task_id": target_tid,
                 }
                 st.session_state.selected_task_id = target_tid

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import torch
 import torch.nn.functional as F
+from PIL import Image
 from torch import nn
 
 
@@ -61,16 +62,23 @@ class GradCAM:
             self.model.zero_grad(set_to_none=True)
 
 
-def apply_heatmap(image_path: str | Path, heatmap: np.ndarray) -> np.ndarray:
+def apply_heatmap(image_source: str | Path | Image.Image, heatmap: np.ndarray) -> np.ndarray:
     if heatmap.ndim != 2 or heatmap.size == 0 or not np.isfinite(heatmap).all():
         raise ValueError("Heatmap overlay requires a finite, non-empty 2D heatmap.")
     if float(np.max(heatmap)) <= float(np.min(heatmap)):
         raise ValueError("Heatmap overlay is unavailable because the heatmap has no activation contrast.")
-    image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
-    if image is None:
-        raise ValueError(f"Could not read image for heatmap overlay: {image_path}")
-    image = cv2.resize(image, (224, 224))
-    resized_heatmap = cv2.resize(heatmap, (image.shape[1], image.shape[0]))
+    if isinstance(image_source, (str, Path)):
+        image = cv2.imread(str(image_source), cv2.IMREAD_COLOR)
+        if image is None:
+            raise ValueError(f"Could not read image for heatmap overlay: {image_source}")
+    else:
+        image_rgb = np.asarray(image_source.convert("RGB"))
+        image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
+    resized_heatmap = cv2.resize(
+        heatmap,
+        (image.shape[1], image.shape[0]),
+        interpolation=cv2.INTER_LINEAR,
+    )
     heatmap_image = cv2.applyColorMap(np.uint8(255 * np.clip(resized_heatmap, 0, 1)), cv2.COLORMAP_JET)
     overlay = cv2.addWeighted(image, 0.6, heatmap_image, 0.4, 0)
     return cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)

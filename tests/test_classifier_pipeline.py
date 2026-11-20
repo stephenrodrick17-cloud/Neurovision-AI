@@ -317,6 +317,21 @@ def test_gradcam_rejects_invalid_or_contrast_free_heatmaps(tmp_path) -> None:
         apply_heatmap(tmp_path / "not_read.jpg", flat_heatmap)
 
 
+def test_heatmap_overlay_preserves_uploaded_image_dimensions(tmp_path) -> None:
+    image = Image.new("RGB", (128, 64), color=(80, 110, 140))
+    heatmap = np.arange(64, dtype=np.float32).reshape(8, 8)
+
+    memory_overlay = apply_heatmap(image, heatmap)
+    image_path = tmp_path / "uploaded.png"
+    image.save(image_path)
+    path_overlay = apply_heatmap(image_path, heatmap)
+
+    assert memory_overlay.shape == (64, 128, 3)
+    assert path_overlay.shape == (64, 128, 3)
+    assert memory_overlay.dtype == np.uint8
+    assert path_overlay.dtype == np.uint8
+
+
 def test_illustrative_coordinate_mapping_is_deterministic_and_labeled() -> None:
     heatmap = np.zeros((3, 5), dtype=np.float32)
     heatmap[0, 4] = 1.0
