@@ -19,9 +19,9 @@ NeuroVision AI is a Streamlit research and educational prototype for binary brai
 The application is in `BrainTumorAI/app.py` and provides:
 
 1. **Home:** project landing view and navigation.
-2. **Dashboard:** upload one JPG/JPEG/PNG image (upload is selected by default; DICOM and NIfTI are not supported), or choose a demonstration scan. Adjust image appearance, view binary class scores, qualitative Grad-CAM overlay, synthetic 3D visualization, a notice that treatment advice is not provided, demonstration PDF summary, and optional AI chat/image description.
-3. **Advanced Analytics:** inspect intermediate CNN activations and heuristic peak-activation coordinates.
-4. **Robotics Simulation:** upload a JPG/JPEG/PNG image by default (or browse local dataset folders), view illustrative geometry over a subdued robotics/human-interaction background and placeholder device telemetry, and manage a session-only demonstration queue.
+2. **Dashboard:** view a built-in public-domain demo scan by default or upload one JPG/JPEG/PNG image (DICOM and NIfTI are not supported). Adjust image appearance, view binary class scores, qualitative Grad-CAM overlay, synthetic 3D visualization, a notice that treatment advice is not provided, demonstration PDF summary, and optional AI chat/image description.
+3. **Advanced Analytics:** view the same built-in demo scan or upload an image; inspect its binary model output, intermediate CNN activations, and heuristic peak-activation coordinates.
+4. **Robotics Simulation:** view the built-in demo scan by default, browse local dataset folders, or upload a JPG/JPEG/PNG image. View illustrative geometry over a subdued robotics/human-interaction background and placeholder device telemetry, ask the optional text-only AI Page Reviewer to explain the displayed output, and manage a session-only demonstration queue.
 5. **Demonstration Records:** add/list synthetic records in Streamlit session state (not an EHR and not persistent storage).
 6. **About System:** architecture summary and disclaimer.
 
@@ -32,6 +32,8 @@ Dataset evidence and unresolved source/license questions are recorded in [DATASE
 The frozen checkpoint has been evaluated on the overlap-screened Cheng Figshare v8 cohort: tumor-positive slice sensitivity was 72.41% (1,223/1,689; 95% patient-cluster bootstrap CI 66.90–77.99%) at a fixed threshold of 0.5. The screen excluded 81 candidate-matched patients (1,375 slices), so the retained subtype mix differs substantially from the full source cohort; Cheng has no no-tumor cases and image-similarity screening cannot prove patient independence. On the provided BraTS 2023 GLI archive, 2D slice accuracy was 60.19%, balanced accuracy 59.92%, sensitivity 52.60%, specificity 67.24%, and ROC-AUC 0.6623 at the same threshold. BraTS negatives are tumor-free slices from tumor-bearing patients, not healthy controls. BraTS patient-level and clinical performance are not established. See [VALIDATION_REPORT.md](VALIDATION_REPORT.md) for the complete report and [EXTERNAL_VALIDATION.md](EXTERNAL_VALIDATION.md) for methods and reproducible commands.
 
 Images are converted to RGB, resized to 224 × 224, converted to tensors, and normalized with ImageNet means `[0.485, 0.456, 0.406]` and standard deviations `[0.229, 0.224, 0.225]`. A ResNet-18 produces two logits; softmax scores are displayed. The maximum score is not calibrated and must not be interpreted as diagnostic certainty.
+
+The built-in PNET example is a public-domain NCI-CONNECT image, included as an annotated software demo—not as training data or a clinical reference. Its embedded label and outline may influence the classifier output. The app computes the output with the deployed checkpoint; the image and result are not embedded in the model weights. A session-only summary of the latest output is shown across pages.
 
 The reproducibly trained ResNet-18 is saved at `BrainTumorAI/models/tumor_classifier_reproducible.pth`. Checkpoints, datasets, and generated results are ignored by Git, so a fresh clone will not contain local data or a trained checkpoint. The app loads a checkpoint strictly and stops with a clear training instruction if it is missing or incompatible; it never produces predictions from random weights. Displayed softmax scores are uncalibrated model outputs, not probabilities of disease.
 
@@ -45,7 +47,7 @@ The reproducibly trained ResNet-18 is saved at `BrainTumorAI/models/tumor_classi
 | `BrainTumorAI/radiosurgery.py` | Synthetic beam, isodose, and DVH calculations; not a treatment-planning system. |
 | `BrainTumorAI/surgical_task_queue.py` | In-memory demo task lifecycle and audit-like event entries; not connected to operating-room systems. |
 | `BrainTumorAI/medication_report.py` | Non-advisory placeholder text and non-clinical PDF summary. |
-| `BrainTumorAI/gemini_assistant.py` | Optional remote OpenRouter text/image description and browser speech synthesis. |
+| `BrainTumorAI/gemini_assistant.py` | Optional Google Gemini API text/image description and browser speech synthesis. |
 
 ## Data and training
 
@@ -125,15 +127,18 @@ streamlit run BrainTumorAI/app.py
 
 Open the local URL printed by Streamlit (usually `http://localhost:8501`). Training ResNet-18 may download pretrained ImageNet weights if they are not cached. Train a reproducible checkpoint before launching inference; an absent or incompatible model is reported as an error.
 
-## Optional Gemini/OpenRouter integration
+## Optional Google Gemini API integration
 
-The AI assistant uses `google/gemini-2.0-flash-001` via OpenRouter. Set a key in a root `.env` file or the process environment:
+The AI assistant uses Google's Gemini API directly. It defaults to `gemini-3.5-flash-lite`; set `GEMINI_MODEL` to another model available to your AI Studio project if needed. Configure the API key locally in a root `.env` file or through the process environment:
 
 ```dotenv
-OPENROUTER_API_KEY=your_key_here
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Never commit `.env` or embed a credential in source code. Image-description requests send image data to a remote provider. Use only data that you are authorized to transmit, and follow applicable consent, institutional, and privacy requirements.
+Never commit `.env` or embed a credential in source code. For Cloud Run, store the key in Secret Manager and expose it as `GEMINI_API_KEY`; do not put it in a Docker image or deployment command. Image-description requests send image data to Google. Use only data that you are authorized to transmit, and follow applicable consent, institutional, and privacy requirements.
+
+The Robotics Simulation Page Reviewer sends its text summary, chat history, and your question to Google Gemini when you submit a question; it does not send uploaded image pixels. Its answers explain the displayed model output and simulated interface only, not medical findings or advice.
 
 ## Deployment and repository map
 

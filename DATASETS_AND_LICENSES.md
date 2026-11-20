@@ -1,8 +1,8 @@
 # Datasets, sources and licences
 
-This repository contains **code, manifests, derived metrics and figures only**. No raw images, volumes or model
-checkpoints (`*.pth`) are distributed here (see `.gitignore`). Everyone who re-runs the experiments must obtain the
-datasets from the original providers and accept their terms.
+This repository contains **code, manifests, derived metrics, figures and one public-domain illustrative demo image**.
+No research raw datasets, volumes or model checkpoints (`*.pth`) are distributed here (see `.gitignore`). Everyone
+who re-runs the experiments must obtain the research datasets from the original providers and accept their terms.
 
 Verification status uses three labels:
 
@@ -33,6 +33,15 @@ Checked on 2026-11-01.
   - GPL 2 is a software licence and is an unusual choice for image data; its implications for redistribution are
     unclear. **We therefore do not redistribute the images.**
 - `DATASET_PROVENANCE.md` and `paper_evidence/release_audit_v7.json` record the same unresolved status.
+
+## Built-in illustrative demo image
+
+- `BrainTumorAI/assets/demo_tumor_sample.jpg` is the NCI-CONNECT Staff image *MRI of PNET*, available from
+  [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:MRI_of_PNET.jpg) and the
+  [National Cancer Institute page](https://www.cancer.gov/rare-brain-spine-tumor/tumors/pnet).
+- Wikimedia Commons identifies the image as public domain. The file is annotated with a tumor label and outline;
+  those markings may influence model output. It is an external, illustrative UI sample, not part of the training
+  set or a clinical reference. The model's prediction for it is not medical evidence.
 
 ## 2. Cheng et al. brain tumour dataset (Figshare)
 

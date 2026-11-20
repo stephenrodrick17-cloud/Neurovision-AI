@@ -301,6 +301,9 @@ if 'emergency_stop_active' not in st.session_state:
 if 'last_plan' not in st.session_state:
     st.session_state.last_plan = None
 
+if "latest_model_output" not in st.session_state:
+    st.session_state.latest_model_output = None
+
 # --- Load Model ---
 @st.cache_resource
 def load_model():
@@ -322,6 +325,10 @@ except (FileNotFoundError, CheckpointError, ValueError) as exc:
     st.stop()
 
 # --- Helper Functions ---
+BUILTIN_DEMO_SCAN_PATH = Path(__file__).resolve().parent / "assets" / "demo_tumor_sample.jpg"
+BUILTIN_DEMO_SCAN_NAME = "Public-domain PNET demo image (NCI-CONNECT)"
+
+
 def process_image_adjustments(image, brightness, contrast, sharpness):
     enhancer = ImageEnhance.Brightness(image)
     image = enhancer.enhance(brightness)
@@ -346,6 +353,54 @@ def infer_image(image):
     except (RuntimeError, ValueError) as exc:
         st.error(f"Model inference failed: {exc}")
         return None
+
+def remember_model_output(pred_idx, confidence, source_page):
+    st.session_state.latest_model_output = {
+        "label": IDX_TO_CLASS[pred_idx],
+        "confidence": float(confidence),
+        "source_page": source_page,
+    }
+
+def get_builtin_demo_output():
+    cached = st.session_state.get("builtin_demo_output")
+    if cached:
+        return cached
+    if not BUILTIN_DEMO_SCAN_PATH.is_file():
+        return None
+    image = load_rgb_image(BUILTIN_DEMO_SCAN_PATH)
+    if image is None:
+        return None
+    logits = infer_image(image)
+    if logits is None:
+        return None
+    probabilities = torch.softmax(logits, dim=0)
+    confidence, pred_idx = torch.max(probabilities, 0)
+    result = {
+        "pred_idx": int(pred_idx.item()),
+        "label": IDX_TO_CLASS[int(pred_idx.item())],
+        "confidence": float(confidence.item()),
+    }
+    st.session_state["builtin_demo_output"] = result
+    remember_model_output(result["pred_idx"], result["confidence"], "Built-in demo")
+    return result
+
+def render_latest_model_output():
+    latest = st.session_state.get("latest_model_output")
+    if latest:
+        st.caption(
+            f"Latest model output this session ({latest['source_page']}): "
+            f"{latest['label']}-labeled class; top-class softmax score "
+            f"{latest['confidence'] * 100:.2f}% (uncalibrated; not diagnostic)."
+        )
+
+def render_demo_sample_notice(is_demo_sample):
+    if is_demo_sample:
+        st.caption(
+            "Built-in illustrative sample: NCI-CONNECT Staff, public domain via Wikimedia Commons "
+            "([source](https://commons.wikimedia.org/wiki/File:MRI_of_PNET.jpg)). This annotated image is "
+            "not part of the model's training set; its embedded text and outline may influence the output. "
+            "For software demonstration only, not medical use."
+        )
 
 def get_feature_maps(model, input_tensor, layer_name="layer1"):
     feature_maps = []
@@ -389,6 +444,8 @@ def _parse_illustrative_coords(coords):
 def get_sample_scans():
     manifest_path = DEFAULT_RESULTS_DIR / "split_manifest.csv"
     samples = {}
+    if BUILTIN_DEMO_SCAN_PATH.is_file():
+        samples[BUILTIN_DEMO_SCAN_NAME] = str(BUILTIN_DEMO_SCAN_PATH)
     if not manifest_path.is_file():
         return samples
     with manifest_path.open(newline="", encoding="utf-8") as source:
@@ -536,6 +593,22 @@ def home_page():
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
+    demo_output = get_builtin_demo_output()
+    if demo_output:
+        st.markdown("---")
+        st.subheader("Built-in Sample Model Run")
+        sample_col, output_col = st.columns([1, 1.2])
+        with sample_col:
+            st.image(str(BUILTIN_DEMO_SCAN_PATH), width="stretch")
+        with output_col:
+            st.metric("Model output label", f"{demo_output['label']}-labeled class")
+            st.metric(
+                "Top-class softmax score (uncalibrated)",
+                f"{demo_output['confidence'] * 100:.2f}%",
+            )
+            st.caption("Computed live by the deployed checkpoint; not a diagnosis or clinical result.")
+        render_demo_sample_notice(True)
+
     st.markdown("""
         <style>
         .carousel-container {
@@ -631,20 +704,23 @@ def dashboard_page():
     sample_scans = get_sample_scans()
     input_source = st.radio(
         "MRI Input Source",
-        ["Pre-loaded Benchmark Scans", "Upload Custom Scan"],
+        ["Pre-loaded Demo / Benchmark Scan", "Upload Custom Scan"],
         horizontal=True,
-        index=1,
+        index=0 if sample_scans else 1,
     )
 
     raw_image = None
     scan_identifier = "MRI_SCAN"
+    demo_sample_selected = False
 
-    if input_source == "Pre-loaded Benchmark Scans" and sample_scans:
+    if input_source == "Pre-loaded Demo / Benchmark Scan" and sample_scans:
         selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()))
         scan_file_path = sample_scans[selected_scan_name]
         if os.path.exists(scan_file_path):
             raw_image = load_rgb_image(scan_file_path)
             scan_identifier = os.path.splitext(os.path.basename(scan_file_path))[0]
+            demo_sample_selected = selected_scan_name == BUILTIN_DEMO_SCAN_NAME
+        render_demo_sample_notice(demo_sample_selected)
     else:
         uploaded_file = st.file_uploader(
             "Upload MRI Data (JPG, JPEG, or PNG)",
@@ -703,6 +779,7 @@ def dashboard_page():
                     confidence, pred_idx = torch.max(probs, 0)
                     pred_idx = int(pred_idx.item())
                     confidence = float(confidence.item())
+                    remember_model_output(pred_idx, confidence, "Dashboard")
                     
                     res_class = (
                         "TUMOR-LABELED MODEL PREDICTION"
@@ -729,8 +806,8 @@ def dashboard_page():
                     st.markdown("---")
                     st.subheader("Blind Accessibility")
                     st.caption(
-                        "If the optional OpenRouter service is configured, this image is sent to that remote "
-                        "provider for description. Do not submit identifiable or restricted images without authorization."
+                        "If the optional Gemini API is configured, this image is sent to Google for description. "
+                        "Do not submit identifiable or restricted images without authorization."
                     )
                     if st.button("Generate Audio Description"):
                         with st.spinner("Generating the optional image description..."):
@@ -759,12 +836,6 @@ def dashboard_page():
                         mask = np.uint8(255 * (heatmap_resized > 0.4))
                         fig_3d = create_3d_brain_model(np.array(adj_image), mask)
                         st.plotly_chart(fig_3d, use_container_width=True)
-                    if os.path.exists(temp_path):
-                        try:
-                            os.remove(temp_path)
-                        except Exception:
-                            pass
-
                     st.markdown("<br>", unsafe_allow_html=True)
                     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
                     st.subheader("Illustrative Planning Demonstration")
@@ -899,6 +970,12 @@ def dashboard_page():
             with t4:
                 context = f"Uncalibrated image-classifier output: {res_class}; top-class score {confidence*100:.2f}%."
                 render_gemini_assistant(context)
+            try:
+                os.remove(temp_img_path)
+            except FileNotFoundError:
+                pass
+            except OSError as exc:
+                st.warning(f"Temporary image could not be removed: {exc}")
         else:
             st.info("System Initialized. Select a pre-loaded benchmark scan or upload MRI data to begin analysis.")
 
@@ -928,14 +1005,22 @@ def analytics_page():
     
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     sample_scans = get_sample_scans()
-    input_source = st.radio("Input Source", ["Pre-loaded Benchmark Scan", "Upload Custom Scan"], horizontal=True, key="analytics_source")
+    input_source = st.radio(
+        "Input Source",
+        ["Pre-loaded Demo / Benchmark Scan", "Upload Custom Scan"],
+        horizontal=True,
+        key="analytics_source",
+        index=0 if sample_scans else 1,
+    )
     
     raw_image = None
-    if input_source == "Pre-loaded Benchmark Scan" and sample_scans:
+    demo_sample_selected = False
+    if input_source == "Pre-loaded Demo / Benchmark Scan" and sample_scans:
         selected_scan_name = st.selectbox("Select Benchmark Scan", list(sample_scans.keys()), key="analytics_scan_select")
         scan_file_path = sample_scans[selected_scan_name]
         if os.path.exists(scan_file_path):
             raw_image = load_rgb_image(scan_file_path)
+            demo_sample_selected = selected_scan_name == BUILTIN_DEMO_SCAN_NAME
     else:
         uploaded_file = st.file_uploader("Upload Scan for Neural Layer Analysis", type=["jpg", "png", "jpeg"], key="analytics_uploader")
         if uploaded_file:
@@ -943,6 +1028,22 @@ def analytics_page():
     st.markdown('</div>', unsafe_allow_html=True)
     
     if raw_image is not None:
+        render_demo_sample_notice(demo_sample_selected)
+        prediction_logits = infer_image(raw_image)
+        if prediction_logits is None:
+            return
+        class_probabilities = torch.softmax(prediction_logits, dim=0)
+        confidence, pred_idx = torch.max(class_probabilities, 0)
+        pred_idx = int(pred_idx.item())
+        confidence = float(confidence.item())
+        remember_model_output(pred_idx, confidence, "Advanced Analytics")
+
+        st.subheader("Binary Model Output")
+        result_col, score_col = st.columns(2)
+        result_col.metric("Model output label", f"{IDX_TO_CLASS[pred_idx]}-labeled class")
+        score_col.metric("Top-class softmax score (uncalibrated)", f"{confidence * 100:.2f}%")
+        st.caption("This score is not calibrated diagnostic certainty. The classifier is a research prototype.")
+
         input_tensor = preprocess_image(raw_image).unsqueeze(0)
         current_f_maps = None
         
@@ -989,7 +1090,7 @@ def analytics_page():
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             st.subheader(SIMULATED_COORDINATE_LABEL)
             grad_cam = GradCAM(model, model.layer4[-1])
-            heatmap = grad_cam.generate_heatmap(input_tensor)
+            heatmap = grad_cam.generate_heatmap(input_tensor, target_class=pred_idx)
             illustrative_coordinates, image_region, image_side = illustrative_heatmap_mapping(heatmap)
             coordinate_display = (
                 f"({illustrative_coordinates[0]}, {illustrative_coordinates[1]}, "
@@ -1019,7 +1120,9 @@ def analytics_page():
         
         with col_chat:
             render_gemini_assistant(
-                "Advanced Analytics: qualitative neural activation visualization; spatial coordinates are simulated."
+                f"Advanced Analytics: binary classifier output {IDX_TO_CLASS[pred_idx]}-labeled class; "
+                f"top-class softmax score {confidence * 100:.2f}% (uncalibrated). Grad-CAM is qualitative, "
+                "not a mask; spatial coordinates are simulated. The reviewer receives text only, not image pixels."
             )
             
         with col_tts:
@@ -1027,7 +1130,7 @@ def analytics_page():
             st.subheader("Audio Layer Analysis")
             st.markdown("Generate an audio description of the neural activations for accessibility.")
             st.caption(
-                "If the optional OpenRouter service is configured, the image is sent to that remote provider. "
+                "If the optional Gemini API is configured, the image is sent to Google. "
                 "Do not submit identifiable or restricted images without authorization."
             )
             
@@ -1119,6 +1222,14 @@ def robotics_page():
     active = [t for t in queue if t["status"] == "IN_PROGRESS"]
     completed = [t for t in queue if t["status"] == "COMPLETED"]
     queued = [t for t in queue if t["status"] in ("QUEUED", "PLANNING")]
+    reviewer_context = (
+        "Page: Robotics Simulation. The page includes a demonstration task queue, an illustrative plan, "
+        "a schematic safety checklist, and placeholder camera/device telemetry. No real robot or hardware "
+        "is connected. "
+        f"Current demo queue counts: {len(active)} active, {len(queued)} queued or planning, "
+        f"{len(completed)} completed. Patient names and identifiers are omitted. "
+        "All queue, checklist, camera, and telemetry values are simulated."
+    )
     if completed:
         avg_safety = []
         # Compute via heuristic: HIGH priority -> lower score, volume penalty
@@ -1174,16 +1285,23 @@ def robotics_page():
     with col_input_1:
         input_mode = st.radio(
             "Scan Source",
-            ["Dataset Repository Browser", "Upload Custom MRI Scan"],
+            ["Built-in Demo Scan", "Dataset Repository Browser", "Upload Custom MRI Scan"],
             horizontal=True,
             key="robotics_input_mode",
-            index=1,
+            index=0,
         )
         
         selected_img = None
         selected_scan_label = ""
         
-        if input_mode == "Dataset Repository Browser":
+        if input_mode == "Built-in Demo Scan":
+            if BUILTIN_DEMO_SCAN_PATH.is_file():
+                selected_img = load_rgb_image(BUILTIN_DEMO_SCAN_PATH)
+                selected_scan_label = BUILTIN_DEMO_SCAN_NAME
+                render_demo_sample_notice(True)
+            else:
+                st.error("Built-in demo scan is unavailable.")
+        elif input_mode == "Dataset Repository Browser":
             cat_list = list(inv.keys()) if inv else []
             if cat_list:
                 cat_col, scan_col = st.columns([1, 1.3])
@@ -1245,6 +1363,7 @@ def robotics_page():
         confidence, pred_idx = torch.max(probs, 0)
         pred_idx = int(pred_idx.item())
         confidence = float(confidence.item())
+        remember_model_output(pred_idx, confidence, "Robotics Simulation")
         
         grad_cam = GradCAM(model, model.layer4[-1])
         try:
@@ -1278,6 +1397,19 @@ def robotics_page():
         )
         
         demo_summary = generate_demo_summary(int(pred_idx), float(confidence))
+        reviewer_context = (
+            f"Page: Robotics Simulation. Uploaded 2D image dimensions: {selected_img.width}x{selected_img.height} pixels. "
+            "The reviewer receives no image pixels and cannot visually inspect the uploaded image. "
+            f"Binary classifier output label: {IDX_TO_CLASS[pred_idx]}; top-class softmax score: "
+            f"{confidence * 100:.2f}% (uncalibrated, not diagnostic certainty). "
+            f"Grad-CAM is a qualitative activation visualization; its peak maps to the {image_side} side, "
+            f"{image_region} of the image. It is not a tumor mask or anatomical localization. "
+            f"Displayed coordinates {illustrative_coordinates} are arbitrary image-plane values, not anatomy. "
+            f"The illustrative plan shows a synthetic trajectory length of "
+            f"{stereo_plan['trajectory']['depth_mm']:.1f} arbitrary units and an unvalidated synthetic "
+            f"safety score of {stereo_plan['safety_score']:.1f}/100. The radiosurgery view uses simulated "
+            f"beam geometry. {reviewer_context}"
+        )
 
         v_col1, v_col2, v_col3 = st.columns([1.1, 1.1, 1.8])
         with v_col1:
@@ -1949,6 +2081,21 @@ def robotics_page():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+    render_gemini_assistant(
+        context_info=reviewer_context,
+        title="AI Page Reviewer (not a clinician)",
+        history_key="robotics_reviewer_history",
+        assistant_label="PAGE REVIEWER",
+        input_label="Ask about this page or its displayed output",
+        send_label="Ask Reviewer",
+        clear_label="Clear Reviewer History",
+        privacy_caption=(
+            "When you send a question, your text, this page summary, and this reviewer's chat history are sent "
+            "to the Google Gemini API. This reviewer does not send uploaded image pixels. Do not include patient names or "
+            "other identifying information. Responses can be wrong and are not medical advice."
+        ),
+    )
+
 
 def about_page():
     st.markdown("<h1 class='slide-up'>System Architecture</h1>", unsafe_allow_html=True)
@@ -1979,46 +2126,62 @@ def about_page():
         </div>
     """, unsafe_allow_html=True)
 
-def render_gemini_assistant(context_info=""):
+def render_gemini_assistant(
+    context_info="",
+    title="Optional AI Text Assistant Demo",
+    history_key="chat_history",
+    assistant_label="GEMINI AI",
+    input_label="Consult with Gemini AI...",
+    send_label="Send Query",
+    clear_label="Clear Consultation History",
+    privacy_caption=None,
+):
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Optional AI Text Assistant Demo")
+    st.subheader(title)
     st.markdown("This assistant is not a source of medical interpretation or advice.")
-    st.caption(
-        "When OpenRouter is configured, chat prompts and any image sent for description leave this application "
-        "and are processed by the remote provider. Do not submit identifiable or restricted data without authorization."
-    )
+    st.caption(privacy_caption or (
+        "When Gemini is configured, chat prompts and any image sent for description leave this application "
+        "and are processed by Google. Do not submit identifiable or restricted data without authorization."
+    ))
+
+    if history_key not in st.session_state:
+        st.session_state[history_key] = []
+    chat_history = st.session_state[history_key]
+    widget_suffix = st.session_state.page if history_key == "chat_history" else history_key
     
     # Chat Interface
-    for message in st.session_state.chat_history:
+    for message in chat_history:
         role_color = "var(--accent-blue)" if message['role'] == 'user' else "rgba(255,255,255,0.1)"
         st.markdown(f"""
             <div style="background: {role_color}; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--card-border);">
-                <p style="margin:0; font-size: 0.9rem; font-weight: 700;">{'YOU' if message['role'] == 'user' else 'GEMINI AI'}</p>
+                <p style="margin:0; font-size: 0.9rem; font-weight: 700;">{'YOU' if message['role'] == 'user' else assistant_label}</p>
                 <p style="margin:5px 0 0 0;">{message['content']}</p>
             </div>
         """, unsafe_allow_html=True)
     
-    user_input = st.text_input("Consult with Gemini AI...", key=f"gemini_input_{st.session_state.page}")
-    if st.button("Send Query", key=f"send_query_{st.session_state.page}"):
+    user_input = st.text_input(input_label, key=f"gemini_input_{widget_suffix}")
+    if st.button(send_label, key=f"send_query_{widget_suffix}"):
         if user_input:
             history = []
-            for m in st.session_state.chat_history:
+            for m in chat_history:
                 history.append({"role": m['role'], "parts": [m['content']]})
             
-            if not history:
-                user_query = f"Context: {context_info}\n\nUser Question: {user_input}"
-            else:
-                user_query = user_input
+            user_query = (
+                f"Current page context (text summary only; no image pixels):\n{context_info}\n\n"
+                f"Question: {user_input}"
+                if context_info
+                else user_input
+            )
                 
             with st.spinner("Gemini is thinking..."):
                 response = get_gemini_response(history, user_query)
                 
-            st.session_state.chat_history.append({"role": "user", "content": user_input})
-            st.session_state.chat_history.append({"role": "model", "content": response})
+            chat_history.append({"role": "user", "content": user_input})
+            chat_history.append({"role": "model", "content": response})
             st.rerun()
     
-    if st.button("Clear Consultation History", key=f"clear_chat_{st.session_state.page}"):
-        st.session_state.chat_history = []
+    if st.button(clear_label, key=f"clear_chat_{widget_suffix}"):
+        st.session_state[history_key] = []
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -2069,6 +2232,7 @@ def main():
         "uncalibrated. Grad-CAM is qualitative, not a mask. Illustrative / Simulated Coordinates, volume proxies, "
         "trajectories, safety scores, robotics, and radiosurgery views are not patient-specific or clinically validated."
     )
+    render_latest_model_output()
 
     if st.session_state.page != "Home":
         st.markdown("""

@@ -1,0 +1,6 @@
+.gcloudignore
+.git
+.gitignore
+.env
+#!include:.gitignore
+!BrainTumorAI/models/tumor_classifier_reproducible.pth
